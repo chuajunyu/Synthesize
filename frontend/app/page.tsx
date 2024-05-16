@@ -35,7 +35,7 @@ export default async function Page() {
   return (
     <section>
       <h1>Home</h1>
-      <div>{user ? <SignOut>{`Welcome ${user}`}</SignOut> : <SignIn provider={"google"}/>}</div>
+      <div>{user ? <SignOut>{`Welcome ${user}`}</SignOut> : <SignIn provider={"github"}/>}</div>
     </section>
   );
 }
