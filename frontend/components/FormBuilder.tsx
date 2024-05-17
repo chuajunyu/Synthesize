@@ -45,11 +45,11 @@ function FormBuilder() {
           <form>
             <div className="flex flex-col w-full space-y-4">
               <div className="flex flex-col w-full space-y-1.5">
-                <Label htmlFor="form-name">Form Name</Label>
+                <Label htmlFor="form-name" className="flex justify-start">Form Name</Label>
                 <Input id="form-name" placeholder="Form Name" />
               </div>
               <div className="flex flex-col w-full space-y-1.5">
-                <Label htmlFor="form-description">Form Description</Label>
+                <Label htmlFor="form-description" className="flex justify-start">Form Description</Label>
                 <Input id="form-description" placeholder="What is this form about?" />
               </div>
             </div>
@@ -69,13 +69,13 @@ function FormBuilder() {
           </CardHeader>
           <CardContent>
             <form>
-              <div className="flex w-full gap-4">
-                <div className="flex flex-col w-3/4 space-y-1.5">
-                  <Label htmlFor={`question-${index}`}>Question</Label>
+              <div className="flex flex-row justify-start align-left w-full gap-4">
+                <div className="flex flex-col justify-start w-3/4 space-y-1.5">
+                  <Label htmlFor={`question-${index}`} className="flex justify-start">Question</Label>
                   <Input id={`question-${index}`} placeholder="Untitled Question" />
                 </div>
-                <div className="flex flex-col w-1/4 space-y-1.5">
-                  <Label htmlFor={`question-type-${index}`}>Question Type</Label>
+                <div className="flex flex-col justify-start w-1/4 space-y-1.5">
+                  <Label htmlFor={`question-type-${index}`} className="flex justify-start">Question Type</Label>
                   <Select>
                     <SelectTrigger id={`question-type-${index}`}>
                       <SelectValue placeholder="Select" />
