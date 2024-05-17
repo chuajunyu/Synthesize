@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Next.js Authentication",
-  description: "Example using NextAuth.js",
+  title: "Synthesize",
+  description: "Create forms, surveys and quizzes seamlessly with AI",
 };
 
 export default function RootLayout({
