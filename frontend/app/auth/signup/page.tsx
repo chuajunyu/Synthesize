@@ -1,5 +1,6 @@
 import Link from "next/link"
 import {auth, SignInGoogle, SignInGithub} from "@/components/authFunctions";
+import {redirect} from "next/navigation"
 
 
 export default async function Dashboard() {
@@ -7,7 +8,7 @@ export default async function Dashboard() {
   let user = session?.user?.email;
 
   return (
-    user ? <p>You are logged in!</p> :
+    user ? <p> {redirect("/form")} </p> :
     <div className="mx-auto grid w-[350px] gap-6">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Sign Up</h1>
