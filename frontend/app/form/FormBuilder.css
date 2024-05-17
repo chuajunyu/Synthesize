@@ -1,0 +1,8 @@
+html, body {
+    height: 100%; /* Makes sure the body takes full viewport height */
+    margin: 0; /* Remove default margin */
+    display: flex; /* Establishes a flex container */
+    justify-content: center; /* Centers children horizontally */
+    align-items: center; /* Centers children vertically */
+    text-align: center; /* Centers text inside children */
+  }
