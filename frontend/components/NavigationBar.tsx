@@ -1,8 +1,7 @@
-"use client"
-
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink" // Import the SidebarLink component
+import { SignOut } from "./authFunctions";
 
 const menuItems = [
   {
@@ -26,7 +25,7 @@ const menuItems = [
     text: "Home",
   },
   {
-    href: "formsCreated",
+    href: "platform/formsCreated",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +69,7 @@ const menuItems = [
     text: "Forms Completed",
   },
   {
-    href: "form",
+    href: "platform/form",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -137,6 +136,7 @@ export function NavigationBar() {
               </svg>
             </div>
           </div>
+          <SignOut />
         </div>
       </aside>
     </div>
