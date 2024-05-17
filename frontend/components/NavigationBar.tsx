@@ -1,8 +1,7 @@
-"use client"
-
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink" // Import the SidebarLink component
+import { SignOut } from "./authFunctions";
 
 const menuItems = [
   {
@@ -26,7 +25,7 @@ const menuItems = [
     text: "Home",
   },
   {
-    href: "formsCreated",
+    href: "/platform/formsCreated",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +69,7 @@ const menuItems = [
     text: "Forms Completed",
   },
   {
-    href: "form",
+    href: "/platform/form",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +90,7 @@ const menuItems = [
   },
 ];
 
-export function NavigationBar() {
+export function NavigationBar({user} : {user: string}) {
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
@@ -129,7 +128,7 @@ export function NavigationBar() {
           </ul>
           <div className="mt-auto flex">
             <div className="flex w-full justify-between">
-              <span className="text-sm font-medium text-black dark:text-white">email@synthesize.com</span>
+              <span className="text-sm font-medium text-black dark:text-white">{user}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-roledescription="more menu" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-black dark:text-white" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="1" />
                 <circle cx="19" cy="12" r="1" />
@@ -137,6 +136,7 @@ export function NavigationBar() {
               </svg>
             </div>
           </div>
+          <SignOut />
         </div>
       </aside>
     </div>
