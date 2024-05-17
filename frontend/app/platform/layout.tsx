@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import { auth } from "@/components/authFunctions";
 import { redirect } from "next/navigation";
+import { NavigationBar } from "@/components/NavigationBar";
 
 export const metadata = {
   title: "Synthesize",
@@ -18,8 +19,9 @@ export default async function RootLayout({
 
   return (
     !user ? redirect("/auth/login") :
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <div className="flex min-h-screen">
+        <NavigationBar user={user}/>
+        {children}
+    </div>
   );
 }

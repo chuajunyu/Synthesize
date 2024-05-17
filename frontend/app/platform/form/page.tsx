@@ -5,11 +5,8 @@ import { NavigationBar } from "@/components/NavigationBar";
 
 export default function App() {
   return (
-    <div className="flex min-h-screen">
-      <NavigationBar />
-      <div className="flex-grow">
-        <FormBuilder />
-      </div>
+    <div className="flex-grow">
+      <FormBuilder />
     </div>
   );
 }
