@@ -6,7 +6,7 @@ import SidebarLink from "@/components/SidebarLink" // Import the SidebarLink com
 
 const menuItems = [
   {
-    href: "#",
+    href: "homepage",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ const menuItems = [
     text: "Forms Created",
   },
   {
-    href: "#",
+    href: "formsCompleted",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
