@@ -7,7 +7,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen">
       <NavigationBar />
-      <div className="flex-grow">
+      <div className="flex-grow ml-56">
         <FormBuilder />
       </div>
     </div>
