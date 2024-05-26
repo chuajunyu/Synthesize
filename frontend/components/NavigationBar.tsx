@@ -99,7 +99,7 @@ export function NavigationBar() {
         className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform"
         aria-label="Sidebar"
       >
-        <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-gray-100 px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-violet-100 px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
           <a
             href="#"
             className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
@@ -121,7 +121,7 @@ export function NavigationBar() {
             </svg>
             <span className="ml-3 text-xl font-semibold">Synthesize</span>
           </a>
-          <Separator className="border-slate-300" />
+          <Separator className="border-black" />
           <ul className="space-y-2 text-2sm font-medium mt-4">
             {menuItems.map((item, index) => (
               <SidebarLink key={index} href={item.href} icon={item.icon} text={item.text}/>
