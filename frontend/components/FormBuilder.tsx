@@ -1,7 +1,6 @@
 "use client"
-
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,16 +8,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 function FormBuilder() {
   // State to manage multiple question cards
@@ -26,13 +25,20 @@ function FormBuilder() {
 
   // Function to delete a question
   const handleDelete = (id: number) => {
-    setQuestions(questions.filter(question => question.id !== id));
+    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
   };
 
   // Function to add a new question
   const handleAddNew = () => {
     const newId = questions.length > 0 ? questions[questions.length - 1].id + 1 : 1;
     setQuestions([...questions, { id: newId, question: "", type: "" }]);
+  };
+
+  // Function to handle input changes
+  const handleInputChange = (id: number, field: string, value: string) => {
+    setQuestions(prevQuestions => prevQuestions.map(question => 
+      question.id === id ? { ...question, [field]: value } : question
+    ));
   };
 
   return (
@@ -45,11 +51,11 @@ function FormBuilder() {
           <form>
             <div className="flex flex-col w-full space-y-4">
               <div className="flex flex-col w-full space-y-1.5">
-                <Label htmlFor="form-name">Form Name</Label>
+                <Label htmlFor="form-name" className="flex justify-start">Form Name</Label>
                 <Input id="form-name" placeholder="Form Name" />
               </div>
               <div className="flex flex-col w-full space-y-1.5">
-                <Label htmlFor="form-description">Form Description</Label>
+                <Label htmlFor="form-description" className="flex justify-start">Form Description</Label>
                 <Input id="form-description" placeholder="What is this form about?" />
               </div>
             </div>
@@ -62,22 +68,30 @@ function FormBuilder() {
         </CardFooter>
       </Card>
 
-      {questions.map((question, index) => (
-        <Card key={index} className="w-[800px]">
+      {questions.map((question) => (
+        <Card key={question.id} className="w-[800px]">
           <CardHeader>
             <CardTitle>Create a New Question</CardTitle>
           </CardHeader>
           <CardContent>
             <form>
-              <div className="flex w-full gap-4">
-                <div className="flex flex-col w-3/4 space-y-1.5">
-                  <Label htmlFor={`question-${index}`}>Question</Label>
-                  <Input id={`question-${index}`} placeholder="Untitled Question" />
+              <div className="flex flex-row justify-start align-left w-full gap-4">
+                <div className="flex flex-col justify-start w-3/4 space-y-1.5">
+                  <Label htmlFor={`question-${question.id}`} className="flex justify-start">Question</Label>
+                  <Input 
+                    id={`question-${question.id}`} 
+                    placeholder="Untitled Question" 
+                    value={question.question}
+                    onChange={(e) => handleInputChange(question.id, 'question', e.target.value)}
+                  />
                 </div>
-                <div className="flex flex-col w-1/4 space-y-1.5">
-                  <Label htmlFor={`question-type-${index}`}>Question Type</Label>
-                  <Select>
-                    <SelectTrigger id={`question-type-${index}`}>
+                <div className="flex flex-col justify-start w-1/4 space-y-1.5">
+                  <Label htmlFor={`question-type-${question.id}`} className="flex justify-start">Question Type</Label>
+                  <Select 
+                    value={question.type}
+                    onValueChange={(value) => handleInputChange(question.id, 'type', value)}
+                  >
+                    <SelectTrigger id={`question-type-${question.id}`}>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="popper">
@@ -91,13 +105,13 @@ function FormBuilder() {
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button onClick={() => handleDelete(question.id)} variant="outline">Delete Question</Button>
-            {index === questions.length - 1 && (
+            {question.id === questions[questions.length - 1].id && (
               <Button onClick={handleAddNew}>Add New Question</Button>
             )}
           </CardFooter>
         </Card>
       ))}
-       <Button>Create Form</Button>
+      <Button>Create Form</Button>
     </div>
   );
 }
