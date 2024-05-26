@@ -1,0 +1,20 @@
+import app from "./db_conn";
+import { getDatabase, ref, get } from "firebase/database";
+
+export default async function readFormData(formId: string) {
+    const db = getDatabase(app);
+    const formRef = ref(db, 'forms/' + formId);
+    try {
+        const snapshot = await get(formRef);
+        if (snapshot.exists()) {
+            const formData = snapshot.val();
+            return formData;
+        } else {
+            console.log('No form found with this id');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error reading form data:', error);
+        return null;
+    }
+}
