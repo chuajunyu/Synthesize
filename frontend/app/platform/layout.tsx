@@ -19,9 +19,13 @@ export default async function RootLayout({
 
   return (
     !user ? redirect("/auth/login") :
-    <div className="flex min-h-screen">
-        <NavigationBar user={user}/>
+    <div className="flex flex-row">
+      <div>
+        <NavigationBar user={user} />
+      </div>
+      <div className="flex-auto">
         {children}
+      </div>
     </div>
   );
 }
