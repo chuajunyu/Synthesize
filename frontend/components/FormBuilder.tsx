@@ -40,7 +40,7 @@ function FormBuilder() {
   const [questions, setQuestions] = useState([{ id: 1, question: "", type: "" }]);
   const [key, setKey] = useState<string | null>('');
   
-  const descriptionRef = useRef(null); // Reference to the AlertDialogDescription
+  const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
 
   // Function to delete a question
   const handleDelete = (id: number) => {
@@ -85,10 +85,10 @@ function FormBuilder() {
     }
   };
 
-  let hrefOrigin = useRef()
-  
-  useEffect( () => {  
-       hrefOrigin.current= window.location.origin
+  let hrefOrigin = useRef<string | undefined>();
+
+  useEffect(() => {
+    hrefOrigin.current = window.location.origin;
   }, []);
 
   return (
