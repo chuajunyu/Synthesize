@@ -5,7 +5,7 @@ export default function create_form(email: string, title: string, description: s
     const db = getDatabase(app);
     const formsRef = ref(db, 'forms');
     const newFormsRef = push(formsRef);
-    const key = newFormsRef.key;
+    const key = newFormsRef.key ?? '';
     set(newFormsRef, {
         createdDate: Date.now(),
         creatorId: email,
