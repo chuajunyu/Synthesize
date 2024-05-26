@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { auth } from "@/components/authFunctions";  
 import create_form from "@/database/create_form";
 import { Button } from "@/components/ui/button";
@@ -38,9 +38,9 @@ function FormBuilder() {
   const [description, setDescription] = useState("")
   // State to manage multiple question cards
   const [questions, setQuestions] = useState([{ id: 1, question: "", type: "" }]);
-  const [key, setKey] = useState("")
+  const [key, setKey] = useState<string | null>('');
   
-  const descriptionRef = useRef(null); // Reference to the AlertDialogDescription
+  const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
 
   // Function to delete a question
   const handleDelete = (id: number) => {
@@ -85,7 +85,12 @@ function FormBuilder() {
     }
   };
 
-  const baseUrl = location.origin;
+  let hrefOrigin = useRef<string | undefined>();
+
+  useEffect(() => {
+    hrefOrigin.current = window.location.origin;
+  }, []);
+
   return (
     <div className="flex flex-col justify-center items-center gap-y-8 mt-8">
       <Card className="w-[800px]">
@@ -174,7 +179,7 @@ function FormBuilder() {
           <AlertDialogHeader>
             <AlertDialogTitle>Share the link with your survey participants!</AlertDialogTitle>
             <AlertDialogDescription ref={descriptionRef}>
-              {baseUrl}{usePathname()}/{key}
+              {hrefOrigin.current}{usePathname()}/{key}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
