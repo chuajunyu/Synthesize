@@ -95,7 +95,7 @@ export function NavigationBar({user} : {user: string}) {
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform"
+        className="left-0 top-0 z-40 h-screen w-64 transition-transform"
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-violet-100 px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
