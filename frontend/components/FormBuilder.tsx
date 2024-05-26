@@ -38,7 +38,7 @@ function FormBuilder() {
   const [description, setDescription] = useState("")
   // State to manage multiple question cards
   const [questions, setQuestions] = useState([{ id: 1, question: "", type: "" }]);
-  const [key, setKey] = useState("")
+  const [key, setKey] = useState("") | null>('');
   
   const descriptionRef = useRef(null); // Reference to the AlertDialogDescription
 

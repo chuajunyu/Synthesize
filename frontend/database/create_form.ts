@@ -1,7 +1,7 @@
 import app from "./db_conn";
 import { getDatabase, ref, set, push } from "firebase/database";
 
-export default function create_form(email: string, title: string, description: string, questions: Array<{text: string, type: string}>) {
+export default function create_form(email: string, title: string, description: string, questions: Array<{text: string, type: string}>): string {
     const db = getDatabase(app);
     const formsRef = ref(db, 'forms');
     const newFormsRef = push(formsRef);
