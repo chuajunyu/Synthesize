@@ -5,9 +5,6 @@ export default function readUserData(email: string) {
     const db = getDatabase(app);
     const userRef= ref(db, 'users/');
     const userQuery = query(userRef, orderByChild('email'), equalTo(email));
-    // onValue(userRef, (snapshot) => {
-    //     const data = snapshot.val();
-    //     console.log(data);
 
     get(userQuery).then((snapshot) => {
         if (snapshot.exists()) {
