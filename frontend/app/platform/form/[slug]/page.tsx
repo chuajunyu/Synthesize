@@ -1,10 +1,13 @@
 import ResponseForm from "@/components/ResponseForm";
 import readFormData from "@/database/read_form";
 
-
 export default await async function Page({ params }: { params: { slug: string } }) {
     const formData = await readFormData(params.slug);
-    console.log(formData);
+    if (formData === null) {
+        return <div>
+            <h1>Form not found</h1>
+        </div>
+    }
     const { createdDate, creatorId, description, questions, title } = formData;
     console.log(questions);
     return <div>
