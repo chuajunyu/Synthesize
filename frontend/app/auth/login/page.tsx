@@ -1,11 +1,14 @@
 import Link from "next/link"
-import {auth, SignInGoogle, SignInGithub} from "@/components/authFunctions";
+
+import { EmailLogIn } from "@/components/auth/emailPasswordAuth"
+import {SignInGoogle, SignInGithub} from "@/components/authFunctions";
 import {redirect} from "next/navigation"
+import auth from "@/lib/firebase/auth";
 
 
-export default async function Dashboard() {
-  let session = await auth();
-  let user = session?.user?.email;
+export default function Dashboard() {
+  const user = auth.currentUser;
+  console.log(user)
 
   return (
     user ? <p> {redirect("/platform/form")} </p> :
@@ -16,6 +19,7 @@ export default async function Dashboard() {
           Select one of the following log-in methods
         </p>
       </div>
+      <EmailLogIn />
       <div className="grid gap-2">
         <SignInGoogle />
       </div>
