@@ -1,33 +1,36 @@
 "use client"
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { ShareButton } from "@/components/ShareButton"
+import * as React from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { ShareButton } from "@/components/ShareButton";
 
-const tableItems = [
-    {
-      title: "Form Title 1",
-      date: "17 May 2024",
-    },
-    {
-        title: "Form Title 2",
-        date: "17 May 2024",
-    },
-    {
-        title: "Form Title 3",
-        date: "17 May 2024",
-    },
-];
+interface CreatedFormsTableProps {
+  formData: { [key: string]: FormData };
+}
 
-export function CreatedFormsTable() {
+interface FormData {
+  createdDate: string;
+  creatorId: string;
+  description: string;
+  title: string;
+}
+
+interface FormSummary {
+  id: string;
+  title: string;
+  date: string;
+}
+
+export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
+  const formattedData: FormSummary[] = Object.keys(formData).map((key) => ({
+    id: key,
+    title: formData[key].title,
+    date: new Date(formData[key].createdDate).toLocaleDateString(),
+  }));
+
   return (
     <div className="flex flex-col gap-4 mb-3">
-    {tableItems.map((item, index) => (
-    <Card key={index} className="w-[1000px]">
+    {formattedData.map((item) => (
+    <Card key={item.id} className="w-[1000px]">
       <CardHeader>
         <CardTitle>
         <div className="flex w-full gap-4">
@@ -37,7 +40,12 @@ export function CreatedFormsTable() {
             </svg>
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
+          <a
+            href={`/platform/formsCreated/${item.id}`}
+            className="text-blue-600 hover:underline"
+          >
             {item.title}
+          </a>
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
             {item.date}

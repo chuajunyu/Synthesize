@@ -4,9 +4,7 @@ import readFormData from "@/database/read_form";
 
 export default await async function Page({ params }: { params: { slug: string } }) {
     const formData = await readFormData(params.slug);
-    console.log(formData);
     const { createdDate, creatorId, description, questions, title } = formData;
-    console.log(questions);
     return <div>
         <div className="flex flex-col">
             <ResponseForm title={title} description={description} questions={questions} formId={params.slug}/>
