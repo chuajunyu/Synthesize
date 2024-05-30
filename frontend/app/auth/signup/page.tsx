@@ -1,11 +1,16 @@
+"use client"
+
 import Link from "next/link"
-import {auth, SignInGoogle, SignInGithub} from "@/components/authFunctions";
+import { EmailSignUp } from "@/components/auth/emailPasswordAuth"
+import {SignInGoogle, SignInGithub} from "@/components/authFunctions";
 import {redirect} from "next/navigation"
+import auth from "@/lib/firebase/auth";
+import getCurrentUser from "@/lib/firebase/auth_state_listener";
 
 
-export default async function Dashboard() {
-  let session = await auth();
-  let user = session?.user?.email;
+export default function Dashboard() {
+  const user = auth.currentUser;
+  console.log(user)
 
   return (
     user ? <p> {redirect("/platform/form")} </p> :
@@ -13,9 +18,10 @@ export default async function Dashboard() {
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Sign Up</h1>
         <p className="text-balance text-muted-foreground">
-          Sign up using your social accounts
+          Select one of the following sign-up methods
         </p>
       </div>
+      <EmailSignUp />
       <div className="grid gap-2">
         <SignInGoogle />
       </div>
