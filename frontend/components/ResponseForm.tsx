@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+"use client"
+import React, { useState } from 'react';
+import { auth } from "@/components/authFunctions";  
+import create_response from "@/database/create_response";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,19 +13,25 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
-export default function ResponseForm(title: string, description: string, questions: any[]) {
+interface Question {
+    type: string;
+    text: string;
+  }
+  
+  interface ResponseFormProps {
+    title: string;
+    description: string;
+    questions: Question[];
+    formId: string;
+  }
+
+export default function ResponseForm({ title, description, questions, formId }: ResponseFormProps) {
     const [responses, setResponses] = useState(
-        questions.map(question => ({ id: question.id, response: "" }))
+        questions?.map((question, index) => ({ id: index, response: "" }))
       );
 
+    console.log(questions)
     const handleResponseChange = (id: number, response: string) => {
         setResponses(prevResponses =>
           prevResponses.map(r =>
@@ -30,6 +39,20 @@ export default function ResponseForm(title: string, description: string, questio
           )
         );
       };
+
+    // Function to submit a new response
+    const handleSubmit = async () => {
+      // Call the create_form function here
+      let session = await auth();
+      let user = session?.user?.email ?? "";
+      const formattedResponses = responses.map(response => ({
+        responseId: response.id,
+        response: response.response
+      }));
+      create_response(user, formId, formattedResponses);
+      setResponses([{ id: 1, response: ""}]);
+    }
+
     return (
         <div className="flex flex-col justify-center items-center gap-y-8 mt-8">
         <Card className="w-[800px]">
@@ -39,28 +62,29 @@ export default function ResponseForm(title: string, description: string, questio
         </CardHeader>
         </Card>
 
-    {questions.map((question) => (
-        <Card key={question.id} className="w-[800px]">
+    {questions?.map((question, index) => (
+        <Card key={index} className="w-[800px]">
           <CardHeader>
             <CardTitle>{question.text}</CardTitle>
           </CardHeader>
-          <CardContent>
+        <CardContent>
             <form>
-              <div className="flex flex-row justify-start align-left w-full gap-4">
-                <div className="flex flex-col justify-start w-3/4 space-y-1.5">
-                  <Label htmlFor={`response-${responses.id}`} className="flex justify-start">Answer here</Label>
-                  <Input 
-                    id={`response-${responses.id}`} 
-                    placeholder="Untitled Question" 
-                    value={responses.response}
-                    onChange={(e) => handleResponseChange(question.id, e.target.value)}
-                  />
+                <div className="flex flex-row justify-start align-left w-full gap-4">
+                    <div className="flex flex-col justify-start w-3/4 space-y-1.5">
+                        <Label htmlFor={`response-${index}`} className="flex justify-start">Answer here</Label>
+                        <Input 
+                            id={`response-${index}`} 
+                            placeholder="Untitled Question" 
+                            value={responses[index].response}
+                            onChange={(e) => handleResponseChange(index, e.target.value)}
+                        />
+                    </div>
                 </div>
-              </div>
             </form>
-          </CardContent>
+        </CardContent>
         </Card>
       ))}
+      <Button onClick={handleSubmit}>Submit Response</Button>
     </div>
   )
 }
