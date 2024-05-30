@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
-import { auth } from "@/components/authFunctions";  
 import create_form from "@/database/create_form";
+import { auth } from "@/components/authFunctions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -47,12 +47,13 @@ function FormBuilder() {
     setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
   };
 
+  // Function to add a new question
   const handleAddNew = () => {
     const newId = questions.length > 0 ? questions[questions.length - 1].id + 1 : 1;
     setQuestions([...questions, { id: newId, question: "", type: "" }]);
   };
 
-  // Function to add a new question
+  // Function to submit a new form
   const handleSubmit = async () => {
     // Call the create_form function here
     let session = await auth();
