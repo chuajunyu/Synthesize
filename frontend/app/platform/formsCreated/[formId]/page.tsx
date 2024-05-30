@@ -2,7 +2,7 @@ import React from 'react';
 import FormTitleAndDescription from "@/components/FormTitleAndDescription";
 import FormOverviewStatistics from "@/components/FormOverviewStatistics";
 
-export default function formsCreated() {
+export default function ViewFormPage() {
     return (
         <div className="flex min-h-screen">
             <div className="flex flex-row justify-between w-full mx-20 mt-10 h-full">
