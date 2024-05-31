@@ -3,14 +3,14 @@ import { redirect } from "next/navigation";
 import { EmailLogIn } from "@/components/auth/emailPasswordAuth";
 import { SignInGoogle, SignInGithub } from "@/components/authFunctions";
 import auth from "@/lib/firebase/app";
+import RedirectIfLoggedIn from "@/components/auth/RedirectIfLoggedIn";
 
 export default function Dashboard() {
     const user = auth.currentUser;
     console.log("user is: ", user);
 
-    return user ? (
-        <p> {redirect("/platform/form")} </p>
-    ) : (
+    return (
+        <RedirectIfLoggedIn>
         <div className="mx-auto grid w-[350px] gap-6">
             <div className="grid gap-2 text-center">
                 <h1 className="text-3xl font-bold">Login</h1>
@@ -22,9 +22,9 @@ export default function Dashboard() {
             <div className="grid gap-2">
                 <SignInGoogle />
             </div>
-            <div className="grid gap-2">
+            {/* <div className="grid gap-2">
                 <SignInGithub />
-            </div>
+            </div> */}
             <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}
                 <Link href="signup" className="underline">
@@ -32,5 +32,6 @@ export default function Dashboard() {
                 </Link>
             </div>
         </div>
+        </RedirectIfLoggedIn>
     );
 }
