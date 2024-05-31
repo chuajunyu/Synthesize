@@ -1,31 +1,24 @@
+"use client"
+
 import "@/app/globals.css";
-import { auth } from "@/components/authFunctions";
-import { redirect } from "next/navigation";
 import { NavigationBar } from "@/components/NavigationBar";
+import auth from "@/lib/firebase/app";
+import { useAuth } from "@/lib/firebase/AuthContext";
 
-export const metadata = {
-  title: "Synthesize",
-  description: "Create forms, surveys and quizzes seamlessly with AI",
-};
-
-export default async function RootLayout({
-  children,
+export default function RootLayout({
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
+    const { user, loading } = useAuth();
+    const email = user?.email ?? "";
 
-  let session = await auth();
-  let user = session?.user?.email;
-
-  return (
-    !user ? redirect("/auth/login") :
-    <div className="flex flex-row">
-      <div>
-        <NavigationBar user={user} />
-      </div>
-      <div className="flex-auto">
-        {children}
-      </div>
-    </div>
-  );
+    return (
+        <div className="flex flex-row">
+            <div>
+                <NavigationBar user={email} />
+            </div>
+            <div className="flex-auto">{children}</div>
+        </div>
+    );
 }

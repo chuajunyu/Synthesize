@@ -1,18 +1,19 @@
-"use server";
+// "use server";
+"use client"
 
-
+import { useRouter } from "next/navigation";
 import { auth, signIn, signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
-
-
+import { sign_out } from "@/lib/firebase/sign_out";
+import signInWithGoogleRedirect from "@/lib/firebase/signInWithGoogleRedirect";
+import signInWithGithubPopUp from "@/lib/firebase/signInWithGitHubPopUp";
 
 
 function SignInGoogle() {
     return (
         <form
             action={async () => {
-                "use server";
-                await signIn("google");
+                signInWithGoogleRedirect();
             }}
         >
             <Button type="submit" variant="outline" className="w-full">
@@ -59,11 +60,12 @@ function SignInGoogle() {
 }
 
 function SignInGithub() {
+    const router = useRouter();
     return (
         <form
             action={async () => {
-                "use server";
-                await signIn("github");
+                signInWithGithubPopUp();
+                router.push("/platform/form");
             }}
         >
             <Button type="submit" variant="outline" className="flex w-full">
@@ -94,10 +96,7 @@ function SignInGithub() {
 function SignOut() {
     return (
         <form
-            action={async () => {
-                "use server";
-                await signOut();
-            }}
+            action={() => sign_out()}
         >
             <Button type="submit">Sign Out</Button>
         </form>
