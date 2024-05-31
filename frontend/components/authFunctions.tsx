@@ -1,18 +1,17 @@
-"use server";
-
+// "use server";
+"use client"
 
 import { auth, signIn, signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
-
-
+import { sign_out } from "@/lib/firebase/sign_out";
 
 
 function SignInGoogle() {
     return (
         <form
             action={async () => {
-                "use server";
-                await signIn("google");
+                // "use server";
+                // await signIn("google");
             }}
         >
             <Button type="submit" variant="outline" className="w-full">
@@ -62,8 +61,8 @@ function SignInGithub() {
     return (
         <form
             action={async () => {
-                "use server";
-                await signIn("github");
+                // "use server";
+                // await signIn("github");
             }}
         >
             <Button type="submit" variant="outline" className="flex w-full">
@@ -94,10 +93,7 @@ function SignInGithub() {
 function SignOut() {
     return (
         <form
-            action={async () => {
-                "use server";
-                await signOut();
-            }}
+            action={() => sign_out()}
         >
             <Button type="submit">Sign Out</Button>
         </form>
