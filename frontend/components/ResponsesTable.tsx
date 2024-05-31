@@ -3,33 +3,32 @@ import * as React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShareButton } from "@/components/ShareButton";
 
-interface CreatedFormsTableProps {
-  formData: { [key: string]: MyFormData };
+interface FormResponsesTableProps {
+  responseData: { [key: string]: ResponseData };
 }
 
-interface MyFormData {
-  formId: string;
-  createdDate: string;
-  title: string;
-}
-
-interface FormSummary {
-  id: string;
-  title: string;
+interface ResponseData {
+  creatorId: string;
   date: string;
 }
 
-export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
-  const formattedData: FormSummary[] = Object.keys(formData).map((key) => ({
-    id: key,
-    title: formData[key].title,
-    date: new Date(formData[key].createdDate).toLocaleDateString(),
+interface ResponseSummary {
+  responseId: string;
+  creatorId: string;
+  date: string;
+}
+
+export function ResponsesTable({ responseData }: FormResponsesTableProps) {
+  const formattedData: ResponseSummary[] = Object.keys(responseData).map((key) => ({
+    responseId: key,
+    creatorId: responseData[key].creatorId,
+    date: new Date(responseData[key].date).toLocaleDateString(),
   }));
 
   return (
     <div className="flex flex-col gap-4 mb-3">
-    {formattedData.map((item) => (
-    <Card key={item.id} className="w-[1000px]">
+    {formattedData.map((response) => (
+    <Card key={response.responseId} className="w-[1000px]">
       <CardHeader>
         <CardTitle>
         <div className="flex w-full gap-4">
@@ -40,14 +39,14 @@ export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
           <a
-            href={`/platform/formsCreated/${item.id}`}
+            href={`/platform/formsCreated/${response.responseId}`}
             className="text-blue-600 hover:underline"
           >
-            {item.title}
+            {response.creatorId}
           </a>
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
-            {item.date}
+            {response.date}
         </div> 
         <div className="grid flex-col justify-end r-0 text-sm items-right">
             <ShareButton/>

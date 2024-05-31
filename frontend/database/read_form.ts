@@ -6,13 +6,13 @@ interface Question {
     text: string;
   }
 
-interface FormProps {
+export interface FormProps {
     title: string;
     description: string;
     questions: Question[];
     createdDate: number;
     creatorId: string;
-  }
+}
 
 export default async function readFormData(formId: string): Promise<FormProps | null> {
     const db = getDatabase(app);
