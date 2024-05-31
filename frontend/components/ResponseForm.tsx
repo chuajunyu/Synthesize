@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/lib/firebase/AuthContext"
+import { useAuth } from "@/lib/firebase/AuthContext";
 
 interface Question {
     type: string;
@@ -32,7 +32,6 @@ export default function ResponseForm({ title, description, questions, formId }: 
         questions?.map((question, index) => ({ id: index, response: "" }))
       );
 
-    console.log(questions)
     const handleResponseChange = (id: number, response: string) => {
         setResponses(prevResponses =>
           prevResponses.map(r =>
@@ -41,18 +40,20 @@ export default function ResponseForm({ title, description, questions, formId }: 
         );
       };
 
-    const {user, loading} = useAuth()
-
+    const {user} = useAuth();
     // Function to submit a new response
     const handleSubmit = async () => {
       // Call the create_form function here
-      const email = user?.email ?? "";
+
+      let email = user?.email ?? "";
+      console.log(responses.length)
       const formattedResponses = responses.map(response => ({
         responseId: response.id,
         response: response.response
       }));
       create_response(email, formId, formattedResponses);
-      setResponses([{ id: 1, response: ""}]);
+      setResponses(questions?.map((question, index) => ({ id: index, response: "" })));
+      alert("Response submitted successfully")
     }
 
     return (
