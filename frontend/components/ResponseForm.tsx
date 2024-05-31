@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useAuth } from "@/lib/firebase/AuthContext"
 
 interface Question {
     type: string;
@@ -40,16 +41,17 @@ export default function ResponseForm({ title, description, questions, formId }: 
         );
       };
 
+    const {user, loading} = useAuth()
+
     // Function to submit a new response
     const handleSubmit = async () => {
       // Call the create_form function here
-      let session = await auth();
-      let user = session?.user?.email ?? "";
+      const email = user?.email ?? "";
       const formattedResponses = responses.map(response => ({
         responseId: response.id,
         response: response.response
       }));
-      create_response(user, formId, formattedResponses);
+      create_response(email, formId, formattedResponses);
       setResponses([{ id: 1, response: ""}]);
     }
 
