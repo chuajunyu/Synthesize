@@ -16,7 +16,7 @@ export default function FormsCreated() {
     const [formData, setFormData] = useState<{ [key: string]: MyFormData; } | null>(null);
     const [loading, setLoading] = useState(true);
     const [userEmail, setUserEmail] = useState<string | null>(null);
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     
     useEffect(() => {
         async function authenticate() {
@@ -24,11 +24,11 @@ export default function FormsCreated() {
             setUserEmail(email);
         }
         authenticate();
-    }, []);
+    }, [user?.email]);
 
     useEffect(() => {
         async function fetchData() {
-            if (user !== null) {
+            if (userEmail !== null) {
                 const data = await getUserForms(userEmail);
                 console.log(data)
                 setFormData(data);
