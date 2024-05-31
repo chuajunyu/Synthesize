@@ -2,10 +2,10 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
-import auth from "./auth";
+import auth from "./app";
 
-function signUpWithEmailAndPassword(email: string, password: string) {
-    createUserWithEmailAndPassword(auth, email, password)
+async function signUpWithEmailAndPassword(email: string, password: string) {
+    await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed up
             const user = userCredential.user;
@@ -18,8 +18,8 @@ function signUpWithEmailAndPassword(email: string, password: string) {
         });
 }
 
-function logInWithEmailAndPassword(email: string, password: string) {
-    signInWithEmailAndPassword(auth, email, password)
+async function logInWithEmailAndPassword(email: string, password: string) {
+    await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
