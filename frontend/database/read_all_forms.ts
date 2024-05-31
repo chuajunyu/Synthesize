@@ -1,27 +1,14 @@
 import app from "./db_conn";
 import { getDatabase, ref, get } from "firebase/database";
 
-interface Question {
-    type: string;
-    text: string;
-  }
-
-export interface FormProps {
-    title: string;
-    description: string;
-    questions: Question[];
-    createdDate: number;
-    creatorId: string;
-}
-
-export default async function readFormData(formId: string): Promise<FormProps | null> {
+export default async function read_all_form_data() {
     const db = getDatabase(app);
-    const formRef = ref(db, 'forms/' + formId);
+    const formRef = ref(db, 'forms/');
     try {
         const snapshot = await get(formRef);
         if (snapshot.exists()) {
-            const formData = snapshot.val();
-            return formData;
+            const allFormsData = snapshot.val();
+            return allFormsData;
         } else {
             console.log('No form found with this id');
             return null;

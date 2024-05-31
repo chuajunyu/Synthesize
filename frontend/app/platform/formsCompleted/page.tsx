@@ -1,9 +1,50 @@
-import { NavigationBar } from "@/components/NavigationBar";
-import React from "react";
+"use client"
+import React, { useEffect, useState } from 'react';
 import { CreatedFormsTable } from "@/components/CreatedFormsTable";
+import { getUserForms } from '@/database/read_user_forms';
+import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-export default function formsCreated() {
+export interface MyFormData {
+    formId: string;
+    createdDate: string;
+    title: string;
+}
+
+export default function FormsCreated() {
+    const [formData, setFormData] = useState<{ [key: string]: MyFormData; } | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const { user } = useAuth();
+    
+    useEffect(() => {
+        async function authenticate() {
+            const email = user?.email ?? "";
+            setUserEmail(email);
+        }
+        authenticate();
+    }, [user?.email]);
+
+    useEffect(() => {
+        async function fetchData() {
+            if (userEmail !== null) {
+                const data = await getUserForms(userEmail);
+                setFormData(data);
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, [userEmail]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!formData) {
+        return <div>No forms found</div>;
+    }
+
+
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
@@ -11,7 +52,7 @@ export default function formsCreated() {
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         View your completed forms, Shelia
                     </span>
-                    <CreatedFormsTable />
+                    <CreatedFormsTable formData={formData}/>
                 </div>
             </div>
         </ProtectedRoute>

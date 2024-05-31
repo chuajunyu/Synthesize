@@ -1,5 +1,4 @@
-import { NavigationBar } from "@/components/NavigationBar";
-import React from "react";
+import React from 'react';
 import Block1 from "@/components/Block1";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
