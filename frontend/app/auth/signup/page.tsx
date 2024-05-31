@@ -24,9 +24,9 @@ export default function Dashboard() {
             <div className="grid gap-2">
                 <SignInGoogle />
             </div>
-            <div className="grid gap-2">
+            {/* <div className="grid gap-2">
                 <SignInGithub />
-            </div>
+            </div> */}
             <div className="mt-4 text-center text-sm">
                 Already have an account?{" "}
                 <Link href="login" className="underline">
