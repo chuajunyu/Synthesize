@@ -3,33 +3,38 @@ import * as React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShareButton } from "@/components/ShareButton";
 
-interface CreatedFormsTableProps {
-  formData: { [key: string]: MyFormData };
-}
-
-interface MyFormData {
+interface FormResponsesTableProps {
+  responseData: { [key: string]: ResponseData };
   formId: string;
-  createdDate: string;
-  title: string;
 }
 
-interface FormSummary {
-  id: string;
-  title: string;
+interface ResponseData {
+  userId: string;
+  submissionDate: string;
+}
+
+interface ResponseSummary {
+  responseId: string;
+  creatorId: string;
   date: string;
 }
 
-export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
-  const formattedData: FormSummary[] = Object.keys(formData).map((key) => ({
-    id: key,
-    title: formData[key].title,
-    date: new Date(formData[key].createdDate).toLocaleDateString(),
+interface FormIdProps {
+  formId: string;
+}
+
+export function ResponsesTable({ responseData, formId }: FormResponsesTableProps) {
+  const formattedData: ResponseSummary[] = Object.keys(responseData).map((key) => ({
+    responseId: key,
+    creatorId: responseData[key].userId,
+    date: new Date(responseData[key].submissionDate).toLocaleDateString(),
   }));
 
+  console.log(formId);
   return (
     <div className="flex flex-col w-full gap-4 mb-3">
-    {formattedData.map((item) => (
-    <Card key={item.id} className="w-full">
+    {formattedData.map((response) => (
+    <Card key={response.responseId} className="w-full">
       <CardHeader>
         <CardTitle>
         <div className="flex w-full gap-4">
@@ -40,14 +45,14 @@ export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
           <a
-            href={`/platform/formsCreated/${item.id}`}
+            href={`/platform/formsCompleted/${formId}/${response.responseId}`}
             className="text-blue-600 hover:underline"
           >
-            {item.title}
+            {response.creatorId}
           </a>
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
-            {item.date}
+            {response.date}
         </div> 
         <div className="grid flex-col justify-end r-0 text-sm items-right">
             <ShareButton/>
