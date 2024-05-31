@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { CreatedFormsTable } from "@/components/CreatedFormsTable";
 import { getUserForms } from '@/database/read_user_forms';
-import { auth } from "@/components/authFunctions";
+import { useAuth } from "@/lib/firebase/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export interface MyFormData {
     formId: string;
@@ -13,27 +14,27 @@ export interface MyFormData {
 export default function FormsCreated() {
     const [formData, setFormData] = useState<{ [key: string]: MyFormData; } | null>(null);
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const { user, loading } = useAuth();
     
     useEffect(() => {
         async function authenticate() {
-            const session = await auth();
-            const userEmail = session?.user?.email ?? "";
-            setUser(userEmail);
+            const email = user?.email ?? "";
+            setUserEmail(email);
         }
         authenticate();
     }, []);
 
     useEffect(() => {
         async function fetchData() {
-            if (user !== null) {
+            if (userEmail !== null) {
                 const data = await getUserForms(user);
                 setFormData(data);
                 setLoading(false);
             }
         }
         fetchData();
-    }, [user]);
+    }, [userEmail]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -43,12 +44,17 @@ export default function FormsCreated() {
         return <div>No forms found</div>;
     }
 
+
     return (
-        <div className="flex min-h-screen">
-            <div className="justify-center ml-20 mt-5">
-                <span className="flex mt-3 mb-3 text-xl font-semibold">View your created forms, Shelia</span>
-                <CreatedFormsTable formData={formData} />
+        <ProtectedRoute>
+            <div className="flex min-h-screen">
+                <div className="justify-center ml-20 mt-5">
+                    <span className="flex mt-3 mb-3 text-xl font-semibold">
+                        View your completed forms, Shelia
+                    </span>
+                    <CreatedFormsTable />
+                </div>
             </div>
-        </div>
+        </ProtectedRoute>
     );
 }

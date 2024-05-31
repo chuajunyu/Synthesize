@@ -1,33 +1,38 @@
-import Link from "next/link"
-import {auth, SignInGoogle, SignInGithub} from "@/components/authFunctions";
-import {redirect} from "next/navigation"
+"use client";
 
+import Link from "next/link";
+import { EmailSignUp } from "@/components/auth/emailPasswordAuth";
+import { SignInGoogle, SignInGithub } from "@/components/authFunctions";
+import RedirectIfLoggedIn from "@/components/auth/RedirectIfLoggedIn";
+import auth from "@/lib/firebase/app";
 
-export default async function Dashboard() {
-  let session = await auth();
-  let user = session?.user?.email;
+export default function Dashboard() {
+    const user = auth.currentUser;
+    console.log(user);
 
-  return (
-    user ? <p> {redirect("/platform/form")} </p> :
-    <div className="mx-auto grid w-[350px] gap-6">
-      <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Sign Up</h1>
-        <p className="text-balance text-muted-foreground">
-          Sign up using your social accounts
-        </p>
-      </div>
-      <div className="grid gap-2">
-        <SignInGoogle />
-      </div>
-      <div className="grid gap-2">
-        <SignInGithub />
-      </div>
-      <div className="mt-4 text-center text-sm">
-        Already have an account?{" "}
-        <Link href="login" className="underline">
-          Log in
-        </Link>
-      </div>
-    </div>
-  )
+    return (
+        <RedirectIfLoggedIn>
+            <div className="mx-auto grid w-[350px] gap-6">
+                <div className="grid gap-2 text-center">
+                    <h1 className="text-3xl font-bold">Sign Up</h1>
+                    <p className="text-balance text-muted-foreground">
+                        Select one of the following sign-up methods
+                    </p>
+                </div>
+                <EmailSignUp />
+                <div className="grid gap-2">
+                    <SignInGoogle />
+                </div>
+                {/* <div className="grid gap-2">
+                    <SignInGithub />
+                </div> */}
+                <div className="mt-4 text-center text-sm">
+                    Already have an account?{" "}
+                    <Link href="login" className="underline">
+                        Log in
+                    </Link>
+                </div>
+            </div>
+        </RedirectIfLoggedIn>
+    );
 }
