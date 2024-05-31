@@ -7,18 +7,22 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function FormTitleAndDescription() {
+interface FormTitleAndDescriptionProps {
+  title: string;
+  description: string;
+}
+
+export default function FormTitleAndDescription({title, description}: FormTitleAndDescriptionProps) {
   return (
     <Card className="sm:col-span-2">
       <CardHeader className="pb-3">
-        <CardTitle>Your Orders</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription className="max-w-lg text-balance leading-relaxed">
-          Introducing Our Dynamic Orders Dashboard for Seamless Management and
-          Insightful Analysis.
+          {description}
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button>Create New Order</Button>
+        <Button>Chat with LLM to gather insights!</Button>
       </CardFooter>
     </Card>
   )

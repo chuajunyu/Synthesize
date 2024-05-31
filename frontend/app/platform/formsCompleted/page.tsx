@@ -1,20 +1,53 @@
-import React from 'react';
-import FormTitleAndDescription from "@/components/FormTitleAndDescription";
-import FormOverviewStatistics from "@/components/FormOverviewStatistics";
+"use client"
+import React, { useEffect, useState } from 'react';
+import { CreatedFormsTable } from "@/components/CreatedFormsTable";
+import { getUserForms } from '@/database/read_user_forms';
+import { auth } from "@/components/authFunctions";
 
-export default function formsCreated() {
+export interface MyFormData {
+    formId: string;
+    createdDate: string;
+    title: string;
+}
+
+export default function FormsCreated() {
+    const [formData, setFormData] = useState<{ [key: string]: MyFormData; } | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<string | null>(null);
+    
+    useEffect(() => {
+        async function authenticate() {
+            const session = await auth();
+            const userEmail = session?.user?.email ?? "";
+            setUser(userEmail);
+        }
+        authenticate();
+    }, []);
+
+    useEffect(() => {
+        async function fetchData() {
+            if (user !== null) {
+                const data = await getUserForms(user);
+                setFormData(data);
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, [user]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!formData) {
+        return <div>No forms found</div>;
+    }
+
     return (
         <div className="flex min-h-screen">
-            <div className="flex flex-row justify-between w-full mx-20 mt-10 h-full">
-                <div className="flex-2 flex flex-col mr-5 h-full">
-                    <FormTitleAndDescription />
-                </div>
-                <div className="flex-1 flex flex-col mr-5 h-full">
-                    <FormOverviewStatistics />
-                </div>
-                <div className="flex-1 flex flex-col mr-5 h-full">
-                    <FormOverviewStatistics />
-                </div>
+            <div className="justify-center ml-20 mt-5">
+                <span className="flex mt-3 mb-3 text-xl font-semibold">View your created forms, Shelia</span>
+                <CreatedFormsTable formData={formData} />
             </div>
         </div>
     );
