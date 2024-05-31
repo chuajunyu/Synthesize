@@ -8,30 +8,32 @@ import {
     signUpWithEmailAndPassword,
     logInWithEmailAndPassword,
 } from "@/lib/firebase/auth_email_password";
+import { useRouter } from "next/navigation";
 
-function handleSubmitSignUp(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = form.get("email")?.toString();
-    const password = form.get("password")?.toString();
-    console.log(password);
-    if (email && password) {
-        signUpWithEmailAndPassword(email, password);
-    }
-}
 
-function handleSubmitLogIn(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const email = form.get("email")?.toString();
-    const password = form.get("password")?.toString();
-    console.log(password);
-    if (email && password) {
-        logInWithEmailAndPassword(email, password);
-    }
-}
+
+
 
 function EmailSignUp() {
+    const router = useRouter();
+
+    function handleSubmitSignUp(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const email = form.get("email")?.toString();
+        const password = form.get("password")?.toString();
+        console.log(password);
+        if (email && password) {
+            try {
+                signUpWithEmailAndPassword(email, password);
+                router.push("/platform/form");
+            } catch (error) {
+                console.log(error);
+            }
+            
+        }
+    }
+
     return (
         <form onSubmit={handleSubmitSignUp}>
             <div className="grid gap-4">
@@ -63,6 +65,24 @@ function EmailSignUp() {
 }
 
 function EmailLogIn() {
+    const router = useRouter();
+
+    function handleSubmitLogIn(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const email = form.get("email")?.toString();
+        const password = form.get("password")?.toString();
+        console.log(password);
+        if (email && password) {
+            try {
+                logInWithEmailAndPassword(email, password);
+                router.push("/platform/form");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
     return (
         <form onSubmit={handleSubmitLogIn}>
             <div className="grid gap-4">
