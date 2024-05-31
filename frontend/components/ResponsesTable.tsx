@@ -5,11 +5,12 @@ import { ShareButton } from "@/components/ShareButton";
 
 interface FormResponsesTableProps {
   responseData: { [key: string]: ResponseData };
+  formId: string;
 }
 
 interface ResponseData {
-  creatorId: string;
-  date: string;
+  userId: string;
+  submissionDate: string;
 }
 
 interface ResponseSummary {
@@ -18,17 +19,22 @@ interface ResponseSummary {
   date: string;
 }
 
-export function ResponsesTable({ responseData }: FormResponsesTableProps) {
+interface FormIdProps {
+  formId: string;
+}
+
+export function ResponsesTable({ responseData, formId }: FormResponsesTableProps) {
   const formattedData: ResponseSummary[] = Object.keys(responseData).map((key) => ({
     responseId: key,
-    creatorId: responseData[key].creatorId,
-    date: new Date(responseData[key].date).toLocaleDateString(),
+    creatorId: responseData[key].userId,
+    date: new Date(responseData[key].submissionDate).toLocaleDateString(),
   }));
 
+  console.log(formId);
   return (
-    <div className="flex flex-col gap-4 mb-3">
+    <div className="flex flex-col w-full gap-4 mb-3">
     {formattedData.map((response) => (
-    <Card key={response.responseId} className="w-[1000px]">
+    <Card key={response.responseId} className="w-full">
       <CardHeader>
         <CardTitle>
         <div className="flex w-full gap-4">
@@ -39,7 +45,7 @@ export function ResponsesTable({ responseData }: FormResponsesTableProps) {
         </div> 
         <div className="grid flex-col w-1/2 text-sm items-center gap-4">
           <a
-            href={`/platform/formsCreated/${response.responseId}`}
+            href={`/platform/formsCompleted/${formId}/${response.responseId}`}
             className="text-blue-600 hover:underline"
           >
             {response.creatorId}

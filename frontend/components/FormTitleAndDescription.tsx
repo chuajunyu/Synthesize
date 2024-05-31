@@ -14,8 +14,8 @@ interface FormTitleAndDescriptionProps {
 
 export default function FormTitleAndDescription({title, description}: FormTitleAndDescriptionProps) {
   return (
-    <Card className="sm:col-span-2">
-      <CardHeader className="pb-3">
+    <Card className="">
+      <CardHeader className="pb-9">
         <CardTitle>{title}</CardTitle>
         <CardDescription className="max-w-lg text-balance leading-relaxed">
           {description}

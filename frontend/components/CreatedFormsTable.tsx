@@ -27,9 +27,9 @@ export function CreatedFormsTable({ formData }: CreatedFormsTableProps) {
   }));
 
   return (
-    <div className="flex flex-col gap-4 mb-3">
+    <div className="flex flex-col w-full gap-4 mb-3">
     {formattedData.map((item) => (
-    <Card key={item.id} className="w-[1000px]">
+    <Card key={item.id} className="w-full">
       <CardHeader>
         <CardTitle>
         <div className="flex w-full gap-4">

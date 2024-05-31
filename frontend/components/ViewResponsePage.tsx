@@ -48,8 +48,8 @@ export default function ViewResponsePage({formData, responseData}: props) {
         <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
-            <p>Submitted at {submissionDateString}</p>
-            <p>by {userId} </p>
+            <p>Date Submitted: {submissionDateString}</p>
+            <p>Responder: {userId} </p>
         </CardHeader>
         </Card>
 

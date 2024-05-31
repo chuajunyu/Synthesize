@@ -11,6 +11,8 @@ import { ResponseFormat, getFormResponses } from "@/database/read_form_responses
 export default function ViewFormPage({ params }: { params: { formId: string } }) {
     const [formData, setFormData] = useState<FormProps | null>(null);
     const [responseData, setResponseData ] = useState<{ [key: string]: ResponseFormat} | null>(null);
+    const [responseCount, setResponseCount] = useState<number>(0);
+    const [uniqueRespondersCount, setUniqueRespondersCount] = useState<number>(0);
     
     useEffect(() => {
         async function fetchFormData() {
@@ -29,6 +31,16 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
             try {
                 const data = await getFormResponses(params.formId);
                 setResponseData(data);
+                if (data) {
+                    const len = Object.keys(data).length;
+                    setResponseCount(len);
+                    // the new Set stores unique creatorIds
+                    const responders = new Set<string>();
+                    Object.keys(data).forEach(key => {
+                        responders.add(data[key].userId);
+                    });
+                    setUniqueRespondersCount(responders.size);
+                }
             } catch (error) {
                 console.log("error found");
             }
@@ -44,21 +56,29 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
         return <div>No Response Data found</div>;
     }
     const { createdDate, creatorId, description, questions, title } = formData;
+    const text: string[] = [
+        "Unique Responders", 
+        "Responses"
+    ];
     return (
-        <div className="flex flex-col min-h-screen mx-20">
-            <div className="flex flex-row justify-between w-full mt-10 h-full">
-                <div className="flex flex-col w-1/2 mr-5">
+        <div className="flex flex-col mx-20">
+            <div className="flex flex-row w-full mt-10 h-full items-stretch">
+                <div className="flex flex-col flex-grow mr-5">
                     <FormTitleAndDescription title={formData.title} description={formData.description}/>
                 </div>
-                <div className="flex-4 flex w-1/4 flex-col mr-5">
-                    <FormOverviewStatistics />
+                <div className="flex flex-grow flex-col mr-5">
+                    <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
                 </div>
-                <div className="flex-4 flex w-1/4 flex-col mr-5">
-                    <FormOverviewStatistics />
+                <div className="flex flex-grow flex-col mr-5">
+                    <FormOverviewStatistics count={responseCount} text={text[1]}/>
                 </div>
             </div>
-            <span className="flex mt-3 mb-3 text-xl font-semibold">View Individual Form Responses</span>
-            <ResponsesTable responseData={responseData} />
+            <div className="flex flex-col w-full">
+                <span className="flex my-3 text-xl font-semibold">View Individual Form Responses</span>
+                <div className="flex flex-col flex-grow mr-5">
+                    <ResponsesTable responseData={responseData} formId={params.formId} />
+                </div>
+            </div>
         </div>
     );
 }
