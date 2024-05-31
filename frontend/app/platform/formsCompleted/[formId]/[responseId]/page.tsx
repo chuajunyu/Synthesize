@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: { formId: string, respo
         </div>
     } else {
         return <div>
-            <div className="flex">
+            <div className="flex flex-col w-full mx-20">
                 <h1>Hello this is form id {params.formId} and response id {params.responseId}</h1>
                 <ViewResponsePage formData={formData} responseData={responseData}/>
             </div>

@@ -2,8 +2,8 @@ import app from "./db_conn";
 import { getDatabase, ref, query, orderByChild, equalTo, get } from "firebase/database";
 
 export interface ResponseFormat {
-    creatorId: string;
-    date: string;
+    userId: string;
+    submissionDate: string;
 }
 
 export async function getFormResponses(formId: string): Promise<{ [key: string]: ResponseFormat } | null> {

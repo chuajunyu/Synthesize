@@ -45,8 +45,8 @@ export default function FormsCreated() {
     }
 
     return (
-        <div className="flex min-h-screen">
-            <div className="justify-center ml-20 mt-5">
+        <div className="flex mx-20 mt-5">
+            <div className="flex flex-col w-full ">
                 <span className="flex mt-3 mb-3 text-xl font-semibold">View your created forms, Shelia</span>
                 <CreatedFormsTable formData={formData} />
             </div>
