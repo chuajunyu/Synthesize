@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { CreatedFormsTable } from "@/components/CreatedFormsTable";
 import { getUserForms } from '@/database/read_user_forms';
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { ShareButton } from "@/components/ShareButton";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export interface MyFormData {
@@ -46,13 +45,14 @@ export default function FormsCreated() {
         return <div>No forms found</div>;
     }
 
+    const name = user?.displayName;
 
     return (
         <ProtectedRoute>
             <div className="flex mx-20 mt-5">
                 <div className="flex flex-col w-full ">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
-                        View your created forms, Shelia
+                        View your created forms, {name}
                     </span>
                     <CreatedFormsTable formData={formData} />
                 </div>
