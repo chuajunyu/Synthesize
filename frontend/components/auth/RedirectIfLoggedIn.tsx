@@ -10,7 +10,7 @@ export default function RedirectIfLoggedIn({ children }: { children: React.React
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/platform/form');
+      router.push('/platform/homepage');
     }
   }, [user, loading, router]);
 
