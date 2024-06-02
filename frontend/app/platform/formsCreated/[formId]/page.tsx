@@ -7,6 +7,7 @@ import readFormData from "@/database/read_form";
 import { FormProps } from "@/database/read_form";
 import { ResponsesTable } from "@/components/ResponsesTable";
 import { ResponseFormat, getFormResponses } from "@/database/read_form_responses";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function ViewFormPage({ params }: { params: { formId: string } }) {
     const [formData, setFormData] = useState<FormProps | null>(null);
@@ -61,24 +62,26 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
         "Responses"
     ];
     return (
-        <div className="flex flex-col mx-20">
-            <div className="flex flex-row w-full mt-10 h-full items-stretch">
-                <div className="flex flex-col flex-grow mr-5">
-                    <FormTitleAndDescription title={formData.title} description={formData.description}/>
+        <ProtectedRoute>
+            <div className="flex flex-col mx-20">
+                <div className="flex flex-row w-full mt-10 h-full items-stretch">
+                    <div className="flex flex-col flex-grow mr-5">
+                        <FormTitleAndDescription title={formData.title} description={formData.description}/>
+                    </div>
+                    <div className="flex flex-grow flex-col mr-5">
+                        <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
+                    </div>
+                    <div className="flex flex-grow flex-col mr-5">
+                        <FormOverviewStatistics count={responseCount} text={text[1]}/>
+                    </div>
                 </div>
-                <div className="flex flex-grow flex-col mr-5">
-                    <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
-                </div>
-                <div className="flex flex-grow flex-col mr-5">
-                    <FormOverviewStatistics count={responseCount} text={text[1]}/>
+                <div className="flex flex-col w-full">
+                    <span className="flex my-3 text-xl font-semibold">View Individual Form Responses</span>
+                    <div className="flex flex-col flex-grow mr-5">
+                        <ResponsesTable responseData={responseData} formId={params.formId} />
+                    </div>
                 </div>
             </div>
-            <div className="flex flex-col w-full">
-                <span className="flex my-3 text-xl font-semibold">View Individual Form Responses</span>
-                <div className="flex flex-col flex-grow mr-5">
-                    <ResponsesTable responseData={responseData} formId={params.formId} />
-                </div>
-            </div>
-        </div>
+        </ProtectedRoute>
     );
 }
