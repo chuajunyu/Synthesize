@@ -1,12 +1,11 @@
-"use client"
-
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink" // Import the SidebarLink component
+import { SignOut } from "./authFunctions";
 
 const menuItems = [
   {
-    href: "#",
+    href: "homepage",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +25,7 @@ const menuItems = [
     text: "Home",
   },
   {
-    href: "#",
+    href: "/platform/formsCreated",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +47,7 @@ const menuItems = [
     text: "Forms Created",
   },
   {
-    href: "#",
+    href: "formsCompleted",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +69,7 @@ const menuItems = [
     text: "Forms Completed",
   },
   {
-    href: "#",
+    href: "/platform/form",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -91,15 +90,15 @@ const menuItems = [
   },
 ];
 
-export function NavigationBar() {
+export function NavigationBar({user} : {user: string}) {
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-64 transition-transform"
+        className="left-0 top-0 z-40 h-screen w-64 transition-transform"
         aria-label="Sidebar"
       >
-        <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-white px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-violet-100 px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
           <a
             href="#"
             className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
@@ -119,17 +118,17 @@ export function NavigationBar() {
             >
               <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
             </svg>
-            <span className="ml-3 text-base font-semibold">Synthesize</span>
+            <span className="ml-3 text-xl font-semibold">Synthesize</span>
           </a>
-          <Separator className="border-slate-300" />
-          <ul className="space-y-2 text-sm font-medium mt-4">
+          <Separator className="border-black" />
+          <ul className="space-y-2 text-2sm font-medium mt-4">
             {menuItems.map((item, index) => (
-              <SidebarLink key={index} href={item.href} icon={item.icon} text={item.text} />
+              <SidebarLink key={index} href={item.href} icon={item.icon} text={item.text}/>
             ))}
           </ul>
           <div className="mt-auto flex">
             <div className="flex w-full justify-between">
-              <span className="text-sm font-medium text-black dark:text-white">email@synthesize.com</span>
+              <span className="text-sm font-medium text-black dark:text-white">{user}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-roledescription="more menu" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-black dark:text-white" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="1" />
                 <circle cx="19" cy="12" r="1" />
@@ -137,6 +136,7 @@ export function NavigationBar() {
               </svg>
             </div>
           </div>
+          <SignOut />
         </div>
       </aside>
     </div>
