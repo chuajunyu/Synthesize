@@ -1,8 +1,9 @@
 import "./globals.css";
+import { AuthProvider } from "@/lib/firebase/AuthContext";
 
 export const metadata = {
-  title: "Next.js Authentication",
-  description: "Example using NextAuth.js",
+  title: "Synthesize",
+  description: "Create forms, surveys and quizzes seamlessly with AI",
 };
 
 export default function RootLayout({
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <AuthProvider>
+        <body>
+          {children}
+        </body>
+      </AuthProvider>
     </html>
   );
 }
