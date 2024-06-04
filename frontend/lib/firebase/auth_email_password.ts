@@ -2,7 +2,7 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
-import auth from "./app";
+import { auth } from "./app";
 
 async function signUpWithEmailAndPassword(email: string, password: string) {
     await createUserWithEmailAndPassword(auth, email, password)

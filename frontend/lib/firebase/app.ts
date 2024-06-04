@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
   apiKey: "AIzaSyDqvjhveu0G4NARsIFaxjljVoRwEXfzNMA",
-  authDomain: "synthesize-dev.firebaseapp.com",
+  authDomain: "synthesize-two.vercel.app",
   databaseURL: "https://synthesize-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "synthesize-dev",
   storageBucket: "synthesize-dev.appspot.com",
@@ -15,10 +15,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 
 // Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
-
-export default auth;
+export const auth = getAuth(app);

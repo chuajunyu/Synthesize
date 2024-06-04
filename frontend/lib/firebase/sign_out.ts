@@ -1,7 +1,7 @@
 "use client"
 
 import { signOut } from 'firebase/auth'
-import auth from './app';
+import { auth } from './app';
 
 export function sign_out() {
     signOut(auth).then(() => {
