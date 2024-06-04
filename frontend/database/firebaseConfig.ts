@@ -1,6 +1,7 @@
 export const firebaseConfig = {
     apiKey: "AIzaSyDqvjhveu0G4NARsIFaxjljVoRwEXfzNMA",
-    authDomain: "synthesize-dev.firebaseapp.com",
+    // authDomain: "synthesize-dev.firebaseapp.com",
+    authDomain: "synthesize-two.vercel.app/api/auth-proxy",
     databaseURL: "https://synthesize-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "synthesize-dev",
     storageBucket: "synthesize-dev.appspot.com",
