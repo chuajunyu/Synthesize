@@ -2,7 +2,6 @@
 
 import "@/app/globals.css";
 import { NavigationBar } from "@/components/NavigationBar";
-import auth from "@/lib/firebase/app";
 import { useAuth } from "@/lib/firebase/AuthContext";
 
 export default function RootLayout({

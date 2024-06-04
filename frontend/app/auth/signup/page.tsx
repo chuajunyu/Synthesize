@@ -4,7 +4,7 @@ import Link from "next/link";
 import { EmailSignUp } from "@/components/auth/emailPasswordAuth";
 import { SignInGoogle, SignInGithub } from "@/components/authFunctions";
 import RedirectIfLoggedIn from "@/components/auth/RedirectIfLoggedIn";
-import auth from "@/lib/firebase/app";
+import {auth} from "@/lib/firebase/app";
 
 export default function Dashboard() {
     const user = auth.currentUser;
