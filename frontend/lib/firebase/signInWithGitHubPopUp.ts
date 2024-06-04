@@ -2,7 +2,7 @@ import {
     signInWithPopup,
     GithubAuthProvider,
 } from "firebase/auth";
-import auth from "./app";
+import { auth } from "./app";
 
 const provider = new GithubAuthProvider();
 

@@ -1,4 +1,4 @@
-import app from "./db_conn";
+import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, set, push } from "firebase/database";
 
 export default function create_form(email: string, title: string, description: string, questions: Array<{text: string, type: string}>): string {
