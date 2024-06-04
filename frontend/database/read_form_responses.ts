@@ -1,4 +1,4 @@
-import app from "./db_conn";
+import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, query, orderByChild, equalTo, get } from "firebase/database";
 
 export interface ResponseFormat {

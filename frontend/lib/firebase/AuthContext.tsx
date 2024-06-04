@@ -9,7 +9,7 @@ import {
     Context,
 } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import auth from "./app";
+import { auth } from "./app";
 
 interface AuthContextProps {
     user: User | null;
