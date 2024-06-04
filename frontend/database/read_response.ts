@@ -1,4 +1,4 @@
-import app from "./db_conn";
+import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
 
 

@@ -3,7 +3,7 @@ import {
     getRedirectResult,
     GoogleAuthProvider,
 } from "firebase/auth";
-import auth from "./app";
+import { auth } from "./app";
 import { redirect } from "next/navigation";
 
 const provider = new GoogleAuthProvider();
