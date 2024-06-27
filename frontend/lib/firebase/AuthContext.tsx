@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
     createContext,
@@ -10,7 +10,7 @@ import {
 } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./app";
-import { LOCAL_DEVELOPMENT } from "@/config";
+import { LOCAL, DEVELOPMENT, PRODUCTION } from "@/config";
 
 interface AuthContextProps {
     user: User | null;
@@ -24,10 +24,16 @@ const AuthContext: Context<AuthContextProps | undefined> = createContext<
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    console.log("LOCAL is ", LOCAL);
+    console.log(process.env.NEXT_PUBLIC_NODE_ENV);
 
     useEffect(() => {
-        if (LOCAL_DEVELOPMENT) {
-            setUser({email: "chuajunyu1@gmail.com", displayName: "LOCAL DEV MODE (Jun Yu's acct)"} as User);
+        console.log(LOCAL, DEVELOPMENT, PRODUCTION);
+        if (LOCAL) {
+            setUser({
+                email: "chuajunyu1@gmail.com",
+                displayName: "LOCAL DEV MODE (Jun Yu's acct)",
+            } as User);
             setLoading(false);
         } else {
             const unsubscribe = onAuthStateChanged(auth, (user) => {
