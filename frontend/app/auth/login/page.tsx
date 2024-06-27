@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { EmailLogIn } from "@/components/auth/emailPasswordAuth";
 import { SignInGoogle, SignInGithub } from "@/components/authFunctions";
 import { auth } from "@/lib/firebase/app";
