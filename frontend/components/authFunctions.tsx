@@ -10,10 +10,13 @@ import signInWithGithubPopUp from "@/lib/firebase/signInWithGitHubPopUp";
 
 
 function SignInGoogle() {
+    const router = useRouter();
     return (
         <form
             action={async () => {
                 signInWithGoogleRedirect();
+                console.log("hello im here")
+                router.push("/platform/form");
             }}
         >
             <Button type="submit" variant="outline" className="w-full">

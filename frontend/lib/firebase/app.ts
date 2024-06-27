@@ -5,8 +5,9 @@ import { getAuth } from "firebase/auth";
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
   apiKey: "AIzaSyDqvjhveu0G4NARsIFaxjljVoRwEXfzNMA",
-  // authDomain: "synthesize-dev.firebaseapp.com",
-  authDomain: "synthesize-git-develop-jun-yus-projects.vercel.app",
+  authDomain: "synthesize-dev.firebaseapp.com",  // use this for local development
+  // authDomain: "synthesize-git-develop-jun-yus-projects.vercel.app",  // use this before merging to develop
+  // authDomain: "synthesize-two.vercel.app",  // use this before merging to main
   databaseURL: "https://synthesize-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "synthesize-dev",
   storageBucket: "synthesize-dev.appspot.com",
