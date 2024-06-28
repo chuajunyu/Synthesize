@@ -17,7 +17,7 @@ export default function RootLayout({
             <div>
                 <NavigationBar user={email} />
             </div>
-            <div className="flex-auto">{children}</div>
+            <div className="flex-auto ml-64 mb-20">{children}</div>
         </div>
     );
 }
