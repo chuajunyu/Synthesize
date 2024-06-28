@@ -16,6 +16,8 @@ export default function FormsCreated() {
     const [loading, setLoading] = useState(true);
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const { user } = useAuth();
+
+    console.log(user)
     
     useEffect(() => {
         async function authenticate() {
