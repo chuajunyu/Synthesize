@@ -10,7 +10,9 @@ import {
 } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./app";
-import { LOCAL, DEVELOPMENT, PRODUCTION } from "@/config";
+import { LOCAL, MOCK_USER } from "@/config";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/auth/authSlice";
 
 interface AuthContextProps {
     user: User | null;
@@ -22,27 +24,28 @@ const AuthContext: Context<AuthContextProps | undefined> = createContext<
 >(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUserState] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
-    console.log("LOCAL is ", LOCAL);
-    console.log(process.env.NEXT_PUBLIC_NODE_ENV);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(LOCAL, DEVELOPMENT, PRODUCTION);
         if (LOCAL) {
-            setUser({
-                email: "chuajunyu1@gmail.com",
-                displayName: "LOCAL DEV MODE (Jun Yu's acct)",
-            } as User);
+            const mockUser = {
+                email: MOCK_USER,
+                displayName: "LOCAL DEV MODE (MOCK USER)",
+            } as User;
+            setUser(mockUser);
+            setUserState(mockUser);
             setLoading(false);
         } else {
             const unsubscribe = onAuthStateChanged(auth, (user) => {
                 setUser(user);
+                setUserState(user);
                 setLoading(false);
             });
             return () => unsubscribe();
         }
-    }, []);
+    }, [dispatch]);
 
     const value = { user, loading };
 
