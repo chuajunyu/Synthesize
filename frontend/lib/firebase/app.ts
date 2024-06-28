@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { authDomain } from "@/config";
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
   apiKey: "AIzaSyDqvjhveu0G4NARsIFaxjljVoRwEXfzNMA",
-  // authDomain: "synthesize-dev.firebaseapp.com",
-  authDomain: "synthesize-git-develop-jun-yus-projects.vercel.app",
+  authDomain: authDomain,  // Edit the NODE_ENV in .env to change the authDomain
   databaseURL: "https://synthesize-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "synthesize-dev",
   storageBucket: "synthesize-dev.appspot.com",

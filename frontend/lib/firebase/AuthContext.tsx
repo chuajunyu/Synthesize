@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
     createContext,
@@ -10,6 +10,9 @@ import {
 } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./app";
+import { LOCAL, MOCK_USER } from "@/config";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/auth/authSlice";
 
 interface AuthContextProps {
     user: User | null;
@@ -21,17 +24,28 @@ const AuthContext: Context<AuthContextProps | undefined> = createContext<
 >(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUserState] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user);
+        if (LOCAL) {
+            const mockUser = {
+                email: MOCK_USER,
+                displayName: "LOCAL DEV MODE (MOCK USER)",
+            } as User;
+            setUser(mockUser);
+            setUserState(mockUser);
             setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, []);
+        } else {
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                setUser(user);
+                setUserState(user);
+                setLoading(false);
+            });
+            return () => unsubscribe();
+        }
+    }, [dispatch]);
 
     const value = { user, loading };
 

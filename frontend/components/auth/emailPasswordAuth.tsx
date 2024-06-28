@@ -9,6 +9,7 @@ import {
     logInWithEmailAndPassword,
 } from "@/lib/firebase/auth_email_password";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 
 
@@ -16,17 +17,23 @@ import { useRouter } from "next/navigation";
 
 function EmailSignUp() {
     const router = useRouter();
+    const [errorCode, setErrorCode] = useState<string | null>(null);
+    
 
-    function handleSubmitSignUp(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmitSignUp(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
         const email = form.get("email")?.toString();
         const password = form.get("password")?.toString();
-        console.log(password);
         if (email && password) {
             try {
-                signUpWithEmailAndPassword(email, password);
-                router.push("/platform/form");
+                const message = await signUpWithEmailAndPassword(email, password);
+                
+                if (message == "success") {
+                    router.push("/platform/form");
+                } else {
+                    setErrorCode(message);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -56,6 +63,7 @@ function EmailSignUp() {
                         required
                     />
                 </div>
+                <div className="text-red-500">{errorCode}</div>
                 <Button type="submit" className="w-full">
                     Sign Up
                 </Button>
@@ -66,17 +74,22 @@ function EmailSignUp() {
 
 function EmailLogIn() {
     const router = useRouter();
+    const [errorCode, setErrorCode] = useState<string | null>(null);
 
-    function handleSubmitLogIn(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmitLogIn(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
         const email = form.get("email")?.toString();
         const password = form.get("password")?.toString();
-        console.log(password);
         if (email && password) {
             try {
-                logInWithEmailAndPassword(email, password);
-                router.push("/platform/form");
+                const message = await logInWithEmailAndPassword(email, password);
+                if (message == "success") {
+                    console.log(message)
+                    router.push("/platform/form");
+                } else {
+                    setErrorCode(message);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -113,6 +126,7 @@ function EmailLogIn() {
                         required
                     />
                 </div>
+                <div className="text-red-500">{errorCode}</div>
                 <Button type="submit" className="w-full">
                     Login
                 </Button>
