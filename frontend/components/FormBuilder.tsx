@@ -59,6 +59,7 @@ function FormBuilder() {
     };
 
     const { user, loading } = useAuth();
+    console.log(user, loading)
     
     // Function to submit a new form
     const handleSubmit = async () => {
