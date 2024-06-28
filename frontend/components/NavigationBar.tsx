@@ -111,10 +111,10 @@ export function NavigationBar({ user }: { user: string }) {
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="left-0 top-0 z-40 h-screen w-64 transition-transform"
+        className="fixed left-0 top-0 z-40 h-screen w-64 flex-shrink-0 border-r border-slate-300 bg-violet-100 dark:border-slate-700 dark:bg-slate-900"
         aria-label="Sidebar"
       >
-        <div className="flex h-full flex-col overflow-y-auto border-r border-slate-300 bg-violet-100 px-3 py-4 dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
           <a
             href="#"
             className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
