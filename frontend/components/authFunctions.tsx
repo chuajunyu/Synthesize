@@ -7,10 +7,13 @@ import { Button } from "@/components/ui/button";
 import { sign_out } from "@/lib/firebase/sign_out";
 import signInWithGoogleRedirect from "@/lib/firebase/signInWithGoogleRedirect";
 import signInWithGithubPopUp from "@/lib/firebase/signInWithGitHubPopUp";
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/auth/authSlice';
 
 
 function SignInGoogle() {
     const router = useRouter();
+
     return (
         <form
             action={async () => {
@@ -97,9 +100,13 @@ function SignInGithub() {
 }
 
 function SignOut() {
+    const dispatch = useDispatch();
     return (
         <form
-            action={() => sign_out()}
+            action={() => {
+                sign_out();
+                dispatch(setUser(null));
+            }}
         >
             <Button type="submit">Sign Out</Button>
         </form>
