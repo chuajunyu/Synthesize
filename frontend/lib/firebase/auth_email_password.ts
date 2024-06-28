@@ -5,7 +5,7 @@ import {
 import { auth } from "./app";
 
 async function signUpWithEmailAndPassword(email: string, password: string) {
-    await createUserWithEmailAndPassword(auth, email, password)
+    return await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed up
             const user = userCredential.user;
@@ -13,22 +13,29 @@ async function signUpWithEmailAndPassword(email: string, password: string) {
         })
         .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            // if (errorCode === "auth/email-already-in-use") {
+            //     console.log("Email already in use");
+            // }
+            return errorCode
         });
 }
 
 async function logInWithEmailAndPassword(email: string, password: string) {
-    await signInWithEmailAndPassword(auth, email, password)
+    return await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
             console.log(user);
+            return "success"
         })
         .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            // console.log(errorCode)
+            // alert(errorCode)
+            return errorCode
+            // if (errorCode === "auth/invalid-credentials") {
+            //     console.log("Wrong password");
+            // }
         });
 }
 
