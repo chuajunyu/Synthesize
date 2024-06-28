@@ -1,2 +1,8 @@
+# Dependencies
 venv/
+
+# Cache
 __pycache__/
+
+# Environment Variables
+.env
