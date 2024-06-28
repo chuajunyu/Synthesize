@@ -1,14 +1,10 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { EmailLogIn } from "@/components/auth/emailPasswordAuth";
 import { SignInGoogle, SignInGithub } from "@/components/authFunctions";
 import { auth } from "@/lib/firebase/app";
 import RedirectIfLoggedIn from "@/components/auth/RedirectIfLoggedIn";
 
 export default function Dashboard() {
-    const user = auth.currentUser;
-    console.log("user is: ", user);
-
     return (
         <RedirectIfLoggedIn>
             <div className="mx-auto grid w-[350px] gap-6">
