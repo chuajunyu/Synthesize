@@ -1,29 +1,45 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
-import SidebarLink from "@/components/SidebarLink" // Import the SidebarLink component
+import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
 import { SignOut } from "./authFunctions";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-const menuItems = [
+const projects = [
   {
     href: "homepage",
     icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5"
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
       </svg>
     ),
-    text: "Home",
+    text: "Project A"
   },
+  {
+    href: "homepage",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+      </svg>
+    ),
+    text: "Project B",
+  },
+  {
+    href: "homepage",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+      </svg>
+    ),
+    text: "Project C"
+  }
+];
+
+const projectItems = [
   {
     href: "/platform/formsCreated",
     icon: (
@@ -90,7 +106,7 @@ const menuItems = [
   },
 ];
 
-export function NavigationBar({user} : {user: string}) {
+export function NavigationBar({ user }: { user: string }) {
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
@@ -120,16 +136,84 @@ export function NavigationBar({user} : {user: string}) {
             </svg>
             <span className="ml-3 text-xl font-semibold">Synthesize</span>
           </a>
-          <Separator className="border-black" />
-          <ul className="space-y-2 text-2sm font-medium mt-4">
-            {menuItems.map((item, index) => (
-              <SidebarLink key={index} href={item.href} icon={item.icon} text={item.text}/>
+          <a
+        href="homepage"
+        className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
+      >
+        <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-5 w-5"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+        <span className="ml-4 whitespace-nowrap text-2ms font-medium">Home</span>
+      </a>
+          <Accordion type="single" collapsible className="mb-0 pb-0">
+            <AccordionItem value="item-1">
+              <div className="flex flex-row items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-2.5 mr-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                </svg>
+                <div className="flex flex-row items-center text-2sm font-medium">
+                  Projects<AccordionTrigger className="ml-2"/>
+                </div>
+              </div>
+              <AccordionContent>
+                <div className="flex flex-row ml-5">
+                  <div className="flex flex-col items-center">
+                <Separator orientation="vertical" className="border-zinc-400 border-2" />
+                </div>
+                  <ul className="space-y-4 text-base ml-3 font-medium">
+                  {projects.map((item, index) => (
+                    <SidebarLink
+                    key={index}
+                    href={item.href}
+                    icon={item.icon}
+                    text={item.text}
+                    />
+                  ))}
+                  </ul>
+                  </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <Separator className="border-zinc-400 border-2 mt-2" />
+          <ul className="space-y-4 text-2sm font-medium mt-4">
+            {projectItems.map((item, index) => (
+              <SidebarLink
+                key={index}
+                href={item.href}
+                icon={item.icon}
+                text={item.text}
+              />
             ))}
           </ul>
           <div className="mt-auto flex">
             <div className="flex w-full justify-between">
-              <span className="text-sm font-medium text-black dark:text-white">{user}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-roledescription="more menu" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 text-black dark:text-white" strokeLinecap="round" strokeLinejoin="round">
+              <span className="text-sm font-medium text-black dark:text-white">
+                {user}
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                aria-roledescription="more menu"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-5 w-5 text-black dark:text-white"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <circle cx="12" cy="12" r="1" />
                 <circle cx="19" cy="12" r="1" />
                 <circle cx="5" cy="12" r="1" />
