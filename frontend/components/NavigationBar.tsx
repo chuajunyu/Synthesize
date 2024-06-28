@@ -156,7 +156,7 @@ export function NavigationBar({ user }: { user: string }) {
             <span className="ml-3 text-xl font-semibold">Synthesize</span>
           </a>
           <a
-        href="homepage"
+        href="/platform/homepage"
         className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
       >
         <svg
