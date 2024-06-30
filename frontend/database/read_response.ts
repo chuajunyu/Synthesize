@@ -1,7 +1,5 @@
 import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
-
-
   
 interface Answer {
     response: string;
