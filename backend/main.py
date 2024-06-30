@@ -27,4 +27,4 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     formatted_responses = firebase_service.get_formatted_responses(formId)
     business_context = firebase_service.get_form_description(formId)
     analysis = open_ai_service.analyse_responses(business_context, formatted_responses)
-    return {"message": "Form analysis completed", "content": analysis}
+    return {"message": "Form analysis completed", "content": eval(analysis)}
