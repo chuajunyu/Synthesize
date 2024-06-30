@@ -6,7 +6,7 @@ import { authDomain } from "@/config";
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
   apiKey: "AIzaSyDqvjhveu0G4NARsIFaxjljVoRwEXfzNMA",
-  authDomain: authDomain,  // Edit the NODE_ENV in .env to change the authDomain
+  authDomain: "synthesize-two.vercel.app",
   databaseURL: "https://synthesize-dev-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "synthesize-dev",
   storageBucket: "synthesize-dev.appspot.com",
