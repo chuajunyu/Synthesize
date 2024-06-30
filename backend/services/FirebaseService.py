@@ -53,10 +53,28 @@ class FirebaseService:
         responses = self.get_form_responses(formId)
         form = self.get_form(formId)
         return self.format_responses(form, responses)
+    
+    def get_form_analysis(self, formId):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        return analysis_ref.get()
+
+    def get_analysis_last_updated_time(self, formId):
+        if self.get_form_analysis(formId) is None:
+            return 0
+        return self.get_form_analysis(formId)['last_updated']
+    
+    def update_form_analysis(self, formId, analysis):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.set(analysis)
+        return
 
 
 if __name__ == "__main__":
-    formId = '-NzEHrGgjqOKyNrbAQLi'
+    # formId = '-NzEHrGgjqOKyNrbAQLi'
     firebase_service = FirebaseService()
-    print(firebase_service.get_formatted_responses(formId))
-    print(firebase_service.get_form_description(formId))
+    # print(firebase_service.get_formatted_responses(formId))
+    # print(firebase_service.get_form_description(formId))
+
+    print(firebase_service.get_form_analysis('sdfafds'))
+    print(firebase_service.get_analysis_last_updated_time('asdfas'))
+    firebase_service.update_form_analysis('asdfas', {'test': 'test'})
