@@ -27,11 +27,7 @@ export default async function Page({
         return (
             <ProtectedRoute>
                 <div>
-                    <div className="flex">
-                        <h1>
-                            Hello this is form id {params.formId} and response
-                            id {params.responseId}
-                        </h1>
+                    <div className="flex items-center justify-center">
                         <ViewResponsePage
                             formData={formData}
                             responseData={responseData}
