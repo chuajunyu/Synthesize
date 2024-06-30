@@ -48,8 +48,8 @@ export default function ViewResponsePage({formData, responseData}: props) {
         <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
-            <p>Date Submitted: {submissionDateString}</p>
-            <p>Responder: {userId} </p>
+            <div>Date Submitted: {submissionDateString}</div>
+            <div>Responder: {userId} </div>
         </CardHeader>
         </Card>
 
@@ -62,7 +62,7 @@ export default function ViewResponsePage({formData, responseData}: props) {
             <form>
                 <div className="flex flex-row justify-start align-left w-full gap-4">
                     <div className="flex flex-col justify-start w-3/4 space-y-1.5">
-                        <p>{String(answers[index].response)}</p>
+                        <div>{String(answers[index].response)}</div>
                     </div>
                 </div>
             </form>

@@ -11,11 +11,108 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress" 
+import { Check, ChevronsUpDown } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { getFormTitles } from "@/database/read_form_titles";
+import { Form } from "@/database/read_form_titles";
+import { SetStateAction } from 'react';
+   
+  interface ComboboxProps {
+    forms: Form[];
+    setExternalId: React.Dispatch<SetStateAction<string>>;
+  }
+  
+  const ComboboxDemo = ({ forms, setExternalId }: ComboboxProps) => {
+    const [open, setOpen] = React.useState(false)
+    const [id, setId] = React.useState("")
+
+    useEffect(() => {
+      console.log(forms.filter((form: Form) => form.id === id))
+      console.log(forms)
+      console.log(id)
+    }, [forms, id])
+   
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          {id
+            ? forms.filter((form: Form) => form.id === id)[0]?.title
+            : "Select Form to View Aggregated Insights"}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Search framework..." />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {forms.map((form: Form) => (
+                <CommandItem
+                  key={form.id}
+                  value={form.id}
+                  onSelect={(currentId) => {
+                    setId(currentId === id ? "" : currentId)
+                    setOpen(false)
+                    setExternalId(currentId)
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      id === form.id ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {form.title}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+  }
 
 const dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const { user } = useAuth();
+    const [analysisResponse, setAnalysisResponse] = useState<any>(null);
+    const [formData, setFormData] = useState<Form[]>([]);
+    const [externalId, setExternalId] = useState<string>("")
+    
+    useEffect(() => {
+      const fetchTitles = async () => {
+        const forms = await getFormTitles();
+        
+        if (forms) {
+          setFormData(forms);
+        }
+      }
+      // getFormTitles().then(forms => setFormData(forms))
+      fetchTitles();
+    }, []);
     
     useEffect(() => {
         async function authenticate() {
@@ -34,11 +131,24 @@ const dashboard = () => {
         fetchData();
     }, [userEmail]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    useEffect(() => {
+      async function fetchAnalysisResponseData() {
+          const str = "https://synthesize-wcnj.onrender.com/get_form_analysis/" + externalId + "?secret=furballlovesfishball";
+          const analysis = await fetch(str);
+          setAnalysisResponse(analysis);
+          console.log(analysis);
+      }
+      if (externalId != "") {
+        fetchAnalysisResponseData();
+      }
+    }, 
+    []);
 
-    const name = user?.displayName;
+    if (loading) {
+      return <div>Loading...</div>;
+  }
+
+  const name = user?.displayName;
 
     return (
         <ProtectedRoute>
@@ -47,6 +157,9 @@ const dashboard = () => {
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         View aggregated insights for Project_1, {name}
                     </span>
+                    <div className="my-4">
+                      <ComboboxDemo forms={formData}/>
+                    </div>
                     <div className="flex flex-row w-full items-stretch">
                         <Card className="w-1/5 mr-5">
                             <CardHeader className="pb-2">
