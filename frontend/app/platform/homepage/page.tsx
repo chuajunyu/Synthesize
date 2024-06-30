@@ -12,7 +12,7 @@ export default function DashboardPage() {
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
-                <div className="flex-grow flex-col justify-center ml-20 mt-5">
+                <div className="flex-grow flex-col ml-8 justify-center mt-5">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         Welcome to Synthesize, {name}
                     </span>

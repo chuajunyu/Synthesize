@@ -136,7 +136,7 @@ export function NavigationBar({ user }: { user: string }) {
         <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
           <a
             href="/"
-            className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
+            className="mb-4 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
           >
             <svg
               className="h-5 w-5"
@@ -157,7 +157,7 @@ export function NavigationBar({ user }: { user: string }) {
           </a>
           <a
         href="/platform/homepage"
-        className="flex items-left justify-start rounded-lg px-3 pb-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
+        className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
       >
         <svg
         xmlns="http://www.w3.org/2000/svg"

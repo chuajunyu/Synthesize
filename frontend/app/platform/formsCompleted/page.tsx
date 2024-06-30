@@ -49,7 +49,7 @@ export default function FormsCreated() {
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
-                <div className="justify-center ml-20 mt-5">
+                <div className="justify-center w-full mx-8 mt-5">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         View your completed forms, {name}
                     </span>

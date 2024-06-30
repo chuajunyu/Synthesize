@@ -180,7 +180,7 @@ const dashboard = () => {
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
-                <div className="justify-center w-full ml-20 mt-5">
+                <div className="justify-center w-full mx-8 mt-5">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         View aggregated insights for Project_1, {name}
                     </span>
@@ -195,8 +195,8 @@ const dashboard = () => {
                         <div>Select a Form</div>
                     ) : ( 
                         <div>
-                            <div className="flex flex-row w-full items-stretch">
-                                <Card className="w-1/5 mr-5">
+                            <div className="flex flex-row w-full items-stretch space-x-6">
+                                <Card className="w-1/5">
                                     <CardHeader className="pb-2">
                                         <CardDescription>
                                             Rating
@@ -216,7 +216,7 @@ const dashboard = () => {
                                         />
                                     </CardContent>
                                 </Card>
-                                <Card className="flex-grow w-4/5 mr-20">
+                                <Card className="flex-grow w-4/5">
                                     <CardHeader className="pb-3">
                                         <CardTitle>
                                             Actionable Insights
@@ -259,7 +259,7 @@ const dashboard = () => {
                                 </Card>
                             </div>
                             <div className="justify-center w-full mt-5">
-                                <Card className="flex-grow mr-20">
+                                <Card className="flex-grow">
                                     <CardHeader className="pb-3">
                                         <CardTitle>Compliments</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
@@ -287,7 +287,7 @@ const dashboard = () => {
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
-                                <Card className="flex-grow mr-20 mt-5">
+                                <Card className="flex-grow mt-5">
                                     <CardHeader className="pb-3">
                                         <CardTitle>Complaints</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
