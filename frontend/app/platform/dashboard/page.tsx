@@ -193,7 +193,7 @@ const dashboard = () => {
 
                     {externalId === null ? (
                         <div>Select a Form</div>
-                    ) : (
+                    ) : ( analysisResponse == null ? <div>Your Form does not have enough responses!</div> : (
                         <div>
                             <div className="flex flex-row w-full items-stretch">
                                 <Card className="w-1/5 mr-5">
@@ -317,7 +317,7 @@ const dashboard = () => {
                                 </Card>
                             </div>
                         </div>
-                    )}
+                    ))}
                 </div>
             </div>
         </ProtectedRoute>
