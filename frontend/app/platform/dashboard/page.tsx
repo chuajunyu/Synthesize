@@ -30,6 +30,9 @@ import {
 import { getFormTitles } from "@/database/read_form_titles";
 import { Form } from "@/database/read_form_titles";
 import { SetStateAction } from "react";
+import Actionables from "@/components/Actionables";
+import Insights from "@/components/Insights";
+import { ActionablesProps } from "@/components/Actionables";
 
 interface ComboboxProps {
     forms: Form[];
@@ -153,6 +156,7 @@ const dashboard = () => {
                 .then((data) => {
                     // Handle the parsed data
                     console.log(data);
+                    setAnalysisResponse(data);
                 })
                 .catch((error) => {
                     // Handle any errors that occurred during the fetch
@@ -218,24 +222,38 @@ const dashboard = () => {
                                             Actionable Insights
                                         </CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                            <div className="mt-1">
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <div>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <span>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </span>
+                                            {analysisResponse ? (
+                                                (
+                                                    Object.values(
+                                                        analysisResponse[
+                                                            "content"
+                                                        ][
+                                                            "aggregated_suggestions"
+                                                        ]
+                                                    ) as ActionablesProps[]
+                                                ).map(
+                                                    (
+                                                        value: ActionablesProps,
+                                                        index: number
+                                                    ) => (
+                                                        <Actionables
+                                                            key={index}
+                                                            Actionable={
+                                                                value[
+                                                                    "Actionable"
+                                                                ]
+                                                            }
+                                                            Rationale={
+                                                                value[
+                                                                    "Rationale"
+                                                                ]
+                                                            }
+                                                        />
+                                                    )
+                                                )
+                                            ) : (
+                                                <div>Loading...</div>
+                                            )}
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
@@ -245,24 +263,27 @@ const dashboard = () => {
                                     <CardHeader className="pb-3">
                                         <CardTitle>Compliments</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                            <div className="mt-1">
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <div>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <span>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </span>
+                                            {analysisResponse ? (
+                                                (
+                                                    Object.values(
+                                                        analysisResponse
+                                                            ?.content
+                                                            ?.aggregated_positive
+                                                    ) as string[]
+                                                ).map(
+                                                    (
+                                                        value: string,
+                                                        index: number
+                                                    ) => (
+                                                        <Insights
+                                                            key={index}
+                                                            insight={value}
+                                                        />
+                                                    )
+                                                )
+                                            ) : (
+                                                <div>Loading...</div>
+                                            )}
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
@@ -270,24 +291,27 @@ const dashboard = () => {
                                     <CardHeader className="pb-3">
                                         <CardTitle>Complaints</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                            <div className="mt-1">
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <div>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </div>
-                                            <span>
-                                                - Introducing Our Dynamic Orders
-                                                Dashboard for Seamless
-                                                Management and Insightful
-                                                Analysis.
-                                            </span>
+                                        {analysisResponse ? (
+                                                (
+                                                    Object.values(
+                                                        analysisResponse
+                                                            ?.content
+                                                            ?.aggregated_negative
+                                                    ) as string[]
+                                                ).map(
+                                                    (
+                                                        value: string,
+                                                        index: number
+                                                    ) => (
+                                                        <Insights
+                                                            key={index}
+                                                            insight={value}
+                                                        />
+                                                    )
+                                                )
+                                            ) : (
+                                                <div>Loading...</div>
+                                            )}
                                         </CardDescription>
                                     </CardHeader>
                                 </Card>
