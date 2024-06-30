@@ -51,6 +51,8 @@ class FirebaseService:
     
     def get_formatted_responses(self, formId):
         responses = self.get_form_responses(formId)
+        if responses is None:
+            return []
         form = self.get_form(formId)
         return self.format_responses(form, responses)
     
@@ -70,11 +72,10 @@ class FirebaseService:
 
 
 if __name__ == "__main__":
-    # formId = '-NzEHrGgjqOKyNrbAQLi'
+    formId = '-NzEHrGgjqOKyNrbAQLi'
+    no = '-NzMYgT7TZpGBjAIm5Ba'
     firebase_service = FirebaseService()
-    # print(firebase_service.get_formatted_responses(formId))
-    # print(firebase_service.get_form_description(formId))
+    # firebase_service.get_form_responses(formId)
+    print(firebase_service.get_formatted_responses(formId))
+    print(firebase_service.get_form_description(no))
 
-    print(firebase_service.get_form_analysis('sdfafds'))
-    print(firebase_service.get_analysis_last_updated_time('asdfas'))
-    firebase_service.update_form_analysis('asdfas', {'test': 'test'})

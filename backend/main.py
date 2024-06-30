@@ -28,8 +28,6 @@ open_ai_service = OpenAiService()
 firebase_service = FirebaseService()
 
 
-
-
 @app.get("/")
 async def root():
     return {"message": "Hello World", "time": str(datetime.now())}
@@ -47,6 +45,10 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
         return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
 
     formatted_responses = firebase_service.get_formatted_responses(formId)
+    if formatted_responses == []:
+        response.status_code = status.HTTP_204_NO_CONTENT
+        return {"message": "No responses found", "content": []}
+
     business_context = firebase_service.get_form_description(formId)
     analysis = eval(open_ai_service.analyse_responses(business_context, formatted_responses))
     analysis['last_updated'] =  unix_time_now
