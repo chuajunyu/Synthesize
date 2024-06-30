@@ -104,38 +104,38 @@ function FormBuilder() {
     }, []);
 
     return (
-        <div className="flex flex-col justify-center items-center gap-y-8 mt-8">
-            <Card className="w-[800px]">
+        <div className="flex flex-col justify-center items-center gap-y-8 mt-10">
+            <Card className="w-[1400px]">
                 <CardHeader>
                     <CardTitle>Create a New Form</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <form>
                         <div className="flex flex-col w-full space-y-4">
-                            <div className="flex flex-col w-full space-y-1.5">
+                            <div className="flex flex-col w-full space-y-1">
                                 <Label
-                                    htmlFor="form-name"
-                                    className="flex justify-start"
+                                    htmlFor="form-title"
+                                    className="flex justify-start font-medium text-lg"
                                 >
-                                    Form Name
+                                    Form Title
                                 </Label>
                                 <Input
-                                    id="form-name"
-                                    placeholder="Form Name"
+                                    id="form-title"
+                                    placeholder="Provide a title for your form"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
-                            <div className="flex flex-col w-full space-y-1.5">
+                            <div className="flex flex-col w-full space-y-1">
                                 <Label
                                     htmlFor="form-description"
-                                    className="flex justify-start"
+                                    className="flex justify-start font-medium text-lg"
                                 >
                                     Form Description
                                 </Label>
                                 <Input
                                     id="form-description"
-                                    placeholder="What is this form about?"
+                                    placeholder="Provide a description of your form for the respondents"
                                     value={description}
                                     onChange={(e) =>
                                         setDescription(e.target.value)
@@ -153,9 +153,9 @@ function FormBuilder() {
             </Card>
 
             {questions.map((question) => (
-                <Card key={question.id} className="w-[800px]">
+                <Card key={question.id} className="w-[1400px]">
                     <CardHeader>
-                        <CardTitle>Create a New Question</CardTitle>
+                        <CardTitle>Create a New Open-ended Question</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form>
@@ -163,13 +163,13 @@ function FormBuilder() {
                                 <div className="flex flex-col justify-start w-3/4 space-y-1.5">
                                     <Label
                                         htmlFor={`question-${question.id}`}
-                                        className="flex justify-start"
+                                        className="flex justify-start font-medium text-lg"
                                     >
                                         Question
                                     </Label>
                                     <Input
                                         id={`question-${question.id}`}
-                                        placeholder="Untitled Question"
+                                        placeholder="Ask an open-ended question"
                                         value={question.question}
                                         onChange={(e) =>
                                             handleInputChange(
@@ -183,7 +183,7 @@ function FormBuilder() {
                                 <div className="flex flex-col justify-start w-1/4 space-y-1.5">
                                     <Label
                                         htmlFor={`question-type-${question.id}`}
-                                        className="flex justify-start"
+                                        className="flex justify-start font-medium text-lg"
                                     >
                                         Question Type
                                     </Label>
