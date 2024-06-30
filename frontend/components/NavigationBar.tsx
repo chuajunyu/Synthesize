@@ -130,7 +130,7 @@ export function NavigationBar({ user }: { user: string }) {
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-64 flex-shrink-0 border-r border-slate-300 bg-gradient-to-r from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
+        className="fixed left-0 top-0 z-40 h-screen w-56 flex-shrink-0 border-r border-slate-300 bg-gradient-to-r from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
@@ -157,7 +157,7 @@ export function NavigationBar({ user }: { user: string }) {
           </a>
           <a
         href="/platform/homepage"
-        className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
+        className="flex items-left justify-start rounded-lg px-3 pb-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
       >
         <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +217,7 @@ export function NavigationBar({ user }: { user: string }) {
           </ul>
           <div className="mt-auto flex pb-2">
             <div className="flex w-full justify-between">
-              <span className="text-2sm font-medium text-black dark:text-white">
+              <span className="text-sm font-medium text-black dark:text-white mr-1">
                 {user}
               </span>
                 <UserDropDown />
