@@ -1,7 +1,6 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
-import { SignOut } from "./authFunctions";
 import {
   Accordion,
   AccordionContent,
