@@ -63,7 +63,7 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
     ];
     return (
         <ProtectedRoute>
-            <div className="flex flex-col mx-20">
+            <div className="flex flex-col mx-8">
                 <div className="flex flex-row w-full mt-10 h-full items-stretch">
                     <div className="flex flex-col flex-grow mr-5">
                         <FormTitleAndDescription title={formData.title} description={formData.description}/>
@@ -71,13 +71,13 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
                     <div className="flex flex-grow flex-col mr-5">
                         <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
                     </div>
-                    <div className="flex flex-grow flex-col mr-5">
+                    <div className="flex flex-grow flex-col">
                         <FormOverviewStatistics count={responseCount} text={text[1]}/>
                     </div>
                 </div>
                 <div className="flex flex-col w-full">
                     <span className="flex my-3 text-xl font-semibold">View Individual Form Responses</span>
-                    <div className="flex flex-col flex-grow mr-5">
+                    <div className="flex flex-col flex-grow">
                         <ResponsesTable responseData={responseData} formId={params.formId} />
                     </div>
                 </div>

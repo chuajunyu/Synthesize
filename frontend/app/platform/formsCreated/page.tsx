@@ -51,7 +51,7 @@ export default function FormsCreated() {
 
     return (
         <ProtectedRoute>
-            <div className="flex mx-20 mt-5">
+            <div className="flex mx-8 mt-5">
                 <div className="flex flex-col w-full ">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
                         View your created forms, {name}
