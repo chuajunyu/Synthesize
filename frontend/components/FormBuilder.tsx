@@ -105,7 +105,7 @@ function FormBuilder() {
 
     return (
         <div className="flex flex-col justify-center items-center gap-y-8 mt-8">
-            <Card className="w-[800px]">
+            <Card className="w-[1400px]">
                 <CardHeader>
                     <CardTitle>Create a New Form</CardTitle>
                 </CardHeader>
@@ -153,7 +153,7 @@ function FormBuilder() {
             </Card>
 
             {questions.map((question) => (
-                <Card key={question.id} className="w-[800px]">
+                <Card key={question.id} className="w-[1400px]">
                     <CardHeader>
                         <CardTitle>Create a New Question</CardTitle>
                     </CardHeader>
