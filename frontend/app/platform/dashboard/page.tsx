@@ -150,6 +150,9 @@ const dashboard = () => {
                             "Network response was not ok " + response.statusText
                         );
                     }
+                    if (response.status == 204) {
+                        return "No Content";
+                    }
                     // Parse the JSON data from the response
                     return response.json();
                 })
@@ -193,7 +196,10 @@ const dashboard = () => {
 
                     {externalId === null ? (
                         <div>Select a Form</div>
-                    ) : ( 
+                    ) : analysisResponse ==
+                      "No Content: Your form has no responses yet!" ? (
+                        <div>No Content</div>
+                    ) : (
                         <div>
                             <div className="flex flex-row w-full items-stretch space-x-6">
                                 <Card className="w-1/5">
@@ -222,14 +228,15 @@ const dashboard = () => {
                                             Actionable Insights
                                         </CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                            {analysisResponse ? (
+                                            {analysisResponse === undefined ||
+                                            analysisResponse === null ? (
+                                                <div>Loading...</div>
+                                            ) : (
                                                 (
                                                     Object.values(
-                                                        analysisResponse[
-                                                            "content"
-                                                        ][
-                                                            "aggregated_suggestions"
-                                                        ]
+                                                        analysisResponse
+                                                            ?.content
+                                                            ?.aggregated_suggestions || {}
                                                     ) as ActionablesProps[]
                                                 ).map(
                                                     (
@@ -251,8 +258,6 @@ const dashboard = () => {
                                                         />
                                                     )
                                                 )
-                                            ) : (
-                                                <div>Loading...</div>
                                             )}
                                         </CardDescription>
                                     </CardHeader>
@@ -263,12 +268,15 @@ const dashboard = () => {
                                     <CardHeader className="pb-3">
                                         <CardTitle>Compliments</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                            {analysisResponse ? (
+                                            {analysisResponse === undefined ||
+                                            analysisResponse === null ? (
+                                                <div>Loading...</div>
+                                            ) : (
                                                 (
                                                     Object.values(
                                                         analysisResponse
                                                             ?.content
-                                                            ?.aggregated_positive
+                                                            ?.aggregated_positive || {}
                                                     ) as string[]
                                                 ).map(
                                                     (
@@ -281,8 +289,6 @@ const dashboard = () => {
                                                         />
                                                     )
                                                 )
-                                            ) : (
-                                                <div>Loading...</div>
                                             )}
                                         </CardDescription>
                                     </CardHeader>
@@ -291,12 +297,15 @@ const dashboard = () => {
                                     <CardHeader className="pb-3">
                                         <CardTitle>Complaints</CardTitle>
                                         <CardDescription className="flex flex-col text-base leading-relaxed">
-                                        {analysisResponse ? (
+                                            {analysisResponse === undefined ||
+                                            analysisResponse === null ? (
+                                                <div>Loading...</div>
+                                            ) : (
                                                 (
                                                     Object.values(
                                                         analysisResponse
                                                             ?.content
-                                                            ?.aggregated_negative
+                                                            ?.aggregated_negative || {}
                                                     ) as string[]
                                                 ).map(
                                                     (
@@ -309,8 +318,6 @@ const dashboard = () => {
                                                         />
                                                     )
                                                 )
-                                            ) : (
-                                                <div>Loading...</div>
                                             )}
                                         </CardDescription>
                                     </CardHeader>
