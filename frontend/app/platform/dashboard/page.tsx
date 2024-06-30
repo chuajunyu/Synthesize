@@ -56,7 +56,7 @@ const Combobox = ({ forms, setExternalId }: ComboboxProps) => {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-96 justify-between"
                 >
                     {id
                         ? forms.filter((form: Form) => form.id === id)[0]?.title
@@ -64,7 +64,7 @@ const Combobox = ({ forms, setExternalId }: ComboboxProps) => {
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-96">
                 <Command>
                     <CommandInput placeholder="Search framework..." />
                     <CommandList>
