@@ -1,13 +1,13 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
-import { SignOut } from "./authFunctions";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import UserDropDown from "./UserDropDown";
 
 const projects = [
   {
@@ -130,12 +130,12 @@ export function NavigationBar({ user }: { user: string }) {
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-64 flex-shrink-0 border-r border-slate-300 bg-violet-100 dark:border-slate-700 dark:bg-slate-900"
+        className="fixed left-0 top-0 z-40 h-screen w-64 flex-shrink-0 border-r border-slate-300 bg-gradient-to-r from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
           <a
-            href="#"
+            href="/"
             className="mb-10 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
           >
             <svg
@@ -178,18 +178,18 @@ export function NavigationBar({ user }: { user: string }) {
           <Accordion type="single" collapsible className="mb-0 pb-0">
             <AccordionItem value="item-1">
               <div className="flex flex-row items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-2.5 mr-3.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
-                </svg>
-                <div className="flex flex-row items-center text-2sm font-medium">
-                  <a href="homepage">Projects</a>
-                  <AccordionTrigger className="ml-2"/>
-                </div>
+                  <a href="homepage" className="flex items-left justify-start rounded-lg py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700 pr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6 ml-2.5 mr-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
+                  </svg>
+                  <span className="text-2sm font-medium">Projects</span>
+                  </a>
+                  <AccordionTrigger className="ml-4"/>
               </div>
               <AccordionContent>
                 <div className="flex flex-row ml-5">
                   <div className="flex flex-col items-center">
-                <Separator orientation="vertical" className="border-zinc-400 border-2" />
+                <Separator orientation="vertical" className="border-zinc-500 border-1" />
                 </div>
                   <ul className="space-y-4 text-base ml-3 font-medium">
                   {projects.map((item, index) => (
@@ -205,7 +205,6 @@ export function NavigationBar({ user }: { user: string }) {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <Separator className="border-zinc-400 border-2 mt-2" />
           <ul className="space-y-4 text-2sm font-medium mt-4">
             {projectItems.map((item, index) => (
               <SidebarLink
@@ -216,31 +215,14 @@ export function NavigationBar({ user }: { user: string }) {
               />
             ))}
           </ul>
-          <div className="mt-auto flex">
+          <div className="mt-auto flex pb-2">
             <div className="flex w-full justify-between">
-              <span className="text-sm font-medium text-black dark:text-white">
+              <span className="text-2sm font-medium text-black dark:text-white">
                 {user}
               </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                aria-roledescription="more menu"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="h-5 w-5 text-black dark:text-white"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="1" />
-                <circle cx="19" cy="12" r="1" />
-                <circle cx="5" cy="12" r="1" />
-              </svg>
+                <UserDropDown />
             </div>
           </div>
-          <SignOut />
         </div>
       </aside>
     </div>
