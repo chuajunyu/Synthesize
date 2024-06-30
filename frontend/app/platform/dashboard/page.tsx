@@ -33,6 +33,7 @@ import { SetStateAction } from "react";
 import Actionables from "@/components/Actionables";
 import Insights from "@/components/Insights";
 import { ActionablesProps } from "@/components/Actionables";
+import { SECRET_KEY } from "@/config";
 
 interface ComboboxProps {
     forms: Form[];
@@ -141,7 +142,7 @@ const dashboard = () => {
     useEffect(() => {
         console.log("fetching analysis response data");
         async function fetchAnalysisResponseData() {
-            const apiEndpoint = `https://synthesize-wcnj.onrender.com/get_form_analysis/${externalId}?secret=furballlovesfishball`;
+            const apiEndpoint = `https://synthesize-wcnj.onrender.com/get_form_analysis/${externalId}?secret=${SECRET_KEY}`;
             fetch(apiEndpoint)
                 .then((response) => {
                     // Check if the response status is OK (status code 200-299)
