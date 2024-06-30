@@ -22,9 +22,15 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Invalid secret key"}
     
-    # TODO: Should check FIREBASE to see when this analysis was last updated and return that instead of re-analysing
-    
+    # Return Cache if the analysis was updated within the last hour
+    unix_time_now = int(datetime.timestamp(datetime.now()))
+    last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
+    if unix_time_now - last_updated_time <= 3600:
+        return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
+
     formatted_responses = firebase_service.get_formatted_responses(formId)
     business_context = firebase_service.get_form_description(formId)
-    analysis = open_ai_service.analyse_responses(business_context, formatted_responses)
+    analysis = eval(open_ai_service.analyse_responses(business_context, formatted_responses))
+    analysis['last_updated'] =  unix_time_now
+    firebase_service.update_form_analysis(formId, analysis)
     return {"message": "Form analysis completed", "content": analysis}
