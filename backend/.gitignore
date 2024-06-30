@@ -1,0 +1,10 @@
+# Dependencies
+venv/
+
+# Cache
+__pycache__/
+*__pycache__*
+
+# Environment Variables
+.env
+firebase_credentials.json
