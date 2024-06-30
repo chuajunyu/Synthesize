@@ -1,4 +1,3 @@
-// "use server";
 "use client"
 
 import { useRouter } from "next/navigation";
@@ -99,8 +98,11 @@ function SignInGithub() {
     );
 }
 
+// functionality has been absorbed into UserDropDown
+// not used anymore
 function SignOut() {
     const dispatch = useDispatch();
+    
     return (
         <form
             action={() => {
@@ -108,9 +110,8 @@ function SignOut() {
                 dispatch(setUser(null));
             }}
         >
-            <Button type="submit">Sign Out</Button>
         </form>
     );
 }
 
-export { auth, SignInGoogle, SignInGithub, SignOut };
+export { auth, SignInGoogle, SignInGithub };
