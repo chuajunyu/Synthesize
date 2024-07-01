@@ -6,18 +6,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import Link from "next/link"
 
-export default function Block1() {
+interface Block1Props {
+  title: string,
+  text: string,
+  showButton: boolean
+  buttonText: string,
+  href: string
+}
+export default function Block1({title , text, showButton, buttonText, href }: Block1Props) {
   return (
-    <Card className="sm:col-span-2">
+    <Card className="w-full">
       <CardHeader className="pb-3">
-        <CardTitle>Create your survey with Synthesize, and gather insights by conversing with our chatbot.</CardTitle>
-        <CardDescription className="max-w-lg text-balance leading-relaxed">
-        How much time have you spent (let’s be honest: wasted) scrolling through endless Excel spreadsheets full of open-ended question data, trying to piece together new customer insights?
+        <CardTitle>{title}</CardTitle>
+        <CardDescription className="w-full">
+        {text}
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button>Create New Order</Button>
+        { showButton &&
+        <Link href={href}>
+          <Button>{buttonText}</Button>
+        </Link>
+        }
       </CardFooter>
     </Card>
   )
