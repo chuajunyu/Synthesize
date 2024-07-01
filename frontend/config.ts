@@ -19,6 +19,6 @@ if (LOCAL) {
     authDomain = "synthesize-two.vercel.app";
 }
 
-export const SECRET_KEY = process.env.SECRET_KEY;
+export const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY;
 
 export { authDomain };
