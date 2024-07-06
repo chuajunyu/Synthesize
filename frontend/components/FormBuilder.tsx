@@ -17,7 +17,7 @@ import { useAuth } from "@/lib/firebase/AuthContext";
 import AlertFormShareLink from "@/components/AlertFormShareLink";
 import FormTitleAndDescriptionCard from "./FormTitleAndDescriptionCard";
 
-function FormBuilder() {
+export default function FormBuilder() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [questions, setQuestions] = useState([{ id: 1, question: "" }]);
@@ -119,5 +119,3 @@ function FormBuilder() {
     </div>
   );
 }
-
-export default FormBuilder;

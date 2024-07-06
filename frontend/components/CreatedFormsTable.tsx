@@ -17,7 +17,7 @@ interface FormSummary {
 }
 
 // InitialformData: Object with form IDs as keys and form details (title, createdDate) as values.
-export function CreatedFormsTable() {
+export default function CreatedFormsTable() {
   const [formData, setFormData] = useState<{
     [key: string]: MyFormData;
   } | null>(null);

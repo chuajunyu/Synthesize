@@ -1,16 +1,12 @@
-"use client"
-import React, { useState } from 'react';
-import { auth } from "@/components/authFunctions";  
-import create_response from "@/database/create_response";
-import { Button } from "@/components/ui/button"
+"use client";
+import React from "react";
+
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 interface Question {
   text: string;
@@ -34,40 +30,43 @@ interface ResponseDataProps {
   userId: string;
 }
 
-interface props {formData: FormProps; responseData: ResponseDataProps}
+interface props {
+  formData: FormProps;
+  responseData: ResponseDataProps;
+}
 
-export default function ViewResponsePage({formData, responseData}: props) {
-  const {title, description, questions } = formData;
-  const {answers, submissionDate, userId} = responseData;
-  const submissionDateString = new Date(submissionDate).toLocaleDateString()
-  console.log(answers[0])
+export default function ViewResponsePage({ formData, responseData }: props) {
+  const { title, description, questions } = formData;
+  const { answers, submissionDate, userId } = responseData;
+  const submissionDateString = new Date(submissionDate).toLocaleDateString();
+
   return (
-        <div className="flex flex-col justify-center items-center gap-y-8 mt-8">
-        <Card className="w-[800px]">
+    <div className="flex flex-col justify-center items-center gap-y-8">
+      <Card className="w-full">
         <CardHeader>
-            <CardTitle>{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
-            <div>Date Submitted: {submissionDateString}</div>
-            <div>Responder: {userId} </div>
+          <CardTitle>{title}</CardTitle>
+          <div>Form Description: {description}</div>
+          <div>Responder: {userId}</div>
+          <div>Date of Response Submission: {submissionDateString}</div>
         </CardHeader>
-        </Card>
+      </Card>
 
-    {questions?.map((question, index) => (
-        <Card key={index} className="w-[800px]">
+      {questions?.map((question, index) => (
+        <Card key={index} className="w-full">
           <CardHeader>
             <CardTitle>{question.text}</CardTitle>
           </CardHeader>
-        <CardContent>
+          <CardContent>
             <form>
-                <div className="flex flex-row justify-start align-left w-full gap-4">
-                    <div className="flex flex-col justify-start w-3/4 space-y-1.5">
-                        <div>{String(answers[index].response)}</div>
-                    </div>
+              <div className="flex flex-row justify-start align-left w-full gap-4">
+                <div className="flex flex-col justify-start space-y-1.5">
+                  <div>{String(answers[index].response)}</div>
                 </div>
+              </div>
             </form>
-        </CardContent>
+          </CardContent>
         </Card>
       ))}
     </div>
-  )
+  );
 }

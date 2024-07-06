@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { CreatedFormsTable } from "@/components/CreatedFormsTable";
+import CreatedFormsTable from "@/components/CreatedFormsTable";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 

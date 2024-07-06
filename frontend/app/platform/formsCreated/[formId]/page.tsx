@@ -1,15 +1,13 @@
 "use client"
-import React from 'react';
-import { useState, useEffect } from 'react';
-import FormTitleAndDescription from "@/components/FormTitleAndDescription";
+import React, { useState, useEffect } from "react";
 import FormOverviewStatistics from "@/components/FormOverviewStatistics";
-import readFormData from "@/database/read_form";
-import { FormProps } from "@/database/read_form";
-import { ResponsesTable } from "@/components/ResponsesTable";
-import { ResponseFormat, getFormResponses } from "@/database/read_form_responses";
+import read_form_data, { FormProps } from "@/database/read_form";
+import ResponsesTable from "@/components/ResponsesTable";
+import read_form_responses, { ResponseFormat } from "@/database/read_form_responses";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import Block1 from "@/components/Block1"
 
-export default function ViewFormPage({ params }: { params: { formId: string } }) {
+export default function ViewFormInsightsPage({ params }: { params: { formId: string } }) {
     const [formData, setFormData] = useState<FormProps | null>(null);
     const [responseData, setResponseData ] = useState<{ [key: string]: ResponseFormat} | null>(null);
     const [responseCount, setResponseCount] = useState<number>(0);
@@ -18,10 +16,10 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
     useEffect(() => {
         async function fetchFormData() {
             try {
-                const data = await readFormData(params.formId);
+                const data = await read_form_data(params.formId);
                 setFormData(data);
             } catch (error) {
-                console.log("error found");
+                console.log("error fetching form data");
             }
         }
         fetchFormData();
@@ -30,7 +28,7 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
     useEffect(() => {
         async function fetchResponseData() {
             try {
-                const data = await getFormResponses(params.formId);
+                const data = await read_form_responses(params.formId);
                 setResponseData(data);
                 if (data) {
                     const len = Object.keys(data).length;
@@ -56,7 +54,8 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
     if (!responseData) {
         return <div>No Response Data found</div>;
     }
-    const { createdDate, creatorId, description, questions, title } = formData;
+    const { description, title } = formData;
+    
     const text: string[] = [
         "Unique Responders", 
         "Responses"
@@ -65,8 +64,9 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
         <ProtectedRoute>
             <div className="flex flex-col mx-8">
                 <div className="flex flex-row w-full mt-10 h-full items-stretch">
-                    <div className="flex flex-col flex-grow mr-5">
-                        <FormTitleAndDescription title={formData.title} description={formData.description}/>
+                    <div className="flex flex-grow mr-5">
+                        <Block1 title={title} text={description}
+                            showButton={false} buttonText="" href=""/>
                     </div>
                     <div className="flex flex-grow flex-col mr-5">
                         <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
@@ -76,7 +76,7 @@ export default function ViewFormPage({ params }: { params: { formId: string } })
                     </div>
                 </div>
                 <div className="flex flex-col w-full">
-                    <span className="flex my-3 text-xl font-semibold">View Individual Form Responses</span>
+                    <span className="flex my-3 mt-10 text-xl font-semibold">View Individual Form Responses</span>
                     <div className="flex flex-col flex-grow">
                         <ResponsesTable responseData={responseData} formId={params.formId} />
                     </div>

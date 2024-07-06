@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import React from "react";
 
-export function ShareButton() {
+export default function ShareButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
