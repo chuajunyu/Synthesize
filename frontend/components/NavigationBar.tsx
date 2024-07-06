@@ -108,7 +108,7 @@ export default function NavigationBar({ user }: { user: string }) {
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside
         id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-56 flex-shrink-0 border-r border-slate-300 bg-gradient-to-r from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
+        className="fixed left-0 top-0 z-40 h-screen w-56 flex-shrink-0 border-r border-slate-300 bg-gradient-to-b from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
@@ -228,7 +228,7 @@ export default function NavigationBar({ user }: { user: string }) {
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        className="absolute top-1/2 transform -translate-y-1/2 right-8 py-2 px-4 rounded-lg size-6"
+        className="absolute top-1/2 transform -translate-y-1/2 left-56 w-10 h-10 bg-purple-400 p-1 text-black rounded-r-xl border-5 z-10"
       >
         <path
           stroke-linecap="round"
