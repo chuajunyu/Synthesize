@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/card"
 
 interface Question {
-  type: string;
   text: string;
 }
 
