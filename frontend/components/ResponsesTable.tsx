@@ -56,7 +56,7 @@ export default function ResponsesTable({
                 </div>
                 <div className="grid flex-col w-1/2 text-sm items-center gap-4">
                   <a
-                    href={`/platform/formsCompleted/${formId}/${response.responseId}`}
+                    href={`/platform/formsCreated/${formId}/${response.responseId}`}
                     className="text-blue-600 hover:underline"
                   >
                     {response.creatorId}
