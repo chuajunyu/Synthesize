@@ -1,13 +1,13 @@
 import ResponseForm from "@/components/ResponseForm";
-import readFormData from "@/database/read_form";
+import read_form_data from "@/database/read_form";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-export default await async function Page({
+export default async function Page({
     params,
 }: {
     params: { slug: string };
 }) {
-    const formData = await readFormData(params.slug);
+    const formData = await read_form_data(params.slug);
     if (formData === null) {
         return (
             <div>
@@ -15,8 +15,8 @@ export default await async function Page({
             </div>
         );
     }
-    const { createdDate, creatorId, description, questions, title } = formData;
-    console.log(questions);
+    const { description, questions, title } = formData;
+    
     return (
         <ProtectedRoute>
             <div>

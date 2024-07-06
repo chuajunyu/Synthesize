@@ -2,7 +2,6 @@ import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
 
 interface Question {
-    type: string;
     text: string;
 }
 
@@ -14,7 +13,7 @@ export interface FormProps {
     creatorId: string;
 }
 
-export default async function readFormData(formId: string): Promise<FormProps | null> {
+export default async function read_form_data(formId: string): Promise<FormProps | null> {
     const db = getDatabase(app);
     const formRef = ref(db, 'forms/' + formId);
     try {

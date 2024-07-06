@@ -126,7 +126,7 @@ const projectItems = [
 //   text: "Forms Completed",
 // },
 
-export function NavigationBar({ user }: { user: string }) {
+export default function NavigationBar({ user }: { user: string }) {
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       <aside

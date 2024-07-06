@@ -6,7 +6,7 @@ interface SidebarLinkProps {
   text: string;
 }
 
-const SidebarLink: React.FC<SidebarLinkProps> = ({ href, icon, text }) => {
+export default function SidebarLink({ href, icon, text }: SidebarLinkProps) {
   return (
     <li>
       <a
@@ -19,5 +19,3 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ href, icon, text }) => {
     </li>
   );
 }
-
-export default SidebarLink;

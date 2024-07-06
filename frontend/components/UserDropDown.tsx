@@ -6,36 +6,20 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
     DropdownMenuSeparator,
     DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 
 import {
-    Cloud,
-    CreditCard,
-    Github,
-    Keyboard,
-    LifeBuoy,
     LogOut,
-    Mail,
-    MessageSquare,
-    Plus,
-    PlusCircle,
     Settings,
     User,
-    UserPlus,
-    Users,
   } from "lucide-react"
 import { sign_out } from "@/lib/firebase/sign_out";
 import { setUser } from '@/redux/auth/authSlice';
   
-const UserDropDown = () => {
+export default function UserDropDown() {
     const dispatch = useDispatch();
 
     const handleSignOut = () => {
@@ -72,5 +56,3 @@ const UserDropDown = () => {
         </DropdownMenu>
     );
 }
-
-export default UserDropDown

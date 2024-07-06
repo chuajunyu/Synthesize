@@ -1,7 +1,7 @@
 import readResponseData from "@/database/read_response";
-import readFormData from "@/database/read_form";
 import ViewResponsePage from "@/components/ViewResponsePage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import read_form_data from "@/database/read_form";
 
 export default async function Page({
     params,
@@ -12,7 +12,7 @@ export default async function Page({
         params.formId,
         params.responseId
     );
-    const formData = await readFormData(params.formId);
+    const formData = await read_form_data(params.formId);
     console.log(responseData);
     console.log(formData);
     if (formData === null || responseData === null) {
@@ -25,16 +25,16 @@ export default async function Page({
         );
     } else {
         return (
-            <ProtectedRoute>
-                <div>
-                    <div className="flex items-center justify-center">
-                        <ViewResponsePage
-                            formData={formData}
-                            responseData={responseData}
-                        />
-                    </div>
-                </div>
-            </ProtectedRoute>
+          <ProtectedRoute>
+            <div className="flex min-h-screen">
+              <div className="justify-center w-full mx-8 mt-5">
+                <ViewResponsePage
+                  formData={formData}
+                  responseData={responseData}
+                />
+              </div>
+            </div>
+          </ProtectedRoute>
         );
     }
 }
