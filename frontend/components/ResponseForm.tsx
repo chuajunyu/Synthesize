@@ -60,7 +60,7 @@ export default function ResponseForm({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-y-8 mt-10 mx-8">
+    <div className="flex flex-col justify-center items-center gap-y-8 mt-5 mx-8">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
