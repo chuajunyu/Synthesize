@@ -15,11 +15,14 @@ import { Button } from "@/components/ui/button";
 
 interface AlertDialogComponentProps {
   handleSubmit: () => void;
-  shareKey: string
+  shareKey: string;
 }
 
-export default function AlertFormShareLink({handleSubmit, shareKey}: AlertDialogComponentProps) {
-    const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
+export default function AlertFormShareLink({
+  handleSubmit,
+  shareKey,
+}: AlertDialogComponentProps) {
+  const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
   let hrefOrigin = useRef<string | undefined>();
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { CreatedFormsTable } from "@/components/CreatedFormsTable";
-import { getUserForms } from '@/database/read_user_forms';
+import { readUserForms } from '@/database/read_user_forms';
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
@@ -28,7 +28,7 @@ export default function FormsCreated() {
     useEffect(() => {
         async function fetchData() {
             if (userEmail !== null) {
-                const data = await getUserForms(userEmail);
+                const data = await readUserForms(userEmail);
                 setFormData(data);
                 setLoading(false);
             }
