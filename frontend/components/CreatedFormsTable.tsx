@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { delete_form } from "../database/delete_form";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { readUserForms } from "@/database/read_user_forms";
+import Link from "next/link";
 
 interface MyFormData {
   createdDate: string;
@@ -120,12 +121,9 @@ export default function CreatedFormsTable() {
                   </svg>
                 </div>
                 <div className="grid flex-col w-1/2 text-sm items-center gap-4">
-                  <a
-                    href={`/platform/formsCreated/${item.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {item.title}
-                  </a>
+                  <Link href={`/platform/formsCreated/${item.id}`} className="text-blue-600 hover:underline">
+                      {item.title}
+                  </Link>
                 </div>
                 <div className="flex-col w-1/2 text-sm items-center gap-4">
                   {item.date}

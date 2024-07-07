@@ -41,7 +41,7 @@ export default function ViewResponsePage({ formData, responseData }: props) {
   const submissionDateString = new Date(submissionDate).toLocaleDateString();
 
   return (
-    <div className="flex flex-col justify-center items-center gap-y-8">
+    <div className="flex flex-col justify-center items-center gap-y-4">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{title}</CardTitle>

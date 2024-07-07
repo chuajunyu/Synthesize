@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import ShareButton from "@/components/ShareButton";
+import Link from "next/link"
 
 interface FormResponsesTableProps {
   responseData: { [key: string]: ResponseData };
@@ -55,12 +56,12 @@ export default function ResponsesTable({
                   </svg>
                 </div>
                 <div className="grid flex-col w-1/2 text-sm items-center gap-4">
-                  <a
-                    href={`/platform/formsCompleted/${formId}/${response.responseId}`}
+                  <Link
+                    href={`/platform/formsCreated/${formId}/${response.responseId}`}
                     className="text-blue-600 hover:underline"
                   >
                     {response.creatorId}
-                  </a>
+                  </Link>
                 </div>
                 <div className="grid flex-col w-1/2 text-sm items-center gap-4">
                   {response.date}
