@@ -22,7 +22,7 @@ export default async function Page({ params }: {
     return (
       <ProtectedRoute>
         <div className="flex min-h-screen">
-          <div className="justify-center w-full mx-8 mt-5">
+          <div className="justify-center w-full mx-8 mt-10">
             <ViewResponsePage formData={formData} responseData={responseData} />
           </div>
         </div>
