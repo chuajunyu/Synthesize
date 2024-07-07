@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
 import {
@@ -103,139 +103,175 @@ const projectItems = [
   }
 ];
 
-export default function NavigationBar({ user }: { user: string }) {
+interface NavigationBarProps {
+  user: string;
+  isNavbarOpen: boolean;
+  toggleNavbarOpen: () => void;
+}
+export default function NavigationBar({
+  user,
+  isNavbarOpen,
+  toggleNavbarOpen,
+}: NavigationBarProps) {
+
+  useEffect(() => {
+    // Save navbar state to local storage
+    localStorage.setItem("isNavbarOpen", JSON.stringify(isNavbarOpen));
+  }, [isNavbarOpen]);
+
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
-      <aside
-        id="sidebar"
-        className="fixed left-0 top-0 z-40 h-screen w-56 flex-shrink-0 border-r border-slate-300 bg-gradient-to-b from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
-        aria-label="Sidebar"
-      >
-        <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
-          <a
-            href="/"
-            className="mb-4 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
+      {isNavbarOpen ? (
+        <div>
+          <aside
+            id="sidebar"
+            className="fixed left-0 top-0 z-40 h-screen w-56 flex-shrink-0 border-r border-slate-300 bg-gradient-to-b from-purple-400 to-pink-400 dark:border-slate-700 dark:bg-slate-900"
+            aria-label="Sidebar"
           >
-            <svg
-              className="h-5 w-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-            </svg>
-            <span className="ml-3 text-xl font-semibold">Synthesize</span>
-          </a>
-          <a
-            href="/platform/homepage"
-            className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-            <span className="ml-4 whitespace-nowrap text-2ms font-medium">
-              Home
-            </span>
-          </a>
-          <Accordion type="single" collapsible className="mb-0 pb-0">
-            <AccordionItem value="item-1">
-              <div className="flex flex-row items-center">
-                <a
-                  href="homepage"
-                  className="flex items-left justify-start rounded-lg py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700 pr-4"
+            <div className="flex h-full flex-col overflow-y-auto  px-3 py-4 ">
+              <a
+                href="/"
+                className="mb-4 flex items-center rounded-lg px-3 py-2 text-slate-900 dark:text-white"
+              >
+                <svg
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6 ml-2.5 mr-3.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-                    />
-                  </svg>
-                  <span className="text-2sm font-medium">Projects</span>
-                </a>
-                <AccordionTrigger className="ml-4" />
-              </div>
-              <AccordionContent>
-                <div className="flex flex-row ml-5">
-                  <div className="flex flex-col items-center">
-                    <Separator
-                      orientation="vertical"
-                      className="border-zinc-500 border-1"
-                    />
+                  <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+                </svg>
+                <span className="ml-3 text-xl font-semibold">Synthesize</span>
+              </a>
+              <a
+                href="/platform/homepage"
+                className="flex items-left justify-start rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span className="ml-4 whitespace-nowrap text-2ms font-medium">
+                  Home
+                </span>
+              </a>
+              <Accordion type="single" collapsible className="mb-0 pb-0">
+                <AccordionItem value="item-1">
+                  <div className="flex flex-row items-center">
+                    <a
+                      href="homepage"
+                      className="flex items-left justify-start rounded-lg py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700 pr-4"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-6 ml-2.5 mr-3.5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+                        />
+                      </svg>
+                      <span className="text-2sm font-medium">Projects</span>
+                    </a>
+                    <AccordionTrigger className="ml-4" />
                   </div>
-                  <ul className="space-y-4 text-base ml-3 font-medium">
-                    {projects.map((item, index) => (
-                      <SidebarLink
-                        key={index}
-                        href={item.href}
-                        icon={item.icon}
-                        text={item.text}
-                      />
-                    ))}
-                  </ul>
+                  <AccordionContent>
+                    <div className="flex flex-row ml-5">
+                      <div className="flex flex-col items-center">
+                        <Separator
+                          orientation="vertical"
+                          className="border-zinc-500 border-1"
+                        />
+                      </div>
+                      <ul className="space-y-4 text-base ml-3 font-medium">
+                        {projects.map((item, index) => (
+                          <SidebarLink
+                            key={index}
+                            href={item.href}
+                            icon={item.icon}
+                            text={item.text}
+                          />
+                        ))}
+                      </ul>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              <ul className="space-y-4 text-2sm font-medium mt-4">
+                {projectItems.map((item, index) => (
+                  <SidebarLink
+                    key={index}
+                    href={item.href}
+                    icon={item.icon}
+                    text={item.text}
+                  />
+                ))}
+              </ul>
+              <div className="mt-auto flex pb-2">
+                <div className="flex w-full justify-between">
+                  <span className="text-sm font-medium text-black dark:text-white mr-1">
+                    {user}
+                  </span>
+                  <UserDropDown />
                 </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-          <ul className="space-y-4 text-2sm font-medium mt-4">
-            {projectItems.map((item, index) => (
-              <SidebarLink
-                key={index}
-                href={item.href}
-                icon={item.icon}
-                text={item.text}
-              />
-            ))}
-          </ul>
-          <div className="mt-auto flex pb-2">
-            <div className="flex w-full justify-between">
-              <span className="text-sm font-medium text-black dark:text-white mr-1">
-                {user}
-              </span>
-              <UserDropDown />
+              </div>
             </div>
-          </div>
+          </aside>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="absolute top-1/2 transform -translate-y-1/2 left-56 w-6 h-10 bg-purple-400 text-black rounded-r-xl border-5 z-10"
+            onClick={toggleNavbarOpen}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+            />
+          </svg>
         </div>
-      </aside>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        className="absolute top-1/2 transform -translate-y-1/2 left-56 w-10 h-10 bg-purple-400 p-1 text-black rounded-r-xl border-5 z-10"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
-        />
-      </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="absolute top-1/2 transform -translate-y-1/2 left-0 w-6 h-10 bg-purple-400 text-black rounded-r-xl border-5 z-10"
+          onClick={toggleNavbarOpen}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+          />
+        </svg>
+      )}
     </div>
   );
 }
