@@ -28,7 +28,6 @@ const config: Config = {
 
 module.exports = async () => ({
   ...(await createJestConfig(config)()),
-  transformIgnorePatterns: [
-    '/node_modules/(?!(firebase|@firebase)/)',
-  ]
-})
+  transformIgnorePatterns: ["/node_modules/(?!(firebase|@firebase)/)"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+});

@@ -183,17 +183,18 @@ export default function NavigationBar({
                   <span className="ml-3 text-xl font-semibold">Synthesize</span>
                 </a>
                 <svg
+                  role="close-navbar"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="#555555"
                   className="size-5 ml-4 mt-3"
                   onClick={toggleNavbarOpen}
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"
                   />
                 </svg>
@@ -290,6 +291,7 @@ export default function NavigationBar({
         </div>
       ) : (
         <svg
+          role="open-navbar"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
