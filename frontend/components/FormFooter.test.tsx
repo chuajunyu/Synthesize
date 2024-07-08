@@ -37,7 +37,7 @@ describe("FormFooter Component", () => {
 
     describe("Interactivity", () => {
         it("calls handleAddNew when 'Add New Question' button is clicked", () => {
-            render(<FormFooter questions={questions} handleAddNew={mockHandleAddNew} />);
+            render(<FormFooter questions={[]} handleAddNew={mockHandleAddNew} />);
         
             const addButton = screen.getByText("Add New Question");
             fireEvent.click(addButton);
