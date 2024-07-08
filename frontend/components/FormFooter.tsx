@@ -5,6 +5,7 @@ interface FormFooterProps {
     questions: { id: number; question: string }[],
     handleAddNew: () => void
 }
+
 export default function FormFooter({ questions, handleAddNew }:FormFooterProps) {
     return (
       <div>
