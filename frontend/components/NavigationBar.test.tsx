@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 jest.mock("@/components/SidebarLink", () => () => (
   <div data-testid="sidebar-link"></div>
 ));
+
 jest.mock("./UserDropDown", () => () => (
   <div data-testid="user-dropdown"></div>
 ));

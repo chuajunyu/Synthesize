@@ -106,11 +106,20 @@ export default function FormBuilder() {
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button onClick={() => handleDelete(question.id)} variant="outline">
+            <Button
+              data-testid="delete-question-button"
+              onClick={() => handleDelete(question.id)}
+              variant="outline"
+            >
               Delete Question
             </Button>
             {question.id === questions[questions.length - 1].id && (
-              <Button onClick={handleAddNew}>Add New Question</Button>
+              <Button
+                data-testid="add-question-button"
+                onClick={handleAddNew}
+              >
+                Add New Question
+              </Button>
             )}
           </CardFooter>
         </Card>
