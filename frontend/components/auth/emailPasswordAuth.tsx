@@ -11,14 +11,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-
-
-
-
 function EmailSignUp() {
     const router = useRouter();
     const [errorCode, setErrorCode] = useState<string | null>(null);
-    
 
     async function handleSubmitSignUp(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -27,8 +22,10 @@ function EmailSignUp() {
         const password = form.get("password")?.toString();
         if (email && password) {
             try {
-                const message = await signUpWithEmailAndPassword(email, password);
-                
+                const message = await signUpWithEmailAndPassword(
+                    email,
+                    password
+                );
                 if (message == "success") {
                     router.push("/platform/form");
                 } else {
@@ -37,7 +34,6 @@ function EmailSignUp() {
             } catch (error) {
                 console.log(error);
             }
-            
         }
     }
 
@@ -83,9 +79,13 @@ function EmailLogIn() {
         const password = form.get("password")?.toString();
         if (email && password) {
             try {
-                const message = await logInWithEmailAndPassword(email, password);
+                const message = await logInWithEmailAndPassword(
+                    email,
+                    password
+                );
+                console.log(message)
                 if (message == "success") {
-                    console.log(message)
+                    console.log(message);
                     router.push("/platform/form");
                 } else {
                     setErrorCode(message);

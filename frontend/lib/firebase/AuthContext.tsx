@@ -34,8 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 email: MOCK_USER,
                 displayName: "LOCAL DEV MODE (MOCK USER)",
             } as User;
-            setUser(mockUser);
-            setUserState(mockUser);
+            setUser(null);
+            setUserState(null);
             setLoading(false);
         } else {
             const unsubscribe = onAuthStateChanged(auth, (user) => {
