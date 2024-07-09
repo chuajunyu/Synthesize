@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { EmailSignUp } from "@/components/auth/emailPasswordAuth";
+import EmailSignUp from "@/components/auth/EmailSignUp";
 import { SignInGoogle } from "@/components/authFunctions";
 
 export default function SignUp() {

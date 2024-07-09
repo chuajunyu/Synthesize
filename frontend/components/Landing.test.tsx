@@ -3,7 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import Landing from "@/components/Landing";
 
 describe("Landing Page Component", () => {
-    describe("Rendering", () => {
+    describe("Renders Copywriting Correctly", () => {
         it("renders the navigation bar with website name", () => {
             render(<Landing />);
             const navigationBar = screen.getByRole("navigation-bar");
@@ -67,15 +67,15 @@ describe("Landing Page Component", () => {
         });
     });
 
-    describe("Interactivity", () => {
-        it("redirects to the login page when the login button is clicked", async () => {
+    describe("Renders Links Correctly", () => {
+        it("renders the login button that leads to the login page with the correct href", async () => {
             render(<Landing />);
             const navigationbar = screen.getByRole("navigation-bar");
             const loginButton = within(navigationbar).getByRole("login");
             expect(loginButton).toHaveAttribute("href", "/auth/login");
         });
 
-        it("redirects to the signup page when the call to action button is clicked", async () => {
+        it("renders the call to action button that leads to sign-up page with the correct href", async () => {
             render(<Landing />);
             const mainContent = screen.getByRole("main-content");
             const callToActionButton =
