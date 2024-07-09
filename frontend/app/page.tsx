@@ -1,14 +1,10 @@
 import "./globals.css";
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import LandingPage from '@/components/LandingPage';
+import Landing from '@/components/Landing';
 
-
-function Landing() {
-
+function LandingPage() {
   return (
-    <LandingPage />
+    <Landing />
   );
 };
 
-export default Landing;
+export default LandingPage;

@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from "@/components/ui/accordion";
 import UserDropDown from "./UserDropDown";
 
@@ -149,7 +149,7 @@ export default function NavigationBar({
     // Save navbar state to local storage
     localStorage.setItem("isNavbarOpen", JSON.stringify(isNavbarOpen));
   }, [isNavbarOpen]);
-
+  
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       {isNavbarOpen ? (
