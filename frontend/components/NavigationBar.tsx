@@ -11,7 +11,7 @@ import UserDropDown from "./UserDropDown";
 
 const projects = [
   {
-    href: "homepage",
+    href: "/platform/homepage",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +31,7 @@ const projects = [
     text: "Project A",
   },
   {
-    href: "homepage",
+    href: "/platform/homepage",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ const projects = [
     text: "Project B",
   },
   {
-    href: "homepage",
+    href: "/platform/homepage",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +225,7 @@ export default function NavigationBar({
                 <AccordionItem value="item-1">
                   <div className="flex flex-row items-center">
                     <a
-                      href="homepage"
+                      href="/platform/projects"
                       className="flex items-left justify-start rounded-lg py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700 pr-4"
                     >
                       <svg
