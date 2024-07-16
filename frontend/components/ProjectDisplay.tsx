@@ -1,37 +1,50 @@
-import React from "react";
-import {
-    Card,
-    CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client"
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-
-const projects = [
-  {
-    Title: "Create a New Project",
-    isAddCard: true,
-  },
-  {
-    Title: "September Coffee Food Feedback",
-  },
-  {
-    Title: "Package Pals User Research",
-  },
-  {
-    Title: "Assurance Vouchers Benefits",
-  },
-  {
-    Title: "Assurance Vouchers Benefits",
-  },
-];
+import read_user_projects, { ProjectTitle } from "@/database/read_user_projects";
+import { useAuth } from "@/lib/firebase/AuthContext";
 
 export default function ProjectDisplay() {
+  const { user } = useAuth();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState<Boolean>(true);
+  const [projectTitles, setprojectTitles] = useState<ProjectTitle[]>([]);
+
+  useEffect(() => {
+    async function authenticate() {
+      const email = user?.email ?? "";
+      setUserEmail(email);
+    }
+    authenticate();
+  }, [user?.email]);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      if (userEmail !== null) {
+        const projects = await read_user_projects(userEmail);
+        setprojectTitles(projects ?? []);
+        setLoading(false);
+      }
+    }
+    fetchProjects();
+  }, [userEmail]);
+
+  const projectsToDisplay = [
+    { title: "Create a New Project", isAddCard: true, projectId: "" },
+    ...projectTitles.map((project) => ({
+      title: project.title,
+      isAddCard: false,
+      projectId: project.projectId,
+    })),
+  ];
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
     return (
       <div className="flex flex-wrap gap-12 mt-5">
-        {projects.map((project, index) => (
+        {projectsToDisplay.map((project, index) => (
           <div
             key={index}
             className="w-1/5 h-64 bg-white shadow-md rounded-lg flex flex-col justify-between items-center"
@@ -71,9 +84,11 @@ export default function ProjectDisplay() {
             </div>
             <span className="w-full text-center truncate px-2 py-4 bg-gradient-to-r from-purple-200 to-pink-200 rounded-b-lg text-blue-600 hover:underline">
               {project.isAddCard ? (
-                <Link href="/platform/projects/create">Create a New Project</Link>
+                <Link href="/platform/projects/create">
+                  Create a New Project
+                </Link>
               ) : (
-                <Link href="/">{project.Title}</Link>
+                <Link href={`/platform/projects/${project.projectId}`}>{project.title}</Link>
               )}
             </span>
           </div>
