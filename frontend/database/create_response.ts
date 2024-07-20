@@ -10,6 +10,8 @@ export default function create_response(userId: string, formId: string, response
         answers: responses,
         submissionDate: Date.now(),
         userId: userId,
+        processed: false,
+        viewed: false
     });
     return key;
 }
