@@ -54,6 +54,7 @@ class FirebaseService:
     
     def get_formatted_unprocessed_responses(self, formId):
         responses = self.get_unprocessed_responses(formId)
+        print(responses)
         if responses is None or responses == {}:
             return []
         form = self.get_form(formId)
@@ -79,6 +80,22 @@ class FirebaseService:
         response_ref = db.reference(f'responses/{formId}/{responseId}')
         response_ref.update({'processed': True})
         return
+    
+    def update_form_analysis_response_sentiments(self, formId, sentiments):
+        for response_id in sentiments:
+            analysis_ref = db.reference(f'analysis/{formId}/sentiments')
+            analysis_ref.update({f'{response_id}': sentiments[response_id]})
+        return
+ 
+    def update_form_analysis_insights(self, formId, insights):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.update({'insights': insights})
+        return
+    
+    def update_form_analysis_last_updated_time(self, formId, timestamp):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.update({'last_updated': timestamp})
+        return
 
 
 if __name__ == "__main__":
@@ -86,9 +103,10 @@ if __name__ == "__main__":
     test2 = '-O2Izql-Rp8o5qIHf86J'
     no = '-O2Izql-Rp8o5qIHf86J'
     firebase_service = FirebaseService()
-    # firebase_service.get_form_responses(0)
+    # print(firebase_service.get_form_responses(test2))
+    print(firebase_service.get_form_analysis('asdfas'))
     # print(firebase_service.get_formatted_responses(formId))
     # print(firebase_service.get_form_description(no))
     # print(firebase_service.get_unprocessed_responses(0))
-    print(firebase_service.get_form_analysis(test2))
+    # print(firebase_service.get_form_analysis(test2))
 

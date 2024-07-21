@@ -56,10 +56,10 @@ I want you to use the form responses that I have collected and extract out posit
 		2. NEGATIVE_SENTIMENTS: Negative sentiments that appear in the form response.
 		3. SUGGESTIONS: Give suggestions for actions that I can take to improve my product/service based on the form response. Be specific and link to the form responses.
 		4. RATIONALE: Explain why [SUGGESTIONS] is relevant and effective given the current form response. Be specific and link to the form responses to back up your rationale. 
-    Once all the form responses have been analyzed, proceed with analysing the intermediate information to generate the following final information, store this under the FINAL section in the response:
-		5. AGGREGATED_POSITIVE: Based on all the [POSITIVE_SENTIMENTS], aggregate them up by grouping similar points together. Ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
-		6. AGGREGATED_NEGATIVE: Based on all the [NEGATIVE_SENTIMENTS], aggregate them by grouping similar points together. Ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
-		7. AGGREGATED_SUGGESTIONS: Based on all the [SUGGESTIONS] and their [RATIONALE], aggregate them by grouping up similar points together. Ensure that all the suggestions are unique and distinct after aggregating, so that they are not semantically similar. Each suggestion should contain the following:
+    Once all the form responses have been analyzed, the goal now is to identify points that are similar and group and aggregate them together into the same points. Proceed with aggregating the intermediate information to generate the following final information, store this under the FINAL section in the response:
+		5. AGGREGATED_POSITIVE: Based on all the [POSITIVE_SENTIMENTS], aggregate them up by grouping similar points together. Merge any duplicates that are semantically similar, ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
+		6. AGGREGATED_NEGATIVE: Based on all the [NEGATIVE_SENTIMENTS], aggregate them by grouping similar points together. Merge any duplicates that are semantically similar, ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
+		7. AGGREGATED_SUGGESTIONS: Based on all the [SUGGESTIONS] and their [RATIONALE], aggregate them by grouping up similar points together. Merge any duplicates that are semantically similar, ensure that all the suggestions are unique and distinct after aggregating. Each suggestion should contain the following:
 			7A. ACTIONABLE: Each suggestion should have a specific actionable step that can be taken immediately to improve the business, this should read like a to-do message.
             7B. RATIONALE: Each suggestion should have a rationale that explains why the suggestion is relevant and effective given the current form responses.
             7C. LINKED_RESPONSES: A list of form response IDs that support this suggestion.
@@ -154,6 +154,28 @@ I am running a business / creating a project with the following description: %s.
 ### SUGGESTIONS RESPONSE FORMAT ###
 {
 	CURRENT: {
+		AGGREGATED_POSITIVE: {
+			positive1: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+			positive2: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+            …
+		},
+		AGGREGATED_NEGATIVE: {
+			negative1: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+			negative2: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+            …
+		},
 		AGGREGATED_SUGGESTIONS: {
 			suggestion_id1: {
 				ACTIONABLE: string describing the actionable that can be taken to improve the business,
@@ -169,6 +191,28 @@ I am running a business / creating a project with the following description: %s.
 		}
     }
     NEW: {
+    	AGGREGATED_POSITIVE: {
+			positive1: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+			positive2: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+            …
+		},
+		AGGREGATED_NEGATIVE: {
+			negative1: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+			negative2: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+            …
+		},
 		AGGREGATED_SUGGESTIONS: {
 			suggestion_id3: {
 				ACTIONABLE: string describing the actionable that can be taken to improve the business,
@@ -188,14 +232,20 @@ I am running a business / creating a project with the following description: %s.
 #################
 
 ### OBJECTIVE ###
-I want you to compare the current suggestions and the new suggestions, and merge all similar suggestions together to produce 1 single set of suggestions which are unique. When merging, the original current suggestions should take precedence. Use this step-by-step process and do not use code:
-            
-    1. For each suggestion under the NEW section, compare it with all the suggestions under the CURRENT section. 
-    	2. If the suggestion is similar to any of the suggestions in the CURRENT section, merge them together using this step by step process:
+I want you to compare the current sentiments and suggestions and the new sentiments and suggestions, and merge all similar sentiments or suggestions together to produce 1 single set of sentiments and suggestions which are unique. When merging, the current set should take precedence. Use this step-by-step process and do not use code:
+
+	For each sentiment under the NEW section, compare it with all the sentiments under the CURRENT section.
+		1. If the sentiment is similar to any of the sentiments in the CURRENT section, merge them together using this step by step process:
+			a. Retain the same sentiment_id as the one in the CURRENT section.
+            b. With precedence given to the current sentiment, merge the positive_sentiment and count of the new sentiment with the current sentiment by rephrasing them together in a coherent manner. Keep it concise and specific.
+		2. Else, if the sentiment is unique, add it directly to the final list of sentiments.
+           
+    For each suggestion under the NEW section, compare it with all the suggestions under the CURRENT section. 
+    	1. If the suggestion is similar to any of the suggestions in the CURRENT section, merge them together using this step by step process:
 			a. Retain the same suggestion_id as the one in the CURRENT section.
             b. With precedence given to the current suggestion, merge the ACTIONABLE and RATIONALE of the new suggestion with the current suggestion by rephrasing them together in a coherent manner. Keep it concise and specific.
             c. Add the LINKED_RESPONSES of the new suggestion to the LINKED_RESPONSES of the current suggestion.
-    	3. Else, if the suggestion is unique, add it directly to the final list of suggestions.
+    	2. Else, if the suggestion is unique, add it directly to the final list of suggestions.
 
 #################
 
@@ -219,6 +269,28 @@ Please follow the response format exactly as shown below:
 
 { 
 	FINAL:	{
+		AGGREGATED_POSITIVE: {
+			positive1: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+			positive2: {
+				positive_sentiment: string describing positive sentiment that was mentioned,
+				count: Integer representing number of times this positive sentiment was mentioned,
+			},
+            …
+		},
+		AGGREGATED_NEGATIVE: {
+			negative1: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+			negative2: {
+				negative_sentiment: string describing negative sentiment that was mentioned,
+				count: Integer representing number of times this negative sentiment was mentioned,
+			},
+            …
+		},
 		AGGREGATED_SUGGESTIONS: {
 			suggestion_id1: {
 				ACTIONABLE: string describing the actionable that can be taken to improve the business,

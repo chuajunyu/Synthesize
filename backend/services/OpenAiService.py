@@ -4,8 +4,8 @@ import json
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from utils.system_prompt_templates import analysis_system_prompt_template, merge_system_prompt_template
-from utils.mock_responses import *
+from services.utils.system_prompt_templates import analysis_system_prompt_template, merge_system_prompt_template
+from services.utils.mock_responses import *
 
 load_dotenv()
 
@@ -26,15 +26,15 @@ class OpenAiService:
         )
         return completion.choices[0].message.content
     
-    def merge_suggestions(self, business_context, current_suggestions, new_suggestions):
+    def merge_insights(self, business_context, current_insights, new_insights):
         payload = {
-            "CURRENT": current_suggestions,
-            "NEW": new_suggestions
+            "CURRENT": current_insights,
+            "NEW": new_insights
         }
         completion = self.client.chat.completions.create(
             response_format={ "type": "json_object" },
             model="gpt-4o",
-            temperature=0.5,
+            temperature=0.7,
             messages=[
                 {"role": "system", "content": merge_system_prompt_template % business_context},
                 {"role": "user", "content": json.dumps(payload)},

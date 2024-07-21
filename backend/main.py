@@ -44,12 +44,13 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     
     # Return Cache if the analysis was updated within the 10 minutes
     unix_time_now = int(datetime.timestamp(datetime.now()))
-    # last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
-    # if unix_time_now - last_updated_time <= 600:
-    #     return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
+    last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
+    if unix_time_now - last_updated_time <= 600:
+        return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
 
     # Only run if there are any unprocessed responses
     formatted_responses = firebase_service.get_formatted_unprocessed_responses(formId)
+
     if formatted_responses == [] or formatted_responses is None:
         past_content = firebase_service.get_form_analysis(formId)
         if past_content:
@@ -65,18 +66,25 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     new_analysis = eval(openai_response)
 
     # Append everything in the intermediate analysis to firebase
+    firebase_service.update_form_analysis_response_sentiments(formId, new_analysis["INTERMEDIATE"])
 
-    # Merge the positive and negative sentiments
-
-    # Merge the suggestions
+    # Merge the positive / negative sentiments and suggestions
+    past_analysis = firebase_service.get_form_analysis(formId)
+    if past_analysis and past_analysis.get("insights", None) is not None:
+        past_insights = past_analysis.get("insights", None)
+        merged_insights = eval(open_ai_service.merge_insights(business_context, past_insights, new_analysis["FINAL"]))
+    else:
+        merged_insights = new_analysis["FINAL"]
 
     # Update the firebase accordingly
-
-    new_analysis['last_updated'] =  unix_time_now
-    firebase_service.update_form_analysis(formId, new_analysis)
+    firebase_service.update_form_analysis_insights(formId, merged_insights)
 
     # Set responses as processed
     processed_responses = [response_id for response_id in formatted_responses]
     for response_id in processed_responses:
         firebase_service.set_form_response_processed(formId, response_id)
-    return {"message": "Form analysis completed", "content": analysis}
+
+    firebase_service.update_form_analysis_last_updated_time(formId, unix_time_now)
+
+    final_analysis = firebase_service.get_form_analysis(formId)
+    return {"message": "Form analysis completed", "content": final_analysis}
