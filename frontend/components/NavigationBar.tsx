@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import UserDropDown from "./UserDropDown";
 import read_user_projects, { ProjectTitle } from "@/database/read_user_projects";
@@ -78,9 +78,11 @@ interface NavigationBarProps {
   isNavbarOpen: boolean;
   toggleNavbarOpen: () => void;
 }
+
 export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: NavigationBarProps) {
   const [projects, setProjects] = useState<ProjectTitle[]>([]);
   const [selectedProject, setSelectedProject] = useState("Default Project");
+  const [isAccordionOpen, setIsAccordionOpen] = useState("false");
 
   useEffect(() => {
     // Save navbar state to local storage
@@ -97,6 +99,10 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
     read_projects();
   }, [user])
   
+  const handleCloseAccordion = () => {
+    setIsAccordionOpen("");
+  }
+
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       {isNavbarOpen ? (
@@ -168,7 +174,13 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                   Home
                 </span>
               </a>
-              <Accordion type="single" collapsible className="mb-0 pb-0">
+              <Accordion
+                type="single"
+                collapsible
+                className="mb-0 pb-0"
+                value={isAccordionOpen}
+                onValueChange={setIsAccordionOpen}
+              >
                 <AccordionItem value="item-1">
                   <div className="flex flex-row items-center mb-2">
                     <a
@@ -191,7 +203,17 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                       </svg>
                       <span className="text-2sm font-medium">Projects</span>
                     </a>
-                    <AccordionTrigger className="ml-4" />
+                    <AccordionTrigger className="ml-4" asChild>
+                      <button
+                        onClick={() =>
+                          setIsAccordionOpen(
+                            isAccordionOpen === "item-1" ? "" : "item-1"
+                          )
+                        }
+                      >
+                        Toggle
+                      </button>
+                    </AccordionTrigger>
                   </div>
                   <div className="flex flex-row ml-11 mb-4">
                     <svg
@@ -208,8 +230,7 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                         d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
                       />
                     </svg>
-                    <span
-                      className="w-full ml-4 text-left text-base font-medium truncate">
+                    <span className="w-full ml-4 text-left text-base font-medium truncate">
                       {selectedProject}
                     </span>
                   </div>
@@ -243,6 +264,7 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                             }
                             text={project.title}
                             setProject={setSelectedProject}
+                            onClick={handleCloseAccordion}
                           />
                         ))}
                       </ul>
