@@ -1,76 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import SidebarLink from "@/components/SidebarLink"; // Import the SidebarLink component
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import UserDropDown from "./UserDropDown";
-
-const projects = [
-  {
-    href: "/platform/homepage",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-        />
-      </svg>
-    ),
-    text: "Project A",
-  },
-  {
-    href: "/platform/homepage",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-        />
-      </svg>
-    ),
-    text: "Project B",
-  },
-  {
-    href: "/platform/homepage",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
-        />
-      </svg>
-    ),
-    text: "Project C",
-  },
-];
+import read_user_projects, { ProjectTitle } from "@/database/read_user_projects";
 
 const projectItems = [
   {
@@ -140,16 +78,31 @@ interface NavigationBarProps {
   isNavbarOpen: boolean;
   toggleNavbarOpen: () => void;
 }
-export default function NavigationBar({
-  user,
-  isNavbarOpen,
-  toggleNavbarOpen,
-}: NavigationBarProps) {
+
+export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: NavigationBarProps) {
+  const [projects, setProjects] = useState<ProjectTitle[]>([]);
+  const [selectedProject, setSelectedProject] = useState("Default Project");
+  const [isAccordionOpen, setIsAccordionOpen] = useState("false");
+
   useEffect(() => {
     // Save navbar state to local storage
     localStorage.setItem("isNavbarOpen", JSON.stringify(isNavbarOpen));
   }, [isNavbarOpen]);
+
+  useEffect(() => {
+    async function read_projects() {
+      const user_projects = await read_user_projects(user);
+      if (user_projects) {
+        setProjects(user_projects);
+      }
+    }
+    read_projects();
+  }, [user])
   
+  const handleCloseAccordion = () => {
+    setIsAccordionOpen("");
+  }
+
   return (
     <div className="h-screen w-25 bg-white dark:bg-slate-900">
       {isNavbarOpen ? (
@@ -221,9 +174,15 @@ export default function NavigationBar({
                   Home
                 </span>
               </a>
-              <Accordion type="single" collapsible className="mb-0 pb-0">
+              <Accordion
+                type="single"
+                collapsible
+                className="mb-0 pb-0"
+                value={isAccordionOpen}
+                onValueChange={setIsAccordionOpen}
+              >
                 <AccordionItem value="item-1">
-                  <div className="flex flex-row items-center">
+                  <div className="flex flex-row items-center mb-2">
                     <a
                       href="/platform/projects"
                       className="flex items-left justify-start rounded-lg py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700 pr-4"
@@ -244,7 +203,33 @@ export default function NavigationBar({
                       </svg>
                       <span className="text-2sm font-medium">Projects</span>
                     </a>
-                    <AccordionTrigger className="ml-4" />
+                    <AccordionTrigger
+                      className="ml-4"
+                      onClick={() =>
+                        setIsAccordionOpen(
+                          isAccordionOpen === "item-1" ? "" : "item-1"
+                        )
+                      }
+                    / >
+                  </div>
+                  <div className="flex flex-row ml-11 mb-4">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+                      />
+                    </svg>
+                    <span className="w-full ml-4 text-left text-base font-medium truncate">
+                      {selectedProject}
+                    </span>
                   </div>
                   <AccordionContent>
                     <div className="flex flex-row ml-5">
@@ -254,13 +239,29 @@ export default function NavigationBar({
                           className="border-zinc-500 border-1"
                         />
                       </div>
-                      <ul className="space-y-4 text-base ml-3 font-medium">
-                        {projects.map((item, index) => (
+                      <ul className="space-y-4 text-base ml-3 font-medium w-full">
+                        {projects.map((project, index) => (
                           <SidebarLink
                             key={index}
-                            href={item.href}
-                            icon={item.icon}
-                            text={item.text}
+                            icon={
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth="1.5"
+                                stroke="currentColor"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+                                />
+                              </svg>
+                            }
+                            text={project.title}
+                            setProject={setSelectedProject}
+                            onClick={handleCloseAccordion}
                           />
                         ))}
                       </ul>

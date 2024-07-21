@@ -24,16 +24,21 @@ export default function ProjectBuilder() {
   const { user } = useAuth();
 
   const handleSubmit = async () => {
-    const email = user?.email ?? "";
-    // logic for submitting a new project and redirecting back to homepage
-    create_project(email, title, description, goal)
-      .then(() => {
-        console.log("Project created successfully, routing back to projects page");
-        router.push("/platform/projects");
-      })
-      .catch((error) => {
-        console.log("Error creating project: ", error);
-      });
+    if (title.length == 0) {
+      alert("The project title cannot be empty. Please try again.");
+    }
+    else {
+      const email = user?.email ?? "";
+      // logic for submitting a new project and redirecting back to homepage
+      create_project(email, title, description, goal)
+        .then(() => {
+          console.log("Project created successfully, routing back to projects page");
+          router.push("/platform/projects");
+        })
+        .catch((error) => {
+          console.log("Error creating project: ", error);
+        });
+    }
   };
 
   return (
@@ -48,27 +53,31 @@ export default function ProjectBuilder() {
               <div className="flex flex-col justify-start w-full space-y-8">
                 <div>
                   <Label className="flex justify-start font-medium text-lg">
-                    Project Title
+                    Project Title *
                   </Label>
                   <Input
                     id="title"
-                    placeholder="Give your project a title. This could be your service or product name."
+                    placeholder="e.g., Lola's Cafe new outlet in Tampines"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   ></Input>
+                  {title.length == 0 && 
+                    <div className="text-left text-red-500 font small text-sm">
+                      This field is required. 
+                    </div>}
                 </div>
                 <div>
                   <Label className="flex justify-start font-medium text-lg">
                     Project Description (max 300 characters)
                   </Label>
                   <Label className="flex justify-start font-small text-sm text-rose-800 mb-2">
-                    * This information will be used by the LLM when generating
+                    This information will be used by the LLM when generating
                     insights. Note that giving acurate information will enhance
                     the quality of your derived insights.
                   </Label>
                   <Input
                     id="description"
-                    placeholder="Give your project a description. This could a description of your service or product."
+                    placeholder="e.g., Lola's Cafe is a neighbourhood cafe. Our new store at Tampines located in the heartlands, inside Tampines Mall."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className={`w-full p-2 border rounded ${
@@ -95,13 +104,13 @@ export default function ProjectBuilder() {
                     Project Goals (max 300 characters)
                   </Label>
                   <Label className="flex justify-start font-small text-sm text-rose-800 mb-2">
-                    * This information will be used by the LLM when generating
+                    This information will be used by the LLM when generating
                     insights. Note that giving acurate information will enhance
                     the quality of your derived insights.
                   </Label>
                   <Input
                     id="goals"
-                    placeholder="Give your project a goal. This could the business goal of your product."
+                    placeholder="e.g., My team plans to hit $100k/month of revenue. We want to validate our new dishes - Crab Rigatoni and Seafood Laksa - among the Tampines customers."
                     value={goal}
                     onChange={(e) => {
                       setGoal(e.target.value);
