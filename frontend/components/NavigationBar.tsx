@@ -203,17 +203,14 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                       </svg>
                       <span className="text-2sm font-medium">Projects</span>
                     </a>
-                    <AccordionTrigger className="ml-4" asChild>
-                      <button
-                        onClick={() =>
-                          setIsAccordionOpen(
-                            isAccordionOpen === "item-1" ? "" : "item-1"
-                          )
-                        }
-                      >
-                        Toggle
-                      </button>
-                    </AccordionTrigger>
+                    <AccordionTrigger
+                      className="ml-4"
+                      onClick={() =>
+                        setIsAccordionOpen(
+                          isAccordionOpen === "item-1" ? "" : "item-1"
+                        )
+                      }
+                    / >
                   </div>
                   <div className="flex flex-row ml-11 mb-4">
                     <svg
