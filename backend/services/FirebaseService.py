@@ -1,8 +1,7 @@
 import os
 from dotenv import load_dotenv
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+from firebase_admin import credentials, db
 
 load_dotenv()
 
@@ -21,6 +20,10 @@ class FirebaseService:
         responses_ref = db.reference(f'responses/{formId}')
         return responses_ref.get()
 
+    def get_unprocessed_responses(self, formId):
+        unprocessed_responses_query = db.reference(f'responses/{formId}').order_by_child('processed').equal_to(False)
+        return unprocessed_responses_query.get()
+
     def get_form(self, formId):
         forms_ref = db.reference(f'forms/{formId}')
         return forms_ref.get()
@@ -30,7 +33,7 @@ class FirebaseService:
         return form['description']
 
     def format_responses(self, form, responses):
-        result = []
+        result = {}
         questions = form["questions"]
         questionsList = list()
 
@@ -45,15 +48,17 @@ class FirebaseService:
             for i, answer in enumerate(answers):
                 formatted_answer[i] = {f'question{i}': questionsList[i], f'response{i}': answer['response']}
             
-            result.append(formatted_answer)
+            result[response_id] = (formatted_answer)
 
         return result
     
-    def get_formatted_responses(self, formId):
-        responses = self.get_form_responses(formId)
-        if responses is None:
+    def get_formatted_unprocessed_responses(self, formId):
+        responses = self.get_unprocessed_responses(formId)
+        if responses is None or responses == {}:
             return []
         form = self.get_form(formId)
+        if form is None:
+            return []
         return self.format_responses(form, responses)
     
     def get_form_analysis(self, formId):
@@ -75,7 +80,8 @@ if __name__ == "__main__":
     formId = '-NzEHrGgjqOKyNrbAQLi'
     no = '-NzMYgT7TZpGBjAIm5Ba'
     firebase_service = FirebaseService()
-    # firebase_service.get_form_responses(formId)
+    # firebase_service.get_form_responses(0)
     print(firebase_service.get_formatted_responses(formId))
-    print(firebase_service.get_form_description(no))
+    # print(firebase_service.get_form_description(no))
+    # print(firebase_service.get_unprocessed_responses(0))
 

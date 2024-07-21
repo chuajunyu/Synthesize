@@ -44,14 +44,16 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     
     # Return Cache if the analysis was updated within the last hour
     unix_time_now = int(datetime.timestamp(datetime.now()))
-    last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
-    if unix_time_now - last_updated_time <= 3600:
-        return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
+    # last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
+    # if unix_time_now - last_updated_time <= 3600:
+    #     return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
 
-    formatted_responses = firebase_service.get_formatted_responses(formId)
+    # Only run if there are any unprocessed responses
+    formatted_responses = firebase_service.get_formatted_unprocessed_responses(formId)
+    print(formatted_responses)
     if formatted_responses == []:
         response.status_code = status.HTTP_204_NO_CONTENT
-        return {"message": "No responses found", "content": []}
+        return {"message": "No unprocessed responses found", "content": []}
 
     business_context = firebase_service.get_form_description(formId)
     analysis = eval(open_ai_service.analyse_responses(business_context, formatted_responses))
