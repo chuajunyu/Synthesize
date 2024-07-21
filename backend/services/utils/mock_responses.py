@@ -684,3 +684,33 @@ mock_responses = {
     }
   ]
 }
+
+mock_current_suggestions = {
+    "AGGREGATED_SUGGESTIONS": {
+        "meowmer1abc":{
+            "ACTIONABLE":"Consider revising the pricing strategy to make the sandwiches more affordable.",
+            "LINKED_RESPONSES":["-O2Jnum_XkcQng8erlos"],
+            "RATIONALE":"The customer feels the sandwiches are overpriced, suggesting that a more competitive pricing strategy might improve customer satisfaction and perception of value."
+        },
+        "2hrawr209ilu":{
+            "ACTIONABLE":"Improve the quality of the sandwiches to provide better value for money.",
+            "LINKED_RESPONSES":["-O2Jnum_XkcQng8erlos"],
+            "RATIONALE":"The customer believes they can make a better sandwich at home, indicating that improving the quality of the sandwiches could make them feel more worthwhile and unique."
+        }
+    }
+}
+
+mock_new_suggestions = {
+    "AGGREGATED_SUGGESTIONS":{
+        "suggestion1":{
+            "ACTIONABLE":"Consider revising the pricing of the footlong set to be more competitive with other options in the market, such as Paris Baguette.",
+            "RATIONALE":"The feedback indicates that the current pricing is perceived as high, especially when compared to competitors like Paris Baguette, which offers lower prices and is perceived to have higher quality. Adjusting the pricing could make Subway more competitive and appealing to price-sensitive customers.",
+            "LINKED_RESPONSES":["-O2JuhyFsTbjvFa_2gA_"]
+        },
+        "suggestion2":{
+            "ACTIONABLE":"Improve the quality of the sandwiches to better justify the current pricing.",
+            "RATIONALE":"Improving the quality of the sandwiches could help justify the current pricing and make customers feel they are getting better value for their money.",
+            "LINKED_RESPONSES":["-O2JuhyFsTbjvFa_2gA_"]
+        }
+    }
+}
