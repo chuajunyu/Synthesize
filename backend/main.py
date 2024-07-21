@@ -42,21 +42,31 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Invalid secret key"}
     
-    # Return Cache if the analysis was updated within the last hour
+    # Return Cache if the analysis was updated within the 10 minutes
     unix_time_now = int(datetime.timestamp(datetime.now()))
     # last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
-    # if unix_time_now - last_updated_time <= 3600:
+    # if unix_time_now - last_updated_time <= 600:
     #     return {"message": "Form analysis updated recently", "content": firebase_service.get_form_analysis(formId)}
 
     # Only run if there are any unprocessed responses
     formatted_responses = firebase_service.get_formatted_unprocessed_responses(formId)
-    print(formatted_responses)
-    if formatted_responses == []:
-        response.status_code = status.HTTP_204_NO_CONTENT
-        return {"message": "No unprocessed responses found", "content": []}
+    if formatted_responses == [] or formatted_responses is None:
+        past_content = firebase_service.get_form_analysis(formId)
+        if past_content:
+            response.status_code = status.HTTP_200_OK
+            return {"message": "Form analysis already completed", "content": past_content}
+        else:
+            response.status_code = status.HTTP_204_NO_CONTENT
+            return {"message": "No unprocessed responses found", "content": []}
 
     business_context = firebase_service.get_form_description(formId)
-    analysis = eval(open_ai_service.analyse_responses(business_context, formatted_responses))
+    openai_response = open_ai_service.analyse_responses(business_context, formatted_responses)
+    analysis = eval(openai_response)
     analysis['last_updated'] =  unix_time_now
     firebase_service.update_form_analysis(formId, analysis)
+
+    # Set responses as processed
+    processed_responses = [response_id for response_id in formatted_responses]
+    for response_id in processed_responses:
+        firebase_service.set_form_response_processed(formId, response_id)
     return {"message": "Form analysis completed", "content": analysis}

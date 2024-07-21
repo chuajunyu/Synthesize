@@ -18,6 +18,7 @@ class OpenAiService:
         completion = self.client.chat.completions.create(
             response_format={ "type": "json_object" },
             model="gpt-4o",
+            temperature=0.5,
             messages=[
                 {"role": "system", "content": analysis_system_prompt_template % business_context},
                 {"role": "user", "content": str(formatted_responses)}

@@ -59,9 +59,9 @@ I want you to use the form responses that I have collected and extract out posit
     Once all the form responses have been analyzed, proceed with analysing the intermediate information to generate the following final information, store this under the FINAL section in the response:
 		5. AGGREGATED_POSITIVE: Based on all the [POSITIVE_SENTIMENTS], aggregate them up by grouping similar points together. Ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
 		6. AGGREGATED_NEGATIVE: Based on all the [NEGATIVE_SENTIMENTS], aggregate them by grouping similar points together. Ensure that all the points are unique and distinct after aggregating. Count how many times this was mentioned.
-		7. AGGREGATED_SUGGESTIONS: Based on all the [SUGGESTIONS] and their [RATIONALE], aggregate them by grouping up similar points together. Ensure that all the points are unique and distinct after aggregating. Each suggestion should contain the following:
-			7A. ACTIONABLE: Each point should have a specific actionables that can be taken to improve the business.
-            7B. RATIONALE: Each point should have a rationale that explains why the suggestion is relevant and effective given the current form responses.
+		7. AGGREGATED_SUGGESTIONS: Based on all the [SUGGESTIONS] and their [RATIONALE], aggregate them by grouping up similar points together. Ensure that all the suggestions are unique and distinct after aggregating, so that they are not semantically similar. Each suggestion should contain the following:
+			7A. ACTIONABLE: Each suggestion should have a specific actionable step that can be taken immediately to improve the business, this should read like a to-do message.
+            7B. RATIONALE: Each suggestion should have a rationale that explains why the suggestion is relevant and effective given the current form responses.
             7C. LINKED_RESPONSES: A list of form response IDs that support this suggestion.
 
 #################

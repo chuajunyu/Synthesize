@@ -74,14 +74,21 @@ class FirebaseService:
         analysis_ref = db.reference(f'analysis/{formId}')
         analysis_ref.set(analysis)
         return
+    
+    def set_form_response_processed(self, formId, responseId):
+        response_ref = db.reference(f'responses/{formId}/{responseId}')
+        response_ref.update({'processed': True})
+        return
 
 
 if __name__ == "__main__":
     formId = '-NzEHrGgjqOKyNrbAQLi'
-    no = '-NzMYgT7TZpGBjAIm5Ba'
+    test2 = '-O2Izql-Rp8o5qIHf86J'
+    no = '-O2Izql-Rp8o5qIHf86J'
     firebase_service = FirebaseService()
     # firebase_service.get_form_responses(0)
-    print(firebase_service.get_formatted_responses(formId))
+    # print(firebase_service.get_formatted_responses(formId))
     # print(firebase_service.get_form_description(no))
     # print(firebase_service.get_unprocessed_responses(0))
+    print(firebase_service.get_form_analysis(test2))
 
