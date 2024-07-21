@@ -59,11 +59,21 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
             response.status_code = status.HTTP_204_NO_CONTENT
             return {"message": "No unprocessed responses found", "content": []}
 
+    # Process the new responses
     business_context = firebase_service.get_form_description(formId)
     openai_response = open_ai_service.analyse_responses(business_context, formatted_responses)
-    analysis = eval(openai_response)
-    analysis['last_updated'] =  unix_time_now
-    firebase_service.update_form_analysis(formId, analysis)
+    new_analysis = eval(openai_response)
+
+    # Append everything in the intermediate analysis to firebase
+
+    # Merge the positive and negative sentiments
+
+    # Merge the suggestions
+
+    # Update the firebase accordingly
+
+    new_analysis['last_updated'] =  unix_time_now
+    firebase_service.update_form_analysis(formId, new_analysis)
 
     # Set responses as processed
     processed_responses = [response_id for response_id in formatted_responses]
