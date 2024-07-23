@@ -1,7 +1,7 @@
 import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, set, push } from "firebase/database";
 
-export default function create_form(email: string, title: string, description: string, questions: Array<{text: string}>): string {
+export default function create_form(email: string, title: string, description: string, questions: Array<{text: string}>, projectId: string): string {
     const db = getDatabase(app);
     const formsRef = ref(db, 'forms');
     const newFormsRef = push(formsRef);
@@ -12,11 +12,19 @@ export default function create_form(email: string, title: string, description: s
       title: title,
       description: description,
       questions: questions,
-    }).then(() => {
+      }).then(() => {
         console.log("Form created successfully");
+        
+        // Associate the form with the project
+        const projectFormsRef = ref(db, `projects/${projectId}`);
+        push(projectFormsRef, key).then(() => {
+          console.log("Form associated with project successfully")
+        }).catch((error) => {
+          console.log("Error associating form with project: ", error);
+        });
       })
-      .catch((error) => {
+    .catch((error) => {
         console.error("Error creating form: ", error);
-      });
+    });
     return key;
 }
