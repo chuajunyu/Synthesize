@@ -4,14 +4,15 @@ interface SidebarLinkProps {
   href?: string;
   icon: React.ReactNode;
   text: string;
-  setProject?: (id: string) => void;
+  id?: string;
+  setProject?: (project: { id: string; name: string }) => void;
   onClick?: () => void;
 }
 
-export default function SidebarLink({ href, icon, text, setProject, onClick }: SidebarLinkProps) {
-  const handleSelectProject = (projectId: string) => {
+export default function SidebarLink({ href, icon, text, id, setProject, onClick }: SidebarLinkProps) {
+  const handleSelectProject = (projectId: string, projectTitle: string) => {
     if (setProject && onClick) {
-      setProject(projectId);
+      setProject({ id: projectId, name: projectTitle });
       onClick();
     }
   };
@@ -31,7 +32,7 @@ export default function SidebarLink({ href, icon, text, setProject, onClick }: S
           {icon}
           <span
             className="w-full ml-4 text-left truncate"
-            onClick={() => handleSelectProject(text)}
+            onClick={() => id && handleSelectProject(id, text)}
           >
             {text}
           </span>
