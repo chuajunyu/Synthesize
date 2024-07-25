@@ -1,6 +1,14 @@
-// src/lib/firebase/manageUserProjects.ts
 import { app } from "@/lib/firebase/app";
-import { getDatabase, ref, get, set, push, orderByChild, query, equalTo } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  push,
+  orderByChild,
+  query,
+  equalTo,
+} from "firebase/database";
 
 const db = getDatabase(app);
 
@@ -8,10 +16,7 @@ export default async function manage_user_default_project(
   userId: string
 ): Promise<{ projectId: string; projectName: string }> {
   const defaultProjectName = "Default Project";
-    const projectsRef = ref(db, "projects");
-    
-    console.log("UserID:", userId);
-
+  const projectsRef = ref(db, "projects");
 
   // Query to find the default project for the current user
   const projectQuery = query(
@@ -26,18 +31,19 @@ export default async function manage_user_default_project(
   // Check if a default project already exists
   projectsSnapshot.forEach((childSnapshot) => {
     const project = childSnapshot.val();
-    if (project.name === defaultProjectName) {
+    if (project.title === defaultProjectName) {
       defaultProjectId = childSnapshot.key;
     }
   });
 
+  // If the default project does not exist
   if (!defaultProjectId) {
     // Create a new default project
     const newProjectRef = push(projectsRef);
     defaultProjectId = newProjectRef.key ?? "";
     await set(newProjectRef, {
       projectId: defaultProjectId,
-      name: defaultProjectName,
+      title: defaultProjectName,
       createdDate: Date.now(),
       creatorId: userId,
     });

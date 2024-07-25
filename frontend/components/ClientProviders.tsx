@@ -19,6 +19,6 @@ export default function ClientProviders({ children }: { children: React.ReactNod
   }, [user]);
     
     return (
-            <ProjectProvider userId={userEmail}>{children}</ProjectProvider>
+        <ProjectProvider userId={userEmail}>{children}</ProjectProvider>
     );
 };

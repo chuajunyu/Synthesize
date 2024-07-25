@@ -1,5 +1,5 @@
 import "./globals.css";
-import { useAuth, AuthProvider } from "@/lib/firebase/AuthContext";
+import { AuthProvider } from "@/lib/firebase/AuthContext";
 import ClientProviders from "@/components/ClientProviders";
 import { Providers } from "@/redux/provider";
 
