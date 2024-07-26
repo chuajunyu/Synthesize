@@ -77,7 +77,7 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
         merged_insights = new_analysis["FINAL"]
 
     # Update the insights on the firebase accordingly
-    firebase_service.update_form_analysis_insights(formId, merged_insights)
+    firebase_service.update_form_analysis_insights(formId, merged_insights, unix_time_now)
 
     # Set responses as processed
     processed_responses = [response_id for response_id in formatted_responses]
