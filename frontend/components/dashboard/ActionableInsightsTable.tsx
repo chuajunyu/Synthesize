@@ -1,8 +1,6 @@
 import {
     Card,
-    CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -83,7 +81,9 @@ function ActionableInsightsTable({
                                                 actionable={
                                                     suggestion.ACTIONABLE
                                                 }
-                                                lastUpdated={suggestion.lastUpdated}
+                                                lastUpdated={
+                                                    suggestion.lastUpdated
+                                                }
                                                 mentions={
                                                     suggestion.LINKED_RESPONSES
                                                         .length

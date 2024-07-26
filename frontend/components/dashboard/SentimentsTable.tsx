@@ -8,7 +8,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import SentimentCard from "@/components/dashboard/SentimentCard";
 
-
 interface Sentiment {
     positive_sentiment?: string;
     negative_sentiment?: string;
@@ -20,7 +19,10 @@ interface SentimentsTableProps {
     negativeSentiments: Record<string, Sentiment>;
 }
 
-function SentimentsTable({positiveSentiments, negativeSentiments}: SentimentsTableProps) {
+function SentimentsTable({
+    positiveSentiments,
+    negativeSentiments,
+}: SentimentsTableProps) {
     return (
         <div className="justify-center w-full mt-5">
             <Card className="flex-grow">
