@@ -16,6 +16,7 @@ interface Suggestion {
     LINKED_RESPONSES: string[];
     open: boolean;
     viewed: boolean;
+    lastUpdated: number;
 }
 
 interface ActionableInsightsTableProps {
@@ -82,7 +83,7 @@ function ActionableInsightsTable({
                                                 actionable={
                                                     suggestion.ACTIONABLE
                                                 }
-                                                lastUpdated={1626864000}
+                                                lastUpdated={suggestion.lastUpdated}
                                                 mentions={
                                                     suggestion.LINKED_RESPONSES
                                                         .length
