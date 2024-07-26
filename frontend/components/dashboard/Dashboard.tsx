@@ -112,13 +112,16 @@ const dashboard = () => {
                 setBusinessSentimentScore(0);
                 return;
             }
-
+            
+            // Base score is based on the ratio of positive to total sentiments
             const sentimentRatio =
                 (positiveSentiments.length / totalSentiments) * 10;
-
+            
+            // Bonus points if the number of positive sentiments > form responses count
             const morePositiveSentiments =
                 positiveSentiments.length > formResponsesCount ? 1.2 : 0;
 
+            // Bonus points if the number of negative sentiments < form responses count
             const lessNegativeSentiments =
                 negativeSentiments.length < formResponsesCount ? 1.2 : 0;
 
@@ -127,6 +130,7 @@ const dashboard = () => {
                 morePositiveSentiments +
                 lessNegativeSentiments;
 
+            // Cap the points at max 10
             const finalScore = Math.round(score * 10) / 10;
             if (finalScore > 10) {
                 setBusinessSentimentScore(10);
