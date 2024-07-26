@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AuthProvider } from "@/lib/firebase/AuthContext";
+import ClientProviders from "@/components/ClientProviders";
 import { Providers } from "@/redux/provider";
 
 export const metadata = {
@@ -11,15 +12,16 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+  }) {
+  
   return (
     <html lang="en">
       <Providers>
-      <AuthProvider>
-        <body>
-          {children}
-        </body>
-      </AuthProvider>
+        <AuthProvider>
+          <ClientProviders>
+            <body>{children}</body>
+          </ClientProviders>
+        </AuthProvider>
       </Providers>
     </html>
   );

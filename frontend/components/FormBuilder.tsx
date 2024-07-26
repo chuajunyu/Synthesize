@@ -16,8 +16,10 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import AlertFormShareLink from "@/components/AlertFormShareLink";
 import FormTitleAndDescriptionCard from "./FormTitleAndDescriptionCard";
+import { useProject } from "@/contexts/ProjectContext";
 
 export default function FormBuilder() {
+  const { selectedProject } = useProject();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [questions, setQuestions] = useState([{ id: 1, question: "" }]);
@@ -58,8 +60,15 @@ export default function FormBuilder() {
     const formattedQuestions = questions.map((question) => ({
       text: question.question,
     }));
+    console.log(selectedProject.id);
     // Call the backend create_form function here to store form data in database
-    const newKey = create_form(email, title, description, formattedQuestions);
+    const newKey = create_form(
+        email,
+        title,
+        description,
+        formattedQuestions,
+        selectedProject.id
+      );
     setKey(newKey);
     // set the page back to its original state
     setTitle("");

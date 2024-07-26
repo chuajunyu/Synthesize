@@ -5,6 +5,7 @@ import { delete_form } from "../database/delete_form";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import { readUserForms } from "@/database/read_user_forms";
 import Link from "next/link";
+import { useProject } from "@/contexts/ProjectContext";
 
 interface MyFormData {
   createdDate: string;
@@ -25,8 +26,7 @@ export default function CreatedFormsTable() {
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const { user } = useAuth();
-
-  console.log(user);
+  const { selectedProject } = useProject();
 
   useEffect(() => {
     async function authenticate() {
@@ -38,15 +38,15 @@ export default function CreatedFormsTable() {
 
   useEffect(() => {
     async function fetchData() {
-      if (userEmail !== null) {
-        const data = await readUserForms(userEmail);
+      if (selectedProject !== null) {
+        const data = await readUserForms(selectedProject.id);
         console.log(data);
         setFormData(data);
         setLoading(false);
       }
     }
     fetchData();
-  }, [userEmail]);
+  }, [selectedProject]);
 
   let hrefOrigin = useRef<string | undefined>();
 
@@ -96,6 +96,7 @@ export default function CreatedFormsTable() {
     title: formData[key].title,
     date: new Date(formData[key].createdDate).toLocaleDateString(),
   }));
+  console.log(formattedData);
 
   return (
     <div className="flex flex-col w-full gap-4 mb-3">

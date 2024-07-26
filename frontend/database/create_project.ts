@@ -17,7 +17,6 @@ export default function create_project(
     title: title,
     description: description,
     goals: goals,
-    forms: []
   })
     .then(() => {
       console.log("Project created successfully in database");

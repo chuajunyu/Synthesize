@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import UserDropDown from "./UserDropDown";
 import read_user_projects, { ProjectTitle } from "@/database/read_user_projects";
+import { useProject } from "@/contexts/ProjectContext";
 
 const projectItems = [
   {
@@ -80,8 +81,8 @@ interface NavigationBarProps {
 }
 
 export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: NavigationBarProps) {
+  const { selectedProject, setSelectedProject } = useProject();
   const [projects, setProjects] = useState<ProjectTitle[]>([]);
-  const [selectedProject, setSelectedProject] = useState("Default Project");
   const [isAccordionOpen, setIsAccordionOpen] = useState("false");
 
   useEffect(() => {
@@ -210,7 +211,7 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                           isAccordionOpen === "item-1" ? "" : "item-1"
                         )
                       }
-                    / >
+                    />
                   </div>
                   <div className="flex flex-row ml-11 mb-4">
                     <svg
@@ -228,7 +229,7 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                       />
                     </svg>
                     <span className="w-full ml-4 text-left text-base font-medium truncate">
-                      {selectedProject}
+                      {selectedProject && selectedProject.name}
                     </span>
                   </div>
                   <AccordionContent>
@@ -260,6 +261,7 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
                               </svg>
                             }
                             text={project.title}
+                            id={project.projectId}
                             setProject={setSelectedProject}
                             onClick={handleCloseAccordion}
                           />

@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import read_user_projects, { ProjectTitle } from "@/database/read_user_projects";
 import { useAuth } from "@/lib/firebase/AuthContext";
@@ -9,7 +9,7 @@ export default function ProjectDisplay() {
   const { user } = useAuth();
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState<Boolean>(true);
-  const [projectTitles, setprojectTitles] = useState<ProjectTitle[]>([]);
+  const [projectTitles, setProjectTitles] = useState<ProjectTitle[]>([]);
 
   useEffect(() => {
     async function authenticate() {
@@ -19,16 +19,30 @@ export default function ProjectDisplay() {
     authenticate();
   }, [user?.email]);
 
+  const handleDeleteProject = useCallback((id: string) => {
+    delete_project(id)
+      .then(() => {
+        setProjectTitles((prevTitles) =>
+          prevTitles.filter((project) => project.projectId !== id)
+        );
+      })
+      .catch((error) => {
+        console.error("Error deleting project: ", error);
+      });
+  }, []);
+
+
   useEffect(() => {
     async function fetchProjects() {
       if (userEmail !== null) {
         const projects = await read_user_projects(userEmail);
-        setprojectTitles(projects ?? []);
+        console.log(projects);
+        setProjectTitles(projects ?? []);
         setLoading(false);
       }
     }
     fetchProjects();
-  }, [userEmail, projectTitles]);
+  }, [userEmail, handleDeleteProject]);
 
   const projectsToDisplay = [
     { title: "Create a New Project", isAddCard: true, projectId: "" },
@@ -38,11 +52,6 @@ export default function ProjectDisplay() {
       projectId: project.projectId,
     })),
   ];
-
-  const handleDeleteProject = (id: string) => {
-    delete_project(id);
-    projectTitles.filter((prevtitles) => prevtitles.projectId != id);
-  }
 
   if (loading) {
     return <div>Loading...</div>
