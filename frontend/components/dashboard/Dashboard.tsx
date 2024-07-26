@@ -8,7 +8,7 @@ import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import ActionableInsightsTable from "@/components/dashboard/ActionableInsightsTable";
 import SentimentsTable from "@/components/dashboard/SentimentsTable";
 import SelectFormDropdown from "@/components/dashboard/SelectFormDropdown";
-import readUserForms from "@/database/read_user_forms";
+import { readUserForms } from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
 
 interface FormTitle {

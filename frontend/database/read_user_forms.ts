@@ -7,7 +7,7 @@ export interface MyFormData {
     title: string;
 }
 
-export default async function readUserForms(userId: string): Promise<{ [key: string]: MyFormData } | null> {
+export async function readUserForms(userId: string): Promise<{ [key: string]: MyFormData } | null> {
     const db = getDatabase(app);
     const formsRef = ref(db, 'forms');
     const userFormsQuery = query(formsRef, orderByChild('creatorId'), equalTo(userId));
