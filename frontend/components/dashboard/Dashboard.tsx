@@ -20,28 +20,26 @@ interface FormTitle {
 }
 
 const dashboard = () => {
-    const [loading, setLoading] = useState(true);
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const { user } = useAuth();
     const [analysisResponse, setAnalysisResponse] = useState<any>(null);
     const [formData, setFormData] = useState<FormTitle[]>([]);
     const [externalId, setExternalId] = useState<string | null>(null);
     const [formResponsesCount, setFormResponsesCount] = useState<number>(0);
+    const [businessSentimentScore, setBusinessSentimentScore] =
+        useState<number>(0);
 
     useEffect(() => {
         async function fetchData() {
             if (userEmail !== null) {
                 const data = await readUserForms(userEmail);
-                console.log(data)
                 if (data) {
                     const formTitles = Object.keys(data).map((formId) => ({
                         id: formId,
-                        title: data[formId].title
-                    }))
+                        title: data[formId].title,
+                    }));
                     setFormData(formTitles);
                 }
-                
-                setLoading(false);
             }
         }
         fetchData();
@@ -54,15 +52,6 @@ const dashboard = () => {
         }
         authenticate();
     }, [user?.email]);
-
-    useEffect(() => {
-        async function fetchData() {
-            if (userEmail !== null) {
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, [userEmail]);
 
     useEffect(() => {
         console.log("fetching analysis response data");
@@ -97,8 +86,8 @@ const dashboard = () => {
         }
 
         async function fetchFormResponsesCount() {
-            const formResponses = await read_form_responses(externalId ?? "")
-            setFormResponsesCount(Object.keys(formResponses ?? {}).length)
+            const formResponses = await read_form_responses(externalId ?? "");
+            setFormResponsesCount(Object.keys(formResponses ?? {}).length);
         }
 
         if (externalId != null) {
@@ -108,19 +97,44 @@ const dashboard = () => {
     }, [externalId]);
 
     useEffect(() => {
+        // calculate business sentiment score
+        if (analysisResponse) {
+            const positiveSentiments = Object.values(
+                analysisResponse.insights?.AGGREGATED_POSITIVE || {}
+            );
+            const negativeSentiments = Object.values(
+                analysisResponse.insights?.AGGREGATED_NEGATIVE || {}
+            );
+            const totalSentiments =
+                positiveSentiments.length + negativeSentiments.length;
 
-    }, [userEmail]);
+            if (totalSentiments == 0) {
+                setBusinessSentimentScore(0);
+                return;
+            }
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    console.log(
-        (
-            Object.values(
-                analysisResponse?.insights?.AGGREGATED_NEGATIVE || {}
-            ) as any[]
-        ).length.toString()
-    );
+            const sentimentRatio =
+                (positiveSentiments.length / totalSentiments) * 10;
+
+            const morePositiveSentiments =
+                positiveSentiments.length > formResponsesCount ? 1.2 : 0;
+
+            const lessNegativeSentiments =
+                negativeSentiments.length < formResponsesCount ? 1.2 : 0;
+
+            const score =
+                sentimentRatio +
+                morePositiveSentiments +
+                lessNegativeSentiments;
+
+            const finalScore = Math.round(score * 10) / 10;
+            if (finalScore > 10) {
+                setBusinessSentimentScore(10);
+            } else {
+                setBusinessSentimentScore(finalScore);
+            }
+        }
+    }, [analysisResponse, formResponsesCount]);
 
     return (
         <ProtectedRoute>
@@ -143,7 +157,7 @@ const dashboard = () => {
                                 <div className="flex flex-row w-full justify-between gap-x-8">
                                     <StatisticsCard
                                         title="Business Sentiment Score"
-                                        value={"9.8"}
+                                        value={businessSentimentScore.toString()}
                                         change={0.3}
                                         bottomText="Out of 10"
                                     />
@@ -184,7 +198,7 @@ const dashboard = () => {
                                     />
                                     <StatisticsCard
                                         title={"Total Form Responses"}
-                                        value={"23"}
+                                        value={formResponsesCount.toString()}
                                         change={5}
                                         bottomText=""
                                     />
