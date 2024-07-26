@@ -9,6 +9,7 @@ import {
 
 const RED = "#b91c1c";
 const GREEN = "#15803d";
+const GRAY = "#71717a";
 
 interface ChangeCardProps {
     change: number;
@@ -120,6 +121,32 @@ function RedUpArrowCard({ change }: ChangeCardProps) {
     );
 }
 
+function noChangeCard() {
+    return (
+        <div
+            className={`h-full flex flex-row gap-x-1 items-center rounded-full bg-zinc-300 pl-2 pr-3`}
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                stroke={GRAY}
+                className="size-4"
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
+                />
+            </svg>
+            <CardTitle className={`text-lg text-bold text-zinc-500`}>
+                0
+            </CardTitle>
+        </div>
+    );
+}
+
 interface StatisticsCardProps {
     title: string;
     value: string;
@@ -141,18 +168,18 @@ function StatisticsCard(props: StatisticsCardProps) {
                     <CardDescription className="text-black font-semibold text-4xl 2xl:text-4xl">
                         {value}
                     </CardDescription>
-                    {change > 0 ? (
+                    {change == 0 ? (
+                        noChangeCard()
+                    ) : change > 0 ? (
                         oppositeColor ? (
                             <RedUpArrowCard change={change} />
                         ) : (
                             <GreenUpArrowCard change={change} />
                         )
+                    ) : oppositeColor ? (
+                        <GreenDownArrowCard change={change * -1} />
                     ) : (
-                        oppositeColor ? (
-                            <GreenDownArrowCard change={change * -1} />
-                        ) : (
-                            <RedDownArrowCard change={change * - 1} />
-                        )
+                        <RedDownArrowCard change={change * -1} />
                     )}
                 </div>
                 <CardTitle className="text-xs text-slate-400 text-left">

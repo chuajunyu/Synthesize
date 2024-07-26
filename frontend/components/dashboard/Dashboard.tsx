@@ -158,7 +158,7 @@ const dashboard = () => {
                                     <StatisticsCard
                                         title="Business Sentiment Score"
                                         value={businessSentimentScore.toString()}
-                                        change={0.3}
+                                        change={0}
                                         bottomText="Out of 10"
                                     />
                                     <StatisticsCard
@@ -170,7 +170,7 @@ const dashboard = () => {
                                                     {}
                                             ) as any[]
                                         ).length.toString()}
-                                        change={1}
+                                        change={0}
                                         bottomText="Generated with AI"
                                     />
                                     <StatisticsCard
@@ -181,7 +181,7 @@ const dashboard = () => {
                                                     ?.AGGREGATED_POSITIVE || {}
                                             ) as any[]
                                         ).length.toString()}
-                                        change={3}
+                                        change={0}
                                         bottomText=""
                                     />
                                     <StatisticsCard
@@ -192,14 +192,14 @@ const dashboard = () => {
                                                     ?.AGGREGATED_NEGATIVE || {}
                                             ) as any[]
                                         ).length.toString()}
-                                        change={3}
+                                        change={0}
                                         bottomText=""
                                         oppositeColor={true}
                                     />
                                     <StatisticsCard
                                         title={"Total Form Responses"}
                                         value={formResponsesCount.toString()}
-                                        change={5}
+                                        change={0}
                                         bottomText=""
                                     />
                                 </div>
