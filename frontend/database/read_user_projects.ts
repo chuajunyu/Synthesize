@@ -16,19 +16,20 @@ export default async function read_user_projects(
     orderByChild("creatorId"),
     equalTo(userId)
   );
-    try {
+  
+  try {
       const snapshot = await get(userProjectsQuery);
       if (snapshot.exists()) {
         const projects = snapshot.val();
         console.log(projects);
         return Object.keys(projects).map((key) => ({
-            title: projects[key].name,
+            title: projects[key].title,
             projectId: key,
         }));
-    } else {
-      console.log("No projects found for this user");
-      return null;
-    }
+      } else {
+        console.log("No projects found for this user");
+        return null;
+      }
   } catch (error) {
     console.error("Error fetching project responses:", error);
     return null;
