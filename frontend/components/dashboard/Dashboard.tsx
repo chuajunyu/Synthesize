@@ -10,6 +10,7 @@ import SentimentsTable from "@/components/dashboard/SentimentsTable";
 import SelectFormDropdown from "@/components/dashboard/SelectFormDropdown";
 import { readUserForms } from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
+import { useProject } from "@/contexts/ProjectContext";
 
 interface FormTitle {
     id: string;
@@ -25,22 +26,24 @@ const dashboard = () => {
     const [formResponsesCount, setFormResponsesCount] = useState<number>(0);
     const [businessSentimentScore, setBusinessSentimentScore] =
         useState<number>(0);
+    const { selectedProject } = useProject();
 
     useEffect(() => {
         async function fetchData() {
-            if (userEmail !== null) {
-                const data = await readUserForms(userEmail);
+            if (selectedProject !== null) {
+                const data = await readUserForms(selectedProject?.id);
                 if (data) {
                     const formTitles = Object.keys(data).map((formId) => ({
                         id: formId,
                         title: data[formId].title,
                     }));
+                    console.log(formTitles);
                     setFormData(formTitles);
                 }
             }
         }
         fetchData();
-    }, [userEmail]);
+    }, [selectedProject, userEmail]);
 
     useEffect(() => {
         async function authenticate() {
@@ -142,7 +145,7 @@ const dashboard = () => {
             <div className="flex min-h-screen">
                 <div className="justify-center w-full mx-8 mt-5">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
-                        (TODO: Project Name)
+                        {selectedProject?.name}
                     </span>
                     <div className="my-4">
                         <SelectFormDropdown
@@ -150,9 +153,9 @@ const dashboard = () => {
                             setExternalId={setExternalId}
                         />
                     </div>
-                    {externalId === null ? (
+                    {/* {externalId === null ? (
                         <div>Select a Form</div>
-                    ) : (
+                    ) : ( */}
                         <div>
                             <div className="flex flex-col">
                                 <div className="flex flex-row w-full justify-between gap-x-8">
@@ -222,7 +225,7 @@ const dashboard = () => {
                                 }
                             />
                         </div>
-                    )}
+                    {/* )} */}
                 </div>
             </div>
         </ProtectedRoute>
