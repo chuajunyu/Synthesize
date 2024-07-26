@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { delete_form } from "../database/delete_form";
 import { useAuth } from "@/lib/firebase/AuthContext";
-import { readUserForms } from "@/database/read_user_forms";
+import readUserForms from "@/database/read_user_forms";
 import Link from "next/link";
 
 interface MyFormData {

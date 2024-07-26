@@ -3,14 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import { getFormTitles } from "@/database/read_form_titles";
-import { MyFormData } from "@/database/read_user_forms";
 import { SECRET_KEY } from "@/config";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import ActionableInsightsTable from "@/components/dashboard/ActionableInsightsTable";
 import SentimentsTable from "@/components/dashboard/SentimentsTable";
 import SelectFormDropdown from "@/components/dashboard/SelectFormDropdown";
-import readResponseData from "@/database/read_response";
 import readUserForms from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
 
