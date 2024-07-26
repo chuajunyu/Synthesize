@@ -41,7 +41,7 @@ function InsightsCard({
 }: InsightsCardProps) {
 
     // Convert lastUpdated from unix to human readable format
-    const date = new Date(lastUpdated);
+    const date = new Date(lastUpdated * 1000);
 
     return (
         <div className="flex flex-row justify-evenly items-center h-20 hover:bg-slate-200 focus:bg-slate-200">
