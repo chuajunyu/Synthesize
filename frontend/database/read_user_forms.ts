@@ -7,7 +7,7 @@ export interface MyFormData {
     title: string;
 }
 
-export async function readUserForms(userId: string): Promise<{ [key: string]: MyFormData } | null> {
+export default async function readUserForms(userId: string): Promise<{ [key: string]: MyFormData } | null> {
     const db = getDatabase(app);
     const formsRef = ref(db, 'forms');
     const userFormsQuery = query(formsRef, orderByChild('creatorId'), equalTo(userId));
@@ -16,7 +16,7 @@ export async function readUserForms(userId: string): Promise<{ [key: string]: My
         if (snapshot.exists()) {
             return snapshot.val();
         } else {
-            console.log('No responses found for this user');
+            console.log('No forms found for this user');
             return null;
         }
     } catch (error) {

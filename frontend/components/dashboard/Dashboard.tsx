@@ -4,32 +4,48 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { getFormTitles } from "@/database/read_form_titles";
-import { Form } from "@/database/read_form_titles";
+import { MyFormData } from "@/database/read_user_forms";
 import { SECRET_KEY } from "@/config";
 import StatisticsCard from "@/components/dashboard/StatisticsCard";
 import ActionableInsightsTable from "@/components/dashboard/ActionableInsightsTable";
 import SentimentsTable from "@/components/dashboard/SentimentsTable";
 import SelectFormDropdown from "@/components/dashboard/SelectFormDropdown";
+import readResponseData from "@/database/read_response";
+import readUserForms from "@/database/read_user_forms";
+import read_form_responses from "@/database/read_form_responses";
+
+interface FormTitle {
+    id: string;
+    title: string;
+}
 
 const dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const { user } = useAuth();
     const [analysisResponse, setAnalysisResponse] = useState<any>(null);
-    const [formData, setFormData] = useState<Form[]>([]);
+    const [formData, setFormData] = useState<FormTitle[]>([]);
     const [externalId, setExternalId] = useState<string | null>(null);
+    const [formResponsesCount, setFormResponsesCount] = useState<number>(0);
 
     useEffect(() => {
-        const fetchTitles = async () => {
-            const forms = await getFormTitles();
-
-            if (forms) {
-                setFormData(forms);
+        async function fetchData() {
+            if (userEmail !== null) {
+                const data = await readUserForms(userEmail);
+                console.log(data)
+                if (data) {
+                    const formTitles = Object.keys(data).map((formId) => ({
+                        id: formId,
+                        title: data[formId].title
+                    }))
+                    setFormData(formTitles);
+                }
+                
+                setLoading(false);
             }
-        };
-
-        fetchTitles();
-    }, []);
+        }
+        fetchData();
+    }, [userEmail]);
 
     useEffect(() => {
         async function authenticate() {
@@ -79,14 +95,32 @@ const dashboard = () => {
                     );
                 });
         }
+
+        async function fetchFormResponsesCount() {
+            const formResponses = await read_form_responses(externalId ?? "")
+            setFormResponsesCount(Object.keys(formResponses ?? {}).length)
+        }
+
         if (externalId != null) {
             fetchAnalysisResponseData();
+            fetchFormResponsesCount();
         }
     }, [externalId]);
+
+    useEffect(() => {
+
+    }, [userEmail]);
 
     if (loading) {
         return <div>Loading...</div>;
     }
+    console.log(
+        (
+            Object.values(
+                analysisResponse?.insights?.AGGREGATED_NEGATIVE || {}
+            ) as any[]
+        ).length.toString()
+    );
 
     return (
         <ProtectedRoute>
@@ -115,19 +149,35 @@ const dashboard = () => {
                                     />
                                     <StatisticsCard
                                         title={"Total Actionable Insights"}
-                                        value={"10"}
+                                        value={(
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_SUGGESTIONS ||
+                                                    {}
+                                            ) as any[]
+                                        ).length.toString()}
                                         change={1}
                                         bottomText="Generated with AI"
                                     />
                                     <StatisticsCard
                                         title="Total Positive Sentiments"
-                                        value={"3"}
+                                        value={(
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_POSITIVE || {}
+                                            ) as any[]
+                                        ).length.toString()}
                                         change={3}
                                         bottomText=""
                                     />
                                     <StatisticsCard
                                         title="Total Negative Sentiments"
-                                        value={"3"}
+                                        value={(
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_NEGATIVE || {}
+                                            ) as any[]
+                                        ).length.toString()}
                                         change={3}
                                         bottomText=""
                                         oppositeColor={true}

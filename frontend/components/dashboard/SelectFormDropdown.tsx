@@ -51,7 +51,7 @@ function SelectFormDropdown ({ forms, setExternalId }: ComboboxProps) {
             </PopoverTrigger>
             <PopoverContent className="w-96">
                 <Command>
-                    <CommandInput placeholder="Search framework..." />
+                    <CommandInput placeholder="Search for a form..." />
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
