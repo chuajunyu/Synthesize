@@ -25,15 +25,20 @@ interface ProjectProviderProps {
 }
 
 export function ProjectProvider({ children, userId }: ProjectProviderProps) {
-    const storage = sessionStorage.getItem("selectedProject");
     const [selectedProject, setSelectedProject] = useState<{
         id: string;
         name: string;
-    } | null>(storage ? JSON.parse(storage) : null);
+    } | null>(null);
 
     useEffect(() => {
         async function initializeProject() {
-            if (userId && !selectedProject) {
+            const storage = sessionStorage.getItem("selectedProject");
+            console.log(typeof storage, "storage");
+
+            if (storage != null) {
+                console.log(storage, "storage");
+                setSelectedProject(JSON.parse(storage));
+            } else if (userId && selectedProject == null) {
                 const { projectId, projectName } =
                     await manage_user_default_project(userId);
                 setSelectedProject({ id: projectId, name: projectName });
@@ -43,10 +48,12 @@ export function ProjectProvider({ children, userId }: ProjectProviderProps) {
     }, [userId]);
 
     useEffect(() => {
-        sessionStorage.setItem(
-            "selectedProject",
-            JSON.stringify(selectedProject)
-        );
+        if (selectedProject != null) {
+            sessionStorage.setItem(
+                "selectedProject",
+                JSON.stringify(selectedProject)
+            );
+        }
     }, [selectedProject]);
 
     return (
