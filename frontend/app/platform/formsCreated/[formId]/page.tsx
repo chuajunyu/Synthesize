@@ -1,14 +1,15 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import FormOverviewStatistics from "@/components/FormOverviewStatistics";
-import read_form_data, { FormProps } from "@/database/read_form";
+import read_form_data from "@/database/read_form";
 import ResponsesTable from "@/components/ResponsesTable";
 import read_form_responses, { ResponseFormat } from "@/database/read_form_responses";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Block1 from "@/components/Block1"
+import { Form } from "@/lib/types";
 
 export default function ViewFormInsightsPage({ params }: { params: { formId: string } }) {
-    const [formData, setFormData] = useState<FormProps | null>(null);
+    const [formData, setFormData] = useState<Form | null>(null);
     const [responseData, setResponseData ] = useState<{ [key: string]: ResponseFormat} | null>(null);
     const [responseCount, setResponseCount] = useState<number>(0);
     const [uniqueRespondersCount, setUniqueRespondersCount] = useState<number>(0);
