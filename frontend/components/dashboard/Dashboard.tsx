@@ -213,6 +213,7 @@ const dashboard = () => {
                                     analysisResponse?.insights
                                         ?.AGGREGATED_SUGGESTIONS
                                 }
+                                formId={externalId ?? ""}
                             />
                             <SentimentsTable
                                 negativeSentiments={
