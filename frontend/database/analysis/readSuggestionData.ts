@@ -10,7 +10,7 @@ interface Suggestion {
     viewed: boolean;
 }
 
-export default async function readSuggestion(formId: string, suggestionId: string): Promise< Suggestion | null> {
+export default async function readSuggestionData(formId: string, suggestionId: string): Promise< Suggestion | null> {
     const db = getDatabase(app);
     const suggestionRef = ref(db, `analysis/${formId}/insights/AGGREGATED_SUGGESTIONS/${suggestionId}`);
 

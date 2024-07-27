@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import readSuggestion from "@/database/read_suggestion";
+import readSuggestionData from "@/database/analysis/readSuggestionData";
 import read_form_data from "@/database/read_form";
 import { useProject } from "@/contexts/ProjectContext";
 import { useEffect, useState } from "react";
@@ -19,6 +19,9 @@ import read_form_responses, {
 } from "@/database/read_form_responses";
 import ResponsesTable, { ResponseData } from "@/components/ResponsesTable";
 import { Button } from "@/components/ui/button";
+import setSuggestionAsDone from "@/database/analysis/setSuggestionAsDone";
+import setSuggestionAsOpen from "@/database/analysis/setSuggestionAsOpen";
+import setSuggestionAsViewed from "@/database/analysis/setSuggestionAsViewed";
 
 interface SuggestionProps {
     formId: string;
@@ -37,8 +40,18 @@ function SuggestionPage({ formId, suggestionId }: SuggestionProps) {
     } | null>(null);
 
     useEffect(() => {
+        async function setAsViewed() {
+            if (!suggestionData?.viewed) {
+                await setSuggestionAsViewed(formId, suggestionId);
+            }
+        }
+        setAsViewed();
+
         async function getSuggestionData() {
-            const suggestionData = await readSuggestion(formId, suggestionId);
+            const suggestionData = await readSuggestionData(
+                formId,
+                suggestionId
+            );
             setSuggestionData(suggestionData);
             setLoading(false);
         }
@@ -96,7 +109,29 @@ function SuggestionPage({ formId, suggestionId }: SuggestionProps) {
                     </CardContent>
                     <CardFooter>
                         <div className="flex flex-row w-full justify-end">
-                            <Button>Mark as Done</Button>
+                            {suggestionData?.open ? (
+                                <Button
+                                    onClick={() => {
+                                        setSuggestionAsDone(
+                                            formId,
+                                            suggestionId
+                                        );
+                                    }}
+                                >
+                                    Mark as Done
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={() => {
+                                        setSuggestionAsOpen(
+                                            formId,
+                                            suggestionId
+                                        );
+                                    }}
+                                >
+                                    Re-open this Actionable
+                                </Button>
+                            )}
                         </div>
                     </CardFooter>
                 </Card>

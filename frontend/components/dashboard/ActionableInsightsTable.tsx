@@ -7,6 +7,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import InsightsCard from "@/components/dashboard/InsightsCard";
+import Link from "next/link";
 
 interface Suggestion {
     ACTIONABLE: string;
@@ -19,10 +20,12 @@ interface Suggestion {
 
 interface ActionableInsightsTableProps {
     suggestionsData: Record<string, Suggestion>;
+    formId: string;
 }
 
 function ActionableInsightsTable({
     suggestionsData,
+    formId,
 }: ActionableInsightsTableProps) {
     console.log(suggestionsData, "hi");
     return (
@@ -69,27 +72,43 @@ function ActionableInsightsTable({
                                 </div>
                             ) : (
                                 (
-                                    Object.values(
-                                        suggestionsData || {}
-                                    ) as Suggestion[]
+                                    Object.entries(suggestionsData || {}) as [
+                                        string,
+                                        Suggestion
+                                    ][]
                                 ).map(
-                                    (suggestion: Suggestion, index: number) => (
+                                    (
+                                        suggestionObject: [string, Suggestion],
+                                        index: number
+                                    ) => (
                                         <div key={index}>
-                                            <InsightsCard
-                                                newStatus={!suggestion.viewed}
-                                                openStatus={suggestion.open}
-                                                actionable={
-                                                    suggestion.ACTIONABLE
-                                                }
-                                                lastUpdated={
-                                                    suggestion.lastUpdated
-                                                }
-                                                mentions={
-                                                    suggestion.LINKED_RESPONSES
-                                                        .length
-                                                }
-                                            />
-                                            <Separator />
+                                            <Link
+                                                href={`dashboard/actionable/${formId}/${suggestionObject[0]}`}
+                                            >
+                                                <InsightsCard
+                                                    newStatus={
+                                                        !suggestionObject[1]
+                                                            .viewed
+                                                    }
+                                                    openStatus={
+                                                        suggestionObject[1].open
+                                                    }
+                                                    actionable={
+                                                        suggestionObject[1]
+                                                            .ACTIONABLE
+                                                    }
+                                                    lastUpdated={
+                                                        suggestionObject[1]
+                                                            .lastUpdated
+                                                    }
+                                                    mentions={
+                                                        suggestionObject[1]
+                                                            .LINKED_RESPONSES
+                                                            .length
+                                                    }
+                                                />
+                                                <Separator />
+                                            </Link>
                                         </div>
                                     )
                                 )
