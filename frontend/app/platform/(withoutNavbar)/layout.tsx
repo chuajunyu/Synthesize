@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-200 via-rose-100 to-pink-200 px-20 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-sky-200 via-rose-100 to-pink-200 px-20 pt-4">
         {children}
     </div>
   );
