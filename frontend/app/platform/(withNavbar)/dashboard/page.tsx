@@ -111,6 +111,14 @@ const dashboard = () => {
     const [externalId, setExternalId] = useState<string | null>(null);
 
     useEffect(() => {
+      async function authenticate() {
+        const email = user?.email ?? "";
+        setUserEmail(email);
+      }
+      authenticate();
+    }, [user?.email]);
+    
+    useEffect(() => {
         const fetchTitles = async () => {
             const forms = await getFormTitles();
 
@@ -121,14 +129,6 @@ const dashboard = () => {
 
         fetchTitles();
     }, []);
-
-    useEffect(() => {
-        async function authenticate() {
-            const email = user?.email ?? "";
-            setUserEmail(email);
-        }
-        authenticate();
-    }, [user?.email]);
 
     useEffect(() => {
         async function fetchData() {
