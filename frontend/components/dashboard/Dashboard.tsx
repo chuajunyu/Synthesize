@@ -138,8 +138,8 @@ const dashboard = () => {
                 setBusinessSentimentScore(finalScore);
             }
         }
-    }, [analysisResponse, formResponsesCount]);
-
+    }, [analysisResponse, formResponsesCount, selectedProject]);
+        
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">

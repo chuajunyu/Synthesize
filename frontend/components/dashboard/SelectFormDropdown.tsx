@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { Form } from "@/database/read_form_titles";
 import { SetStateAction } from "react";
+import { useSelectedForm } from "@/contexts/SelectFormContext";
 
 interface ComboboxProps {
     forms: Form[];
@@ -27,12 +28,26 @@ interface ComboboxProps {
 function SelectFormDropdown ({ forms, setExternalId }: ComboboxProps) {
     const [open, setOpen] = React.useState(false);
     const [id, setId] = React.useState("");
+    const { selectedForm, setSelectedForm } = useSelectedForm();
 
     useEffect(() => {
         console.log(forms.filter((form: Form) => form.id === id));
         console.log(forms);
         console.log(id);
     }, [forms, id]);
+
+    useEffect(() => {
+        if (selectedForm) {
+            setId(selectedForm.id);
+            setExternalId(selectedForm.id);
+        }
+    }, [selectedForm]);
+
+    useEffect(() => {
+        if (id) {
+            setSelectedForm(forms.filter((form: Form) => form.id === id)[0]);
+        }
+    }, [id]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -53,7 +68,7 @@ function SelectFormDropdown ({ forms, setExternalId }: ComboboxProps) {
                 <Command>
                     <CommandInput placeholder="Search for a form..." />
                     <CommandList>
-                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandEmpty>No forms found.</CommandEmpty>
                         <CommandGroup>
                             {forms.map((form: Form) => (
                                 <CommandItem

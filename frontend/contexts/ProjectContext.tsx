@@ -33,7 +33,6 @@ export function ProjectProvider({ children, userId }: ProjectProviderProps) {
     useEffect(() => {
         async function initializeProject() {
             const storage = sessionStorage.getItem("selectedProject");
-            console.log(typeof storage, "storage");
 
             if (storage != null) {
                 console.log(storage, "storage");
