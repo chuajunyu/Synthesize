@@ -1,5 +1,5 @@
 import { app } from "@/lib/firebase/app";
-import { getDatabase, ref, set, push, get, update } from "firebase/database";
+import { getDatabase, ref, set, push, get } from "firebase/database";
 
 export default function create_form(email: string, title: string, description: string, questions: Array<{text: string}>, projectId: string): string {
     const db = getDatabase(app);
