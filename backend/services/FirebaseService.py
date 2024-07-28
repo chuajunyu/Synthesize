@@ -137,11 +137,6 @@ class FirebaseService:
             analysis_ref.update({f'{response_id}': sentiments[response_id]})
         return
 
-    def update_form_analysis_insights(self, formId, insights):
-        analysis_ref = db.reference(f'analysis/{formId}')
-        analysis_ref.update({'insights': insights})
-        return
-
     def update_form_analysis_last_updated_time(self, formId, timestamp):
         analysis_ref = db.reference(f'analysis/{formId}')
         analysis_ref.update({'last_updated': timestamp})
