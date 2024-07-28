@@ -41,7 +41,7 @@ function SelectFormDropdown ({ forms, setExternalId }: ComboboxProps) {
             setId(selectedForm.id);
             setExternalId(selectedForm.id);
         }
-    }, [selectedForm]);
+    }, []);
 
     useEffect(() => {
         if (id) {
