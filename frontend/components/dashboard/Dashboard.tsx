@@ -12,8 +12,6 @@ import { readUserForms } from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
 import { useProject } from "@/contexts/ProjectContext";
 import { useSelectedForm } from "@/contexts/SelectFormContext";
-import readAnalysisStatistics from "@/database/analysis/readAnalysisStatistics";
-import storeAnalysisStatistics from "@/database/analysis/storeAnalysisStatistics";
 
 interface FormTitle {
     id: string;
@@ -39,7 +37,6 @@ const dashboard = () => {
         useState<number>(0);
     const { selectedProject } = useProject();
     const { selectedForm, setSelectedForm } = useSelectedForm();
-    const [analysisStatistics, setAnalysisStatistics] =
         useState<AnalysisStatistics | null>(null);
 
     useEffect(() => {
@@ -167,46 +164,6 @@ const dashboard = () => {
         setFormResponsesCount(0);
     }, [selectedProject]);
 
-    useEffect(() => {
-        async function fetchAnalysisStatistics() {
-            if (externalId != null && externalId != "") {
-                const statistics = await readAnalysisStatistics(externalId);
-                setAnalysisStatistics(statistics);
-            }
-        }
-        fetchAnalysisStatistics();
-    }, [externalId]);
-
-    useEffect(() => {
-        async function writeAnalysisStatistics() {
-            if (externalId != null && externalId != "") {
-                await storeAnalysisStatistics(externalId, {
-                    businessSentimentScore: businessSentimentScore,
-                    totalActionableInsights: (
-                        Object.values(
-                            analysisResponse?.insights
-                                ?.AGGREGATED_SUGGESTIONS || {}
-                        ) as any[]
-                    ).length,
-                    totalPositiveSentiments: (
-                        Object.values(
-                            analysisResponse?.insights?.AGGREGATED_POSITIVE ||
-                                {}
-                        ) as any[]
-                    ).length,
-                    totalNegativeSentiments: (
-                        Object.values(
-                            analysisResponse?.insights?.AGGREGATED_NEGATIVE ||
-                                {}
-                        ) as any[]
-                    ).length,
-                    totalFormResponses: formResponsesCount,
-                });
-            }
-        }
-        writeAnalysisStatistics()
-    }, [businessSentimentScore, analysisResponse, formResponsesCount]);
-
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
@@ -226,12 +183,7 @@ const dashboard = () => {
                                 <StatisticsCard
                                     title="Business Sentiment Score"
                                     value={businessSentimentScore.toString()}
-                                    change={
-                                        analysisStatistics
-                                            ? analysisStatistics.businessSentimentScore -
-                                              businessSentimentScore
-                                            : 0
-                                    }
+                                    change={businessSentimentScore}
                                     bottomText="Out of 10"
                                 />
                                 <StatisticsCard
@@ -243,16 +195,13 @@ const dashboard = () => {
                                         ) as any[]
                                     ).length.toString()}
                                     change={
-                                        analysisStatistics
-                                            ? analysisStatistics.totalActionableInsights -
-                                              (
-                                                  Object.values(
-                                                      analysisResponse?.insights
-                                                          ?.AGGREGATED_SUGGESTIONS ||
-                                                          {}
-                                                  ) as any[]
-                                              ).length
-                                            : 0
+                                        (
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_SUGGESTIONS ||
+                                                    {}
+                                            ) as any[]
+                                        ).length
                                     }
                                     bottomText="Generated with AI"
                                 />
@@ -265,16 +214,12 @@ const dashboard = () => {
                                         ) as any[]
                                     ).length.toString()}
                                     change={
-                                        analysisStatistics
-                                            ? analysisStatistics.totalPositiveSentiments -
-                                              (
-                                                  Object.values(
-                                                      analysisResponse?.insights
-                                                          ?.AGGREGATED_POSITIVES ||
-                                                          {}
-                                                  ) as any[]
-                                              ).length
-                                            : 0
+                                        (
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_POSITIVE || {}
+                                            ) as any[]
+                                        ).length
                                     }
                                     bottomText=""
                                 />
@@ -287,16 +232,12 @@ const dashboard = () => {
                                         ) as any[]
                                     ).length.toString()}
                                     change={
-                                        analysisStatistics
-                                            ? analysisStatistics.totalNegativeSentiments -
-                                              (
-                                                  Object.values(
-                                                      analysisResponse?.insights
-                                                          ?.AGGREGATED_NEGATIVES ||
-                                                          {}
-                                                  ) as any[]
-                                              ).length
-                                            : 0
+                                        (
+                                            Object.values(
+                                                analysisResponse?.insights
+                                                    ?.AGGREGATED_NEGATIVE || {}
+                                            ) as any[]
+                                        ).length
                                     }
                                     bottomText=""
                                     oppositeColor={true}
@@ -304,12 +245,7 @@ const dashboard = () => {
                                 <StatisticsCard
                                     title={"Total Form Responses"}
                                     value={formResponsesCount.toString()}
-                                    change={
-                                        analysisStatistics
-                                            ? analysisStatistics.totalFormResponses -
-                                              formResponsesCount
-                                            : 0
-                                    }
+                                    change={formResponsesCount}
                                     bottomText=""
                                 />
                             </div>
