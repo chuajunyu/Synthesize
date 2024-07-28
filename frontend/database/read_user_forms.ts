@@ -1,5 +1,5 @@
 import { app } from "@/lib/firebase/app";
-import { getDatabase, ref, query, orderByChild, equalTo, get } from "firebase/database";
+import { getDatabase, ref, get } from "firebase/database";
 
 export interface MyFormData {
     formId: string;
@@ -7,20 +7,35 @@ export interface MyFormData {
     title: string;
 }
 
-export async function getUserForms(userId: string): Promise<{ [key: string]: MyFormData } | null> {
+export async function readUserForms(projectId: string): Promise<{ [key: string]: MyFormData } | null> {
     const db = getDatabase(app);
-    const formsRef = ref(db, 'forms');
-    const userFormsQuery = query(formsRef, orderByChild('creatorId'), equalTo(userId));
+    const projectRef = ref(db, `projects/${projectId}/formIds`);
+    
     try {
-        const snapshot = await get(userFormsQuery);
+        const snapshot = await get(projectRef);
         if (snapshot.exists()) {
-            return snapshot.val();
+          const formIdsObject = snapshot.val();
+          console.log(formIdsObject, "hi");
+            const formData: { [key: string]: MyFormData } = {};
+            for (let i = 0; i < formIdsObject.length; i++) {
+                if (formIdsObject[i] != null) {
+                    const formRef = ref(db, `forms/${formIdsObject[i]}`);
+                    const formSnapshot = await get(formRef);
+
+                    if (formSnapshot.exists()) {
+                        console.log(formSnapshot.val());
+                        formData[formIdsObject[i]] = formSnapshot.val();
+                    }
+                }
+            }
+            console.log(formData);
+          return formData;
         } else {
-            console.log('No responses found for this user');
+            console.log('No forms found for this project');
             return null;
         }
     } catch (error) {
-        console.error('Error fetching user responses:', error);
+        console.error('Error fetching form data for this project:', error);
         return null;
     }
 }

@@ -6,7 +6,7 @@ export interface ResponseFormat {
     submissionDate: string;
 }
 
-export async function getFormResponses(formId: string): Promise<{ [key: string]: ResponseFormat } | null> {
+export default async function read_form_responses(formId: string): Promise<{ [key: string]: ResponseFormat } | null> {
     const db = getDatabase(app);
     const formResponsesRef = ref(db, `responses/${formId}`);
     try {
