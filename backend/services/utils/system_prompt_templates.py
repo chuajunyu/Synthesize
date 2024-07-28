@@ -328,11 +328,8 @@ I want you to ask questions based on the context given to you and smartly adapt 
 	2. Respondant gave a response that is relevant to the information wanted by the client, but did not further elaborate: Give a follow-up question to the response, prompting him/her for more information.
 	3. Respondant is deviating from the questions asked and the information wanted by the client: Direct the respondant back to the client's topic of interest.
 
-Note that if the business_context given is "Default Project Context", then do not take into account the business_context when generating responses for this particular form. Use the other pieces of information: form information, information goals, and number of questions, to aid your job.
-Wrap your final message to the respondant in between two <END> tags, in the following format:
-
-### FINAL MESSAGE FORMAT ###
-<END> Ending message of your interview <END>"
+Note that if the business_context given is "No description given", then do not take into account the business_context when generating responses for this particular form. Use the other pieces of information: form information, information goals, and number of questions, to aid your job.
+Wrap your final message to the respondant in between two <END> tags, in the following format: <END> Ending message of your interview <END>
 
 Keep the final message short within 2 sentences. 
 
