@@ -3,6 +3,7 @@ import { getDatabase, ref, set, push, get } from "firebase/database";
 
 export default function create_aiForm(
   email: string,
+  title: string,
   description: string,
   informationGoals: string,
   numberOfQuestions: string,
@@ -16,6 +17,7 @@ export default function create_aiForm(
     isAiForm: true,
     createdDate: Date.now(),
     creatorId: email,
+    title: title,
     description: description,
     informationGoals: informationGoals,
     numberOfQuestions: numberOfQuestions,

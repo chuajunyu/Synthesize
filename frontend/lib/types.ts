@@ -22,9 +22,12 @@ export interface Question {
     text: string;
 }
 export interface Form {
-    title: string;
-    description: string;
-    questions: Question[];
-    createdDate: number;
-    creatorId: string;
+  title: string;
+  description: string;
+  questions: Question[];
+  createdDate: number;
+  creatorId: string;
+  isAiForm: boolean;
+  informationGoals?: string;
+  numberOfQuestions?: string;
 }

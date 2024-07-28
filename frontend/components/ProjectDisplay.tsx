@@ -45,11 +45,12 @@ export default function ProjectDisplay() {
   }, [userEmail, handleDeleteProject]);
 
   const projectsToDisplay = [
-    { title: "Create a New Project", isAddCard: true, projectId: "" },
+    { title: "Create a New Project", isAddCard: true, projectId: "", binIcon: false},
     ...projectTitles.map((project) => ({
       title: project.title,
       isAddCard: false,
       projectId: project.projectId,
+      binIcon: project.title !== "Default Project"
     })),
   ];
 
@@ -64,7 +65,7 @@ export default function ProjectDisplay() {
             key={index}
             className="w-1/5 h-64 bg-white shadow-md rounded-lg flex flex-col"
           >
-            {!project.isAddCard ? (
+            {!project.isAddCard && project.binIcon? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

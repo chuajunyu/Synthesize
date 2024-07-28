@@ -3,8 +3,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import ChatBubble from '@/components/ChatBubble';
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import create_chat_history from '@/database/create_chat_history';
 
-interface MessageProps {
+export interface MessageProps {
   timestamp: number;
   message: string;
   role: "user" | "robot";
@@ -33,7 +34,7 @@ function SendButton({ handleSubmit }: SendButtonProps) {
     </svg>
   );
 }
-
+                                                                                                                                                        
 export default function ChatBot({
   params,
 }: {
@@ -41,11 +42,12 @@ export default function ChatBot({
   }) {
     const project = params.projectId;
     const form = params.formId;
-    const { user } = useAuth();
+    const { user } = useAuth();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [isEmailSet, setIsEmailSet] = useState(false); // New state variable
     const [messages, setMessages] = useState<MessageProps[]>([]);
     const [input, setInput] = useState<string>("");
+    const [endMessageProcessed, setEndMessageProcessed] = useState(false);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -126,6 +128,18 @@ export default function ChatBot({
         console.log("Fetch error", error);
       }
     };
+    
+    useEffect(() => {
+      const lastMessage = messages[messages.length - 1];
+      if (
+        lastMessage &&
+        lastMessage.message.includes("<END>") &&
+        !endMessageProcessed
+      ) {
+        setEndMessageProcessed(true);
+        storeMessageHistory();
+      }
+    }, [messages]);
 
     useEffect(() => {
       async function getBotOpening() {
@@ -176,6 +190,13 @@ export default function ChatBot({
         handleSendMessage();
       }
     };
+  
+  const storeMessageHistory = async () => {
+    await create_chat_history(userEmail, form, messages);
+    setTimeout(() => {
+      alert("The conversation has ended. You may close the tab now.");
+    }, 1000); // Delay of 1 second (1000 milliseconds)
+  };
 
     return (
       <ProtectedRoute>
