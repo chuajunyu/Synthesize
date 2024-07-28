@@ -12,10 +12,20 @@ import { readUserForms } from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
 import { useProject } from "@/contexts/ProjectContext";
 import { useSelectedForm } from "@/contexts/SelectFormContext";
+import readAnalysisStatistics from "@/database/analysis/readAnalysisStatistics";
+import storeAnalysisStatistics from "@/database/analysis/storeAnalysisStatistics";
 
 interface FormTitle {
     id: string;
     title: string;
+}
+
+interface AnalysisStatistics {
+    businessSentimentScore: number;
+    totalActionableInsights: number;
+    totalPositiveSentiments: number;
+    totalNegativeSentiments: number;
+    totalFormResponses: number;
 }
 
 const dashboard = () => {
@@ -29,6 +39,8 @@ const dashboard = () => {
         useState<number>(0);
     const { selectedProject } = useProject();
     const { selectedForm, setSelectedForm } = useSelectedForm();
+    const [analysisStatistics, setAnalysisStatistics] =
+        useState<AnalysisStatistics | null>(null);
 
     useEffect(() => {
         // This is used to fetch data to populate the select forms drop down list
@@ -90,17 +102,17 @@ const dashboard = () => {
 
         // Fetch response count for the selected form
         async function fetchFormResponsesCount() {
+            console.log(externalId, "asdfadf");
             const formResponses = await read_form_responses(externalId ?? "");
+            console.log(formResponses, "hello");
             setFormResponsesCount(Object.keys(formResponses ?? {}).length);
         }
 
         if (externalId != null && externalId != "") {
-            console.log(externalId, "here")
+            console.log(externalId, "here");
             fetchAnalysisResponseData();
+            fetchFormResponsesCount();
         }
-
-        fetchFormResponsesCount();
-
     }, [externalId]);
 
     useEffect(() => {
@@ -119,11 +131,11 @@ const dashboard = () => {
                 setBusinessSentimentScore(0);
                 return;
             }
-            
+
             // Base score is based on the ratio of positive to total sentiments
             const sentimentRatio =
                 (positiveSentiments.length / totalSentiments) * 10;
-            
+
             // Bonus points if the number of positive sentiments > form responses count
             const morePositiveSentiments =
                 positiveSentiments.length > formResponsesCount ? 1.2 : 0;
@@ -145,16 +157,56 @@ const dashboard = () => {
                 setBusinessSentimentScore(finalScore);
             }
         } else {
-            setBusinessSentimentScore(0)
+            setBusinessSentimentScore(0);
         }
     }, [analysisResponse, formResponsesCount, selectedProject]);
 
     useEffect(() => {
-        setSelectedForm({id: "", title: ""});
-        setAnalysisResponse(null)
-        setFormResponsesCount(0)
-    }, [selectedProject])
-        
+        setSelectedForm({ id: "", title: "" });
+        setAnalysisResponse(null);
+        setFormResponsesCount(0);
+    }, [selectedProject]);
+
+    useEffect(() => {
+        async function fetchAnalysisStatistics() {
+            if (externalId != null && externalId != "") {
+                const statistics = await readAnalysisStatistics(externalId);
+                setAnalysisStatistics(statistics);
+            }
+        }
+        fetchAnalysisStatistics();
+    }, [externalId]);
+
+    useEffect(() => {
+        async function writeAnalysisStatistics() {
+            if (externalId != null && externalId != "") {
+                await storeAnalysisStatistics(externalId, {
+                    businessSentimentScore: businessSentimentScore,
+                    totalActionableInsights: (
+                        Object.values(
+                            analysisResponse?.insights
+                                ?.AGGREGATED_SUGGESTIONS || {}
+                        ) as any[]
+                    ).length,
+                    totalPositiveSentiments: (
+                        Object.values(
+                            analysisResponse?.insights?.AGGREGATED_POSITIVE ||
+                                {}
+                        ) as any[]
+                    ).length,
+                    totalNegativeSentiments: (
+                        Object.values(
+                            analysisResponse?.insights?.AGGREGATED_NEGATIVE ||
+                                {}
+                        ) as any[]
+                    ).length,
+                    totalFormResponses: formResponsesCount,
+                });
+            }
+        }
+        writeAnalysisStatistics()
+    }, [businessSentimentScore, analysisResponse, formResponsesCount]);
+
     return (
         <ProtectedRoute>
             <div className="flex min-h-screen">
@@ -168,80 +220,116 @@ const dashboard = () => {
                             setExternalId={setExternalId}
                         />
                     </div>
-                    {/* {externalId === null ? (
-                        <div>Select a Form</div>
-                    ) : ( */}
-                        <div>
-                            <div className="flex flex-col">
-                                <div className="flex flex-row w-full justify-between gap-x-8">
-                                    <StatisticsCard
-                                        title="Business Sentiment Score"
-                                        value={businessSentimentScore.toString()}
-                                        change={0}
-                                        bottomText="Out of 10"
-                                    />
-                                    <StatisticsCard
-                                        title={"Total Actionable Insights"}
-                                        value={(
-                                            Object.values(
-                                                analysisResponse?.insights
-                                                    ?.AGGREGATED_SUGGESTIONS ||
-                                                    {}
-                                            ) as any[]
-                                        ).length.toString()}
-                                        change={0}
-                                        bottomText="Generated with AI"
-                                    />
-                                    <StatisticsCard
-                                        title="Total Positive Sentiments"
-                                        value={(
-                                            Object.values(
-                                                analysisResponse?.insights
-                                                    ?.AGGREGATED_POSITIVE || {}
-                                            ) as any[]
-                                        ).length.toString()}
-                                        change={0}
-                                        bottomText=""
-                                    />
-                                    <StatisticsCard
-                                        title="Total Negative Sentiments"
-                                        value={(
-                                            Object.values(
-                                                analysisResponse?.insights
-                                                    ?.AGGREGATED_NEGATIVE || {}
-                                            ) as any[]
-                                        ).length.toString()}
-                                        change={0}
-                                        bottomText=""
-                                        oppositeColor={true}
-                                    />
-                                    <StatisticsCard
-                                        title={"Total Form Responses"}
-                                        value={formResponsesCount.toString()}
-                                        change={0}
-                                        bottomText=""
-                                    />
-                                </div>
+                    <div>
+                        <div className="flex flex-col">
+                            <div className="flex flex-row w-full justify-between gap-x-8">
+                                <StatisticsCard
+                                    title="Business Sentiment Score"
+                                    value={businessSentimentScore.toString()}
+                                    change={
+                                        analysisStatistics
+                                            ? analysisStatistics.businessSentimentScore -
+                                              businessSentimentScore
+                                            : 0
+                                    }
+                                    bottomText="Out of 10"
+                                />
+                                <StatisticsCard
+                                    title={"Total Actionable Insights"}
+                                    value={(
+                                        Object.values(
+                                            analysisResponse?.insights
+                                                ?.AGGREGATED_SUGGESTIONS || {}
+                                        ) as any[]
+                                    ).length.toString()}
+                                    change={
+                                        analysisStatistics
+                                            ? analysisStatistics.totalActionableInsights -
+                                              (
+                                                  Object.values(
+                                                      analysisResponse?.insights
+                                                          ?.AGGREGATED_SUGGESTIONS ||
+                                                          {}
+                                                  ) as any[]
+                                              ).length
+                                            : 0
+                                    }
+                                    bottomText="Generated with AI"
+                                />
+                                <StatisticsCard
+                                    title="Total Positive Sentiments"
+                                    value={(
+                                        Object.values(
+                                            analysisResponse?.insights
+                                                ?.AGGREGATED_POSITIVE || {}
+                                        ) as any[]
+                                    ).length.toString()}
+                                    change={
+                                        analysisStatistics
+                                            ? analysisStatistics.totalPositiveSentiments -
+                                              (
+                                                  Object.values(
+                                                      analysisResponse?.insights
+                                                          ?.AGGREGATED_POSITIVES ||
+                                                          {}
+                                                  ) as any[]
+                                              ).length
+                                            : 0
+                                    }
+                                    bottomText=""
+                                />
+                                <StatisticsCard
+                                    title="Total Negative Sentiments"
+                                    value={(
+                                        Object.values(
+                                            analysisResponse?.insights
+                                                ?.AGGREGATED_NEGATIVE || {}
+                                        ) as any[]
+                                    ).length.toString()}
+                                    change={
+                                        analysisStatistics
+                                            ? analysisStatistics.totalNegativeSentiments -
+                                              (
+                                                  Object.values(
+                                                      analysisResponse?.insights
+                                                          ?.AGGREGATED_NEGATIVES ||
+                                                          {}
+                                                  ) as any[]
+                                              ).length
+                                            : 0
+                                    }
+                                    bottomText=""
+                                    oppositeColor={true}
+                                />
+                                <StatisticsCard
+                                    title={"Total Form Responses"}
+                                    value={formResponsesCount.toString()}
+                                    change={
+                                        analysisStatistics
+                                            ? analysisStatistics.totalFormResponses -
+                                              formResponsesCount
+                                            : 0
+                                    }
+                                    bottomText=""
+                                />
                             </div>
-                            <ActionableInsightsTable
-                                suggestionsData={
-                                    analysisResponse?.insights
-                                        ?.AGGREGATED_SUGGESTIONS
-                                }
-                                formId={externalId ?? ""}
-                            />
-                            <SentimentsTable
-                                negativeSentiments={
-                                    analysisResponse?.insights
-                                        ?.AGGREGATED_NEGATIVE
-                                }
-                                positiveSentiments={
-                                    analysisResponse?.insights
-                                        ?.AGGREGATED_POSITIVE
-                                }
-                            />
                         </div>
-                    {/* )} */}
+                        <ActionableInsightsTable
+                            suggestionsData={
+                                analysisResponse?.insights
+                                    ?.AGGREGATED_SUGGESTIONS
+                            }
+                            formId={externalId ?? ""}
+                        />
+                        <SentimentsTable
+                            negativeSentiments={
+                                analysisResponse?.insights?.AGGREGATED_NEGATIVE
+                            }
+                            positiveSentiments={
+                                analysisResponse?.insights?.AGGREGATED_POSITIVE
+                            }
+                        />
+                    </div>
                 </div>
             </div>
         </ProtectedRoute>
