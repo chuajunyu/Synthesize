@@ -45,6 +45,7 @@ export default async function manage_user_default_project(
       title: defaultProjectName,
       createdDate: Date.now(),
       creatorId: userId,
+      description: ""
     });
     console.log("default project created");
   }

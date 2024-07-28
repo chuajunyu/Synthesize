@@ -10,18 +10,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 interface AlertDialogComponentProps {
   handleSubmit: () => void;
   shareKey: string;
+  isManualForm: boolean;
+  selectedProject: string
 }
 
 export default function AlertFormShareLink({
   handleSubmit,
   shareKey,
+  isManualForm,
+  selectedProject
 }: AlertDialogComponentProps) {
+  console.log(selectedProject);
   const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
   let hrefOrigin = useRef<string | undefined>();
 
@@ -42,7 +46,11 @@ export default function AlertFormShareLink({
         });
     }
   };
-  
+  console.log(selectedProject);
+  const link = isManualForm
+    ? `${hrefOrigin.current}/platform/form/manualForm/${shareKey}`
+    : `${hrefOrigin.current}/platform/chat/${selectedProject}/${shareKey}`;
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -54,8 +62,7 @@ export default function AlertFormShareLink({
             Share the link with your survey participants!
           </AlertDialogTitle>
           <AlertDialogDescription ref={descriptionRef}>
-            {hrefOrigin.current}
-            {usePathname()}/{shareKey}
+            {link}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
