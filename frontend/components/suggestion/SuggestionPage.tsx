@@ -23,6 +23,22 @@ import setSuggestionAsDone from "@/database/analysis/setSuggestionAsDone";
 import setSuggestionAsOpen from "@/database/analysis/setSuggestionAsOpen";
 import setSuggestionAsViewed from "@/database/analysis/setSuggestionAsViewed";
 
+function OpenStatusCard() {
+    return (
+        <div className="w-16 px-2 py-1 text-center text-xs rounded-full bg-green-400 shadow-md text-slate-700 font-bold my-2">
+            Open
+        </div>
+    );
+}
+
+function DoneStatusCard() {
+    return (
+        <div className="w-16 px-2 py-1 text-center text-xs rounded-full bg-violet-500 shadow-md text-white font-bold my-2">
+            Done
+        </div>
+    );
+}
+
 interface SuggestionProps {
     formId: string;
     suggestionId: string;
@@ -101,7 +117,9 @@ function SuggestionPage({ formId, suggestionId }: SuggestionProps) {
                             Recommended Action
                         </CardTitle>
                         <CardTitle>{suggestionData.ACTIONABLE}</CardTitle>
-                        <CardDescription></CardDescription>
+                        <CardDescription>
+                            {suggestionData.open? <OpenStatusCard /> : <DoneStatusCard />}
+                        </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <p className="font-bold underline">Rationale</p>
@@ -128,6 +146,7 @@ function SuggestionPage({ formId, suggestionId }: SuggestionProps) {
                                             formId,
                                             suggestionId
                                         );
+                                        location.reload()
                                     }}
                                 >
                                     Re-open this Actionable
