@@ -27,7 +27,19 @@ function ActionableInsightsTable({
     suggestionsData,
     formId,
 }: ActionableInsightsTableProps) {
-    console.log(suggestionsData, "hi");
+
+    function sortSuggestions(a: [string, Suggestion], b: [string, Suggestion]) {
+        if (a[1].viewed == b[1].viewed) {
+            if (a[1].open == b[1].open) {
+                return b[1].lastUpdated - a[1].lastUpdated; // Bigger number will be at the top aka latest timestamp
+            } else {
+                return a[1].open ? -1 : 1;
+            }
+        } else {
+            return a[1].viewed ? 1 : -1;
+        }
+    }
+
     return (
         <div className="flex flex-row w-full items-stretch space-x-6 mt-4 rounded-xl shadow-lg">
             <Card className="flex-grow w-4/5">
@@ -76,42 +88,48 @@ function ActionableInsightsTable({
                                         string,
                                         Suggestion
                                     ][]
-                                ).map(
-                                    (
-                                        suggestionObject: [string, Suggestion],
-                                        index: number
-                                    ) => (
-                                        <div key={index}>
-                                            <Link
-                                                href={`dashboard/actionable/${formId}/${suggestionObject[0]}`}
-                                            >
-                                                <InsightsCard
-                                                    newStatus={
-                                                        !suggestionObject[1]
-                                                            .viewed
-                                                    }
-                                                    openStatus={
-                                                        suggestionObject[1].open
-                                                    }
-                                                    actionable={
-                                                        suggestionObject[1]
-                                                            .ACTIONABLE
-                                                    }
-                                                    lastUpdated={
-                                                        suggestionObject[1]
-                                                            .lastUpdated
-                                                    }
-                                                    mentions={
-                                                        suggestionObject[1]
-                                                            .LINKED_RESPONSES
-                                                            .length
-                                                    }
-                                                />
-                                                <Separator />
-                                            </Link>
-                                        </div>
-                                    )
                                 )
+                                    .sort(sortSuggestions)
+                                    .map(
+                                        (
+                                            suggestionObject: [
+                                                string,
+                                                Suggestion
+                                            ],
+                                            index: number
+                                        ) => (
+                                            <div key={index}>
+                                                <Link
+                                                    href={`dashboard/actionable/${formId}/${suggestionObject[0]}`}
+                                                >
+                                                    <InsightsCard
+                                                        newStatus={
+                                                            !suggestionObject[1]
+                                                                .viewed
+                                                        }
+                                                        openStatus={
+                                                            suggestionObject[1]
+                                                                .open
+                                                        }
+                                                        actionable={
+                                                            suggestionObject[1]
+                                                                .ACTIONABLE
+                                                        }
+                                                        lastUpdated={
+                                                            suggestionObject[1]
+                                                                .lastUpdated
+                                                        }
+                                                        mentions={
+                                                            suggestionObject[1]
+                                                                .LINKED_RESPONSES
+                                                                .length
+                                                        }
+                                                    />
+                                                    <Separator />
+                                                </Link>
+                                            </div>
+                                        )
+                                    )
                             )}
                         </CardDescription>
                     </ScrollArea>
