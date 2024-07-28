@@ -67,7 +67,7 @@ class FirebaseService:
 
     def get_analysis_last_updated_time(self, formId):
         form_analysis = self.get_form_analysis(formId)
-        if form_analysis is not None and not 'last_updated' in form_analysis:
+        if form_analysis is None or not 'last_updated' in form_analysis:
             return 0
         return self.get_form_analysis(formId)['last_updated']
 
