@@ -9,7 +9,7 @@ interface FormResponsesTableProps {
   formId: string;
 }
 
-interface ResponseData {
+export interface ResponseData {
   userId: string;
   submissionDate: string;
 }
