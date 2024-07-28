@@ -23,6 +23,7 @@ import {
 
 export default function FormBuilder() {
   const { selectedProject } = useProject();
+  const [title, setTitle] = useState<string>("")
   const [description, setDescription] = useState<string>(""); // form description
   const [information, setInformation] = useState("");
     const [key, setKey] = useState<string>("");
@@ -56,6 +57,7 @@ export default function FormBuilder() {
     // Call the backend create_form function here to store form data in database
     const newKey = create_aiForm(
       email,
+      title,
       description,
       information,
       current.toString(),
@@ -78,6 +80,20 @@ export default function FormBuilder() {
         <CardContent>
           <form>
             <div className="flex flex-col w-full space-y-4">
+              <div className="flex flex-col w-full space-y-1">
+                <Label
+                  htmlFor="form-title"
+                  className="flex justify-start font-medium text-lg"
+                >
+                  Form Title
+                </Label>
+                <Input
+                  id="form-title"
+                  placeholder="Provide title for this form."
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
               <div className="flex flex-col w-full space-y-1">
                 <Label
                   htmlFor="form-title"
@@ -143,7 +159,12 @@ export default function FormBuilder() {
         </CardContent>
       </Card>
 
-          <AlertFormShareLink handleSubmit={handleSubmit} shareKey={key} isManualForm={false} selectedProject={selectedProject.id}/>
+      <AlertFormShareLink
+        handleSubmit={handleSubmit}
+        shareKey={key}
+        isManualForm={false}
+        selectedProject={selectedProject.id}
+      />
     </div>
   );
 }

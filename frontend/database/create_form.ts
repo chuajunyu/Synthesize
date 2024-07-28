@@ -7,6 +7,7 @@ export default function create_form(email: string, title: string, description: s
     const newFormsRef = push(formsRef);
   const key = newFormsRef.key ?? '';
   set(newFormsRef, {
+    isAiForm: false,
     createdDate: Date.now(),
     creatorId: email,
     title: title,
