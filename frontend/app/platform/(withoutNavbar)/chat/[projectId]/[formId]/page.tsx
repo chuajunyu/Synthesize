@@ -44,21 +44,29 @@ export default function ChatBot({
     const form = params.formId;
     const { user } = useAuth();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     const [userEmail, setUserEmail] = useState<string | null>(null);
-    const [isEmailSet, setIsEmailSet] = useState(false); // New state variable
+    const [count, setCount] = useState(0); // New state variable
     const [messages, setMessages] = useState<MessageProps[]>([]);
     const [input, setInput] = useState<string>("");
-    const [endMessageProcessed, setEndMessageProcessed] = useState(false);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-      async function authenticate() {
-        const email = user?.email ?? "";
-        setUserEmail(email);
-        setIsEmailSet(true); // Signal that email has been set
-      }
-      authenticate();
-    }, [user?.email]);
+      useEffect(() => {
+        let mounted = true;
+
+        async function authenticate() {
+          const email = user?.email ?? "";
+          if (mounted) {
+            setUserEmail(email);
+            setCount(1);
+          }
+        }
+
+        authenticate();
+
+        return () => {
+          mounted = false;
+        };
+      }, [user?.email]);
 
     const handleInputChange = (e: string) => {
       setInput(e);
@@ -91,7 +99,7 @@ export default function ChatBot({
       try {
         console.log("Attempt to fetch chatgpt response will begin now");
         const response = await fetch(
-          `http://127.0.0.1:8000/chat/${project}/${form}`,
+          `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
           {
             method: "POST",
             headers: {
@@ -120,6 +128,9 @@ export default function ChatBot({
             console.log("set bot message");
             return newHistory;
           });
+          if (data.response.includes("<END>")) {
+            storeMessageHistory();
+          }
         } else {
           console.log("Error in fetching bot response");
           console.error("Response details:", data);
@@ -128,55 +139,54 @@ export default function ChatBot({
         console.log("Fetch error", error);
       }
     };
-    
-    useEffect(() => {
-      const lastMessage = messages[messages.length - 1];
-      if (
-        lastMessage &&
-        lastMessage.message.includes("<END>") &&
-        !endMessageProcessed
-      ) {
-        setEndMessageProcessed(true);
-        storeMessageHistory();
-      }
-    }, [messages]);
+  
 
     useEffect(() => {
+      let mounted = true;
+
       async function getBotOpening() {
-        console.log("Attempt to get chatgpt opening message will begin now");
-        const response = await fetch(
-          `http://127.0.0.1:8000/chat/${project}/${form}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              user_id: userEmail,
-              form_id: form,
-              project_id: project,
-              message: "",
-            }),
+        if (count == 1 && mounted) {
+          console.log("Attempt to get chatgpt opening message will begin now");
+          const response = await fetch(
+            `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: userEmail,
+                form_id: form,
+                project_id: project,
+                message: "",
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            console.log("Fetched data successfully");
+            const botMessage: MessageProps = {
+              timestamp: Date.now(),
+              message: data.response,
+              role: "robot",
+            };
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
+            console.log();
+          } else {
+            console.error("Error in fetching bot response", data);
           }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log("Fetched data successfully");
-          const botMessage: MessageProps = {
-            timestamp: Date.now(),
-            message: data.response,
-            role: "robot",
-          };
-          setMessages((prevMessages) => [...prevMessages, botMessage]);
-          console.log();
-        } else {
-          console.error("Error in fetching bot response", data);
         }
       }
-      getBotOpening();
-    }, [isEmailSet]);
+      if (count == 1) {
+        getBotOpening();
+      }
+
+      return () => {
+        mounted = false;
+      };
+    }, [project, form, userEmail]);
 
     useEffect(() => {
       if (chatEndRef.current) {
@@ -192,7 +202,7 @@ export default function ChatBot({
     };
   
   const storeMessageHistory = async () => {
-    await create_chat_history(userEmail, form, messages);
+    create_chat_history(userEmail, form, messages);
     setTimeout(() => {
       alert("The conversation has ended. You may close the tab now.");
     }, 1000); // Delay of 1 second (1000 milliseconds)
