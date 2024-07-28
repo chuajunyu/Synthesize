@@ -116,6 +116,7 @@ function SuggestionPage({ formId, suggestionId }: SuggestionProps) {
                                             formId,
                                             suggestionId
                                         );
+                                        location.reload()
                                     }}
                                 >
                                     Mark as Done

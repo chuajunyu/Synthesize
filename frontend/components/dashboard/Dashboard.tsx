@@ -11,6 +11,7 @@ import SelectFormDropdown from "@/components/dashboard/SelectFormDropdown";
 import { readUserForms } from "@/database/read_user_forms";
 import read_form_responses from "@/database/read_form_responses";
 import { useProject } from "@/contexts/ProjectContext";
+import { useSelectedForm } from "@/contexts/SelectFormContext";
 
 interface FormTitle {
     id: string;
@@ -27,8 +28,10 @@ const dashboard = () => {
     const [businessSentimentScore, setBusinessSentimentScore] =
         useState<number>(0);
     const { selectedProject } = useProject();
+    const { selectedForm, setSelectedForm } = useSelectedForm();
 
     useEffect(() => {
+        // This is used to fetch data to populate the select forms drop down list
         async function fetchData() {
             if (selectedProject !== null) {
                 const data = await readUserForms(selectedProject?.id);
@@ -54,7 +57,7 @@ const dashboard = () => {
     }, [user?.email]);
 
     useEffect(() => {
-        console.log("fetching analysis response data");
+        // Fetch analysis data
         async function fetchAnalysisResponseData() {
             const apiEndpoint = `https://synthesize-wcnj.onrender.com/get_form_analysis/${externalId}?secret=${SECRET_KEY}`;
             fetch(apiEndpoint)
@@ -85,15 +88,19 @@ const dashboard = () => {
                 });
         }
 
+        // Fetch response count for the selected form
         async function fetchFormResponsesCount() {
             const formResponses = await read_form_responses(externalId ?? "");
             setFormResponsesCount(Object.keys(formResponses ?? {}).length);
         }
 
-        if (externalId != null) {
+        if (externalId != null && externalId != "") {
+            console.log(externalId, "here")
             fetchAnalysisResponseData();
-            fetchFormResponsesCount();
         }
+
+        fetchFormResponsesCount();
+
     }, [externalId]);
 
     useEffect(() => {
@@ -137,8 +144,16 @@ const dashboard = () => {
             } else {
                 setBusinessSentimentScore(finalScore);
             }
+        } else {
+            setBusinessSentimentScore(0)
         }
     }, [analysisResponse, formResponsesCount, selectedProject]);
+
+    useEffect(() => {
+        setSelectedForm({id: "", title: ""});
+        setAnalysisResponse(null)
+        setFormResponsesCount(0)
+    }, [selectedProject])
         
     return (
         <ProtectedRoute>
