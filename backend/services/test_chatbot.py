@@ -3,17 +3,6 @@ import requests
 # Define the endpoint URL
 url = "http://127.0.0.1:8000/chat"
 
-# Initial greeting
-initial_payload = {
-    "user_id": "user_2",
-    "form_id": "01",
-    "project_id": "01",
-    "message": "",  # Initial greeting
-}
-
-response = requests.post(url, json=initial_payload)
-print(response.json())
-
 # Simulate subsequent interactions
 followup_payload = {
     "user_id": "user_2",

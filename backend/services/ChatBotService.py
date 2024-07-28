@@ -42,13 +42,13 @@ class ChatBotService:
     def run_chatbot_step(self, user_id, form_id, project_id, user_message=""):
         if user_message:
             self.update_chat_history(user_id, "user", user_message)
+        
         response = self.get_response(user_id, form_id, project_id)
 
         # Check if it's time for the final message
-        if (len(self.chat_histories[user_id]) >= 10):  # Condition for ending the conversation
+        if (len(self.chat_histories[user_id]) >= 9):  # Condition for ending the conversation
             self.update_chat_history(user_id, "assistant", self.final_message)
             return self.final_message
-
         return response
 
 if __name__ == "__main__":

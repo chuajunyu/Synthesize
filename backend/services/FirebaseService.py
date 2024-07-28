@@ -100,8 +100,10 @@ class FirebaseService:
 
     def get_business_context(self, project_id):
         business_context_ref = db.reference(f'projects/{project_id}')
-        return business_context_ref.get()['description']
-
+        context = business_context_ref.get()['description']
+        print(context)
+        return context
+    
     def get_form_description(self, form_id):
         form = self.get_form(form_id)
         return form['description']

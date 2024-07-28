@@ -53,7 +53,7 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     if secret != os.environ['SECRET_KEY']:
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Invalid secret key"}
-    
+
     # Return what is in the Firebase if the analysis was updated within the 10 minutes
     unix_time_now = int(datetime.timestamp(datetime.now()))
     last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
@@ -102,7 +102,8 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     final_analysis = firebase_service.get_form_analysis(formId)
     return {"message": "Form analysis completed", "content": final_analysis}
 
-@app.post("/chat", status_code=status.HTTP_200_OK)
+
+@app.post("/chat/{projectId}/{formId}", status_code=status.HTTP_200_OK)
 async def chat_endpoint(user_message: UserMessage):
     try:
         response = chatbot_service.run_chatbot_step(
@@ -113,9 +114,8 @@ async def chat_endpoint(user_message: UserMessage):
         )
         return {"response": response}
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+        print(f"Error in chat endpoint: {e}")
+        raise e
 
 if __name__ == "__main__":
     import uvicorn
