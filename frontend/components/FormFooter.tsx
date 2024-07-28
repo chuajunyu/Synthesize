@@ -6,12 +6,12 @@ interface FormFooterProps {
     handleAddNew: () => void
 }
 
-export default function FormFooter({ questions, handleAddNew }:FormFooterProps) {
-    return (
-      <div>
-        {questions.length === 0 && (
-          <Button onClick={handleAddNew}>Add New Question</Button>
-        )}
-      </div>
-    );
+export default function FormFooter({ questions, handleAddNew }: FormFooterProps) {
+  return (
+    <div>
+      {questions.length === 0 && (
+        <Button onClick={handleAddNew}>Add New Question</Button>
+      )}
+    </div>
+  );
 }

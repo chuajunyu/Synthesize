@@ -42,10 +42,10 @@ export default async function manage_user_default_project(
     const newProjectRef = push(projectsRef);
     defaultProjectId = newProjectRef.key ?? "";
     await set(newProjectRef, {
-      projectId: defaultProjectId,
       title: defaultProjectName,
       createdDate: Date.now(),
       creatorId: userId,
+      description: ""
     });
     console.log("default project created");
   }

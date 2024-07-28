@@ -2,11 +2,16 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from services.OpenAiService import OpenAiService
 from services.FirebaseService import FirebaseService
+from services.ChatBotService import ChatBotService
+
+from pydantic import BaseModel
+
+from typing import Optional
 
 load_dotenv()
 app = FastAPI()
@@ -28,9 +33,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+class UserMessage(BaseModel):
+    user_id: str
+    form_id: str
+    project_id: str
+    message: Optional[str] = None  # message is optional
+
 open_ai_service = OpenAiService()
 firebase_service = FirebaseService()
-
+chatbot_service = ChatBotService(open_ai_service, firebase_service)
 
 @app.get("/")
 async def root():
@@ -41,7 +53,7 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
     if secret != os.environ['SECRET_KEY']:
         response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Invalid secret key"}
-    
+
     # Return what is in the Firebase if the analysis was updated within the 10 minutes
     unix_time_now = int(datetime.timestamp(datetime.now()))
     last_updated_time = int(firebase_service.get_analysis_last_updated_time(formId))
@@ -89,3 +101,21 @@ async def get_form_analysis(formId: str, response: Response, secret: str | None 
 
     final_analysis = firebase_service.get_form_analysis(formId)
     return {"message": "Form analysis completed", "content": final_analysis}
+
+@app.post("/chat/{projectId}/{formId}", status_code=status.HTTP_200_OK)
+async def chat_endpoint(user_message: UserMessage):
+    try:
+        response = chatbot_service.run_chatbot_step(
+            user_message.user_id,
+            user_message.form_id,
+            user_message.project_id,
+            user_message.message or "",
+        )
+        return {"response": response}
+    except Exception as e:
+        print(f"Error in chat endpoint: {e}")
+        raise e
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)

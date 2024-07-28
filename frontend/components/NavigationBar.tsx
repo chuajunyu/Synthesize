@@ -85,6 +85,8 @@ export default function NavigationBar({ user, isNavbarOpen, toggleNavbarOpen }: 
   const [projects, setProjects] = useState<ProjectTitle[]>([]);
   const [isAccordionOpen, setIsAccordionOpen] = useState("false");
 
+  console.log(selectedProject);
+
   useEffect(() => {
     // Save navbar state to local storage
     localStorage.setItem("isNavbarOpen", JSON.stringify(isNavbarOpen));

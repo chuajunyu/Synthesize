@@ -16,6 +16,9 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'wallpaper': "url('/img/tele-wallpaper.jpg')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

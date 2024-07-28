@@ -15,6 +15,7 @@ class FirebaseService:
             'databaseURL': DATABASE_URL
         })
         self.db = db
+        self.cache = {}
 
     def get_form_responses(self, formId):
         responses_ref = db.reference(f'responses/{formId}')
@@ -27,7 +28,7 @@ class FirebaseService:
     def get_form(self, formId):
         forms_ref = db.reference(f'forms/{formId}')
         return forms_ref.get()
-    
+
     def get_form_description(self, formId):
         form = self.get_form(formId)
         return form['description']
@@ -43,15 +44,13 @@ class FirebaseService:
         for response_id in responses:
             response = responses[response_id]
             answers = response['answers']
-        
+
             formatted_answer = {}
             for i, answer in enumerate(answers):
                 formatted_answer[i] = {f'question{i}': questionsList[i], f'response{i}': answer['response']}
-            
             result[response_id] = (formatted_answer)
-
         return result
-    
+
     def get_formatted_unprocessed_responses(self, formId):
         responses = self.get_unprocessed_responses(formId)
         print(responses)
@@ -61,7 +60,7 @@ class FirebaseService:
         if form is None:
             return []
         return self.format_responses(form, responses)
-    
+
     def get_form_analysis(self, formId):
         analysis_ref = db.reference(f'analysis/{formId}')
         return analysis_ref.get()
@@ -70,7 +69,7 @@ class FirebaseService:
         if not 'last_updated' in self.get_form_analysis(formId):
             return 0
         return self.get_form_analysis(formId)['last_updated']
-    
+
     def update_form_analysis(self, formId, analysis):
         analysis_ref = db.reference(f'analysis/{formId}')
         analysis_ref.set(analysis)
@@ -126,6 +125,59 @@ class FirebaseService:
         analysis_ref.update({'last_updated': timestamp})
         return
 
+    def set_form_response_processed(self, formId, responseId):
+        response_ref = db.reference(f'responses/{formId}/{responseId}')
+        response_ref.update({'processed': True})
+        return
+
+    def update_form_analysis_response_sentiments(self, formId, sentiments):
+        for response_id in sentiments:
+            analysis_ref = db.reference(f'analysis/{formId}/sentiments')
+            analysis_ref.update({f'{response_id}': sentiments[response_id]})
+        return
+
+    def update_form_analysis_insights(self, formId, insights):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.update({'insights': insights})
+        return
+
+    def update_form_analysis_last_updated_time(self, formId, timestamp):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.update({'last_updated': timestamp})
+        return
+
+    def get_business_context(self, project_id):
+        business_context_ref = db.reference(f'projects/{project_id}')
+        context = business_context_ref.get()['description']
+        print(context)
+        return context
+    
+    def get_form_description(self, form_id):
+        form = self.get_form(form_id)
+        return form['description']
+
+    def get_form_information_goals(self, form_id):
+        form = self.get_form(form_id)
+        return form["informationGoals"]
+
+    def get_form_number_of_questions(self, form_id):
+        form = self.get_form(form_id)
+        return form["numberOfQuestions"]
+
+    def get_cache_data(self, project_id, form_id):
+        if project_id not in self.cache:
+            self.cache[project_id] = {}
+        if form_id not in self.cache[project_id]:
+            self.cache[project_id][form_id] = {}
+
+        if not self.cache[project_id][form_id]:
+            self.cache[project_id][form_id] = {
+                "business_context": self.get_business_context(project_id),
+                "form_description": self.get_form_description(form_id),
+                "information_goals": self.get_form_information_goals(form_id),
+                "number_of_questions": self.get_form_number_of_questions(form_id)
+            }
+        return self.cache[project_id][form_id]
 
 if __name__ == "__main__":
     formId = '-NzEHrGgjqOKyNrbAQLi'
@@ -138,4 +190,3 @@ if __name__ == "__main__":
     # print(firebase_service.get_form_description(no))
     # print(firebase_service.get_unprocessed_responses(0))
     # print(firebase_service.get_form_analysis(test2))
-
