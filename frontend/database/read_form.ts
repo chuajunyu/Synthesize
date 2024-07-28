@@ -8,8 +8,15 @@ export default async function read_form_data(formId: string): Promise<Form | nul
     try {
         const snapshot = await get(formRef);
         if (snapshot.exists()) {
-            const formData = snapshot.val();
-            return formData;
+            const data = snapshot.val();
+            return {
+                title: data.title,
+                description: data.description,
+                questions: data.questions || [],
+                createdDate: data.createdDate,
+                creatorId: data.creatorId,
+                isAiForm: data.isAiForm,
+            };
         } else {
             console.log('No form found with this id');
             return null;

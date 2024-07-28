@@ -9,12 +9,12 @@ interface FormResponsesTableProps {
   formId: string;
 }
 
-export interface ResponseData {
+interface ResponseData {
   userId: string;
   submissionDate: string;
 }
 
-interface ResponseSummary {
+export interface ResponseSummary {
   responseId: string;
   creatorId: string;
   date: string;
