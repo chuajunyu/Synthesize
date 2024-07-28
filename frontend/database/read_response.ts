@@ -5,7 +5,7 @@ interface Answer {
     response: string;
 }
 
-interface ResponseDataProps {
+export interface ResponseDataProps {
     answers: Answer[];
     submissionDate: number;
     userId: string;

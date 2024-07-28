@@ -7,6 +7,8 @@ import read_form_responses, { ResponseFormat } from "@/database/read_form_respon
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Block1 from "@/components/Block1"
 import { Form } from "@/lib/types";
+import read_aiForm from "@/database/read_aiForm";
+import read_aiForm_responses from "@/database/read_aiForm_responses";
 
 export default function ViewFormInsightsPage({ params }: { params: { formId: string } }) {
     const [formData, setFormData] = useState<Form | null>(null);
@@ -18,7 +20,13 @@ export default function ViewFormInsightsPage({ params }: { params: { formId: str
         async function fetchFormData() {
             try {
                 const data = await read_form_data(params.formId);
-                setFormData(data);
+                if (data.isAiForm) {
+                    const aiData = await read_aiForm(params.formId);
+                    console.log(aiData);
+                  setFormData(aiData);
+                } else {
+                  setFormData(data);
+                }
             } catch (error) {
                 console.log("error fetching form data");
             }
@@ -29,25 +37,37 @@ export default function ViewFormInsightsPage({ params }: { params: { formId: str
     useEffect(() => {
         async function fetchResponseData() {
             try {
-                const data = await read_form_responses(params.formId);
-                setResponseData(data);
-                if (data) {
-                    const len = Object.keys(data).length;
-                    setResponseCount(len);
-                    // the new Set stores unique creatorIds
-                    const responders = new Set<string>();
-                    Object.keys(data).forEach(key => {
-                        responders.add(data[key].userId);
-                    });
-                    setUniqueRespondersCount(responders.size);
+                if (formData.isAiForm) {
+                    console.log("I am here")
+                    const data = await read_aiForm_responses(params.formId);
+                    console.log(data);
+                    setResponseData(data);
+                } else {
+                    const data = await read_form_responses(params.formId);
+                    setResponseData(data);
                 }
             } catch (error) {
-                console.log("error found");
+                console.log("error found", error);
             }
         }
-        fetchResponseData();
-    }, [params.formId]);
-    
+        if (formData) {
+            fetchResponseData();
+        }
+    }, [params.formId, formData]);
+
+    useEffect(() => {
+      if (responseData) {
+        const len = Object.keys(responseData).length;
+        setResponseCount(len);
+        // the new Set stores unique creatorIds
+        const responders = new Set<string>();
+        Object.keys(responseData).forEach((key) => {
+          responders.add(responseData[key].userId);
+        });
+        setUniqueRespondersCount(responders.size);
+      }
+    }, [responseData]);
+
     if (!formData) {
         return <div>No Form Data found</div>;
     }
@@ -62,27 +82,40 @@ export default function ViewFormInsightsPage({ params }: { params: { formId: str
         "Responses"
     ];
     return (
-        <ProtectedRoute>
-            <div className="flex flex-col mx-8">
-                <div className="flex flex-row w-full mt-10 h-full items-stretch">
-                    <div className="flex flex-grow mr-5">
-                        <Block1 title={title} text={description}
-                            showButton={false} buttonText="" href=""/>
-                    </div>
-                    <div className="flex flex-grow flex-col mr-5">
-                        <FormOverviewStatistics count={uniqueRespondersCount} text={text[0]}/>
-                    </div>
-                    <div className="flex flex-grow flex-col">
-                        <FormOverviewStatistics count={responseCount} text={text[1]}/>
-                    </div>
-                </div>
-                <div className="flex flex-col w-full">
-                    <span className="flex my-3 mt-10 text-xl font-semibold">View Individual Form Responses</span>
-                    <div className="flex flex-col flex-grow">
-                        <ResponsesTable responseData={responseData} formId={params.formId} />
-                    </div>
-                </div>
+      <ProtectedRoute>
+        <div className="flex flex-col mx-8">
+          <div className="flex flex-row w-full mt-10 h-full items-stretch space-x-5">
+            <div className="flex flex-grow min-h-full">
+              <Block1
+                title={title}
+                text={description}
+                showButton={false}
+                buttonText=""
+                href=""
+              />
             </div>
-        </ProtectedRoute>
+            <div className="flex flex-grow min-h-full">
+              <FormOverviewStatistics
+                count={uniqueRespondersCount}
+                text={text[0]}
+              />
+            </div>
+            <div className="flex flex-grow min-h-full">
+              <FormOverviewStatistics count={responseCount} text={text[1]} />
+            </div>
+          </div>
+          <div className="flex flex-col w-full">
+            <span className="flex my-3 mt-10 text-xl font-semibold">
+              View Individual Form Responses
+            </span>
+            <div className="flex flex-col flex-grow">
+              <ResponsesTable
+                responseData={responseData}
+                formId={params.formId}
+              />
+            </div>
+          </div>
+        </div>
+      </ProtectedRoute>
     );
 }

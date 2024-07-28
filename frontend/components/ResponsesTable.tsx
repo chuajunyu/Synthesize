@@ -14,7 +14,7 @@ export interface ResponseData {
   submissionDate: string;
 }
 
-interface ResponseSummary {
+export interface ResponseSummary {
   responseId: string;
   creatorId: string;
   date: string;
