@@ -133,7 +133,7 @@ export default function FormBuilder() {
           </CardFooter>
         </Card>
       ))}
-      <AlertFormShareLink handleSubmit={handleSubmit} shareKey={key} />
+      <AlertFormShareLink handleSubmit={handleSubmit} shareKey={key} isManualForm={false} selectedProject={""} />
     </div>
   );
 }
