@@ -41,7 +41,7 @@ class OpenAiService:
             ]
         )
         return completion.choices[0].message.content
-    
+
     def get_chatgpt_response(self, history, business_context, form_description, information_goals, number_of_questions):
         messages=[
             {"role": "system", "content": chatbot_system_prompt_template.format(business_context=business_context, form_description=form_description, information_goals=information_goals, number_of_questions=number_of_questions)},
@@ -56,3 +56,10 @@ class OpenAiService:
 
 if __name__ == "__main__":
     business_context = "We are McDonald's Fast Food Chain and we have just released a Truffle Cheese sauce dip for our nuggets. We want to assess whether customers like them"
+    # content = json.dumps(mock_responses)
+    # print(len(mock_responses["responses"]))
+    open_ai_service = OpenAiService()
+    # print(open_ai_service.analyse_responses(business_context, content))
+    subway_business_context = "We are Subway, a sandwich shop, and we are looking to improve our sandwich making process"
+    print(open_ai_service.merge_suggestions(subway_business_context, mock_current_suggestions, mock_new_suggestions))
+

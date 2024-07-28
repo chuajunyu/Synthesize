@@ -72,7 +72,7 @@ export default function ProjectBuilder() {
                   </Label>
                   <Label className="flex justify-start font-small text-sm text-rose-800 mb-2">
                     This information will be used by the LLM when generating
-                    insights. Note that giving acurate information will enhance
+                    insights. Note that giving accurate information will enhance
                     the quality of your derived insights.
                   </Label>
                   <Input
@@ -105,7 +105,7 @@ export default function ProjectBuilder() {
                   </Label>
                   <Label className="flex justify-start font-small text-sm text-rose-800 mb-2">
                     This information will be used by the LLM when generating
-                    insights. Note that giving acurate information will enhance
+                    insights. Note that giving accurate information will enhance
                     the quality of your derived insights.
                   </Label>
                   <Input

@@ -48,9 +48,7 @@ class FirebaseService:
             formatted_answer = {}
             for i, answer in enumerate(answers):
                 formatted_answer[i] = {f'question{i}': questionsList[i], f'response{i}': answer['response']}
-
             result[response_id] = (formatted_answer)
-
         return result
 
     def get_formatted_unprocessed_responses(self, formId):
@@ -68,13 +66,63 @@ class FirebaseService:
         return analysis_ref.get()
 
     def get_analysis_last_updated_time(self, formId):
-        if self.get_form_analysis(formId) is None:
+        if not 'last_updated' in self.get_form_analysis(formId):
             return 0
         return self.get_form_analysis(formId)['last_updated']
 
     def update_form_analysis(self, formId, analysis):
         analysis_ref = db.reference(f'analysis/{formId}')
         analysis_ref.set(analysis)
+        return
+    
+    def set_form_response_processed(self, formId, responseId):
+        response_ref = db.reference(f'responses/{formId}/{responseId}')
+        response_ref.update({'processed': True})
+        return
+    
+    def update_form_analysis_response_sentiments(self, formId, sentiments):
+        for response_id in sentiments:
+            analysis_ref = db.reference(f'analysis/{formId}/sentiments')
+            analysis_ref.update({f'{response_id}': sentiments[response_id]})
+        return
+ 
+    def update_form_analysis_insights(self, formId, insights, last_updated):
+        assert 'AGGREGATED_POSITIVE' in insights
+        assert 'AGGREGATED_NEGATIVE' in insights
+        assert 'AGGREGATED_SUGGESTIONS' in insights
+
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_data = analysis_ref.get()
+        
+        if 'insights' not in analysis_data:
+            analysis_ref.set({'insights': {}})
+
+        # Insights already exist, update them
+        analysis_insights_ref = db.reference(f'analysis/{formId}/insights')
+        analysis_insights_ref.update({'AGGREGATED_POSITIVE': insights['AGGREGATED_POSITIVE']})
+        analysis_insights_ref.update({'AGGREGATED_NEGATIVE': insights['AGGREGATED_NEGATIVE']})
+
+        final_suggestions = {}
+        firebase_suggestions = analysis_data['insights'].get('AGGREGATED_SUGGESTIONS', {})
+        generated_suggestions = insights['AGGREGATED_SUGGESTIONS']
+        for suggestion in generated_suggestions:
+            if suggestion not in firebase_suggestions:
+                final_suggestions[suggestion] = generated_suggestions[suggestion]
+                final_suggestions[suggestion]['viewed'] = False
+                final_suggestions[suggestion]['open'] = True
+                final_suggestions[suggestion]['lastUpdated'] = last_updated
+            if suggestion in firebase_suggestions:
+                final_suggestions[suggestion] = firebase_suggestions[suggestion]
+                final_suggestions[suggestion]['viewed'] = firebase_suggestions[suggestion]['viewed']
+                final_suggestions[suggestion]['open'] = firebase_suggestions[suggestion]['open']
+                final_suggestions[suggestion]['lastUpdated'] = last_updated
+
+        analysis_insights_ref.update({'AGGREGATED_SUGGESTIONS': final_suggestions})
+        return
+    
+    def update_form_analysis_last_updated_time(self, formId, timestamp):
+        analysis_ref = db.reference(f'analysis/{formId}')
+        analysis_ref.update({'last_updated': timestamp})
         return
 
     def set_form_response_processed(self, formId, responseId):

@@ -1,19 +1,8 @@
 import { app } from "@/lib/firebase/app";
 import { getDatabase, ref, get } from "firebase/database";
+import {Form} from "@/lib/types";
 
-interface Question {
-    text: string;
-}
-
-export interface FormProps {
-    title: string;
-    description: string;
-    questions: Question[];
-    createdDate: number;
-    creatorId: string;
-}
-
-export default async function read_form_data(formId: string): Promise<FormProps | null> {
+export default async function read_form_data(formId: string): Promise<Form | null> {
     const db = getDatabase(app);
     const formRef = ref(db, 'forms/' + formId);
     try {
