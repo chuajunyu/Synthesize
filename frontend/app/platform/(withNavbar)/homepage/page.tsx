@@ -22,7 +22,7 @@ export default function DashboardPage() {
               text="Effortlessly design custom feedback forms using our intuitive Form Builder. Add questions, edit them as needed, and share the form with your target audience through a simple link. Get started quickly and ensure you gather the precise feedback you need to improve your business or research. 💪"
               showButton={true}
               buttonText="Create a New Form Manually"
-              href="/platform/form"
+              href="/platform/form/manualForm"
             />
             <Block1
               title="Generate Forms with the Empowerment of AI 🤖"

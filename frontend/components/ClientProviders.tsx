@@ -13,7 +13,7 @@ export default function ClientProviders({ children }: { children: React.ReactNod
         if (email != null) {
             setUserEmail(email);
         }
-      console.log("Authenticated user email:", email); // Log user email for debugging
+      // console.log("Authenticated user email:", email); // Log user email for debugging
     }
     authenticate();
   }, [user]);

@@ -14,7 +14,7 @@ export default async function read_form_responses(formId: string): Promise<{ [ke
         if (snapshot.exists()) {
             return snapshot.val();
         } else {
-            console.log('No responses found for this user');
+            console.log("No responses found for this user");
             return null;
         }
     } catch (error) {

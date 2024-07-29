@@ -21,7 +21,6 @@ export default async function read_user_projects(
       const snapshot = await get(userProjectsQuery);
       if (snapshot.exists()) {
         const projects = snapshot.val();
-        console.log(projects);
         return Object.keys(projects).map((key) => ({
             title: projects[key].title,
             projectId: key,

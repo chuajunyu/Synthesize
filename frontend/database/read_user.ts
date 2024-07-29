@@ -10,7 +10,6 @@ export default function readUserData(email: string) {
         if (snapshot.exists()) {
             snapshot.forEach((userSnapshot) => {
             const userData = userSnapshot.val();
-            console.log('User data:', userData);
             });
         } else {
             console.log('No user found with this email');

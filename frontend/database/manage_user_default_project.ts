@@ -48,7 +48,7 @@ export default async function manage_user_default_project(
       description: "No description given.",
       goals: "No goals given.",
     });
-    console.log("default project created");
+    console.log("Default project created");
   }
 
   return { projectId: defaultProjectId, projectName: defaultProjectName };

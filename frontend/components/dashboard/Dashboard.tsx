@@ -49,7 +49,6 @@ const dashboard = () => {
                         id: formId,
                         title: data[formId].title,
                     }));
-                    console.log(formTitles);
                     setFormData(formTitles);
                 }
             }
@@ -84,8 +83,6 @@ const dashboard = () => {
                     return response.json();
                 })
                 .then((data) => {
-                    // Handle the parsed data
-                    console.log(data, "test");
                     setAnalysisResponse(data["content"]);
                 })
                 .catch((error) => {
@@ -99,9 +96,7 @@ const dashboard = () => {
 
         // Fetch response count for the selected form
         async function fetchFormResponsesCount() {
-            console.log(externalId, "asdfadf");
             const formResponses = await read_form_responses(externalId ?? "");
-            console.log(formResponses, "hello");
             setFormResponsesCount(Object.keys(formResponses ?? {}).length);
         }
 

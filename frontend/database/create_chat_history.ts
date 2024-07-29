@@ -15,5 +15,5 @@ export default function create_chat_history(
     creatorId: userId,
     chatHistory: chatHistory
   });
-  console.log("default project created");
+  console.log("Default project created");
 }

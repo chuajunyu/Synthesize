@@ -46,7 +46,6 @@ export default function ResponseForm({
   // Function to submit a new response
   const handleSubmit = async () => {
     let email = user?.email ?? "";
-    console.log(responses.length);
     const formattedResponses = responses.map((response) => ({
       responseId: response.id,
       response: response.response,
