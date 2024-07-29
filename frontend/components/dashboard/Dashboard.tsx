@@ -164,7 +164,7 @@ const dashboard = () => {
             <div className="flex min-h-screen">
                 <div className="justify-center w-full mx-8 mt-5">
                     <span className="flex mt-3 mb-3 text-xl font-semibold">
-                        {selectedProject?.name}
+                        Project: {selectedProject?.name}
                     </span>
                     <div className="my-4">
                         <SelectFormDropdown

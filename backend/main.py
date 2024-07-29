@@ -20,9 +20,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "https://synthesize-git-develop-jun-yus-projects.vercel.app",
-    "https://synthesize-git-develop-jun-yus-projects.vercel.app/*",
     "https://synthesize-two.vercel.app",
-    "https://synthesize-two.vercel.app/*"
 ]
 
 app.add_middleware(

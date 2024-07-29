@@ -66,7 +66,8 @@ class FirebaseService:
         return analysis_ref.get()
 
     def get_analysis_last_updated_time(self, formId):
-        if not 'last_updated' in self.get_form_analysis(formId):
+        form_analysis = self.get_form_analysis(formId)
+        if form_analysis is None or not 'last_updated' in form_analysis:
             return 0
         return self.get_form_analysis(formId)['last_updated']
 
@@ -134,11 +135,6 @@ class FirebaseService:
         for response_id in sentiments:
             analysis_ref = db.reference(f'analysis/{formId}/sentiments')
             analysis_ref.update({f'{response_id}': sentiments[response_id]})
-        return
-
-    def update_form_analysis_insights(self, formId, insights):
-        analysis_ref = db.reference(f'analysis/{formId}')
-        analysis_ref.update({'insights': insights})
         return
 
     def update_form_analysis_last_updated_time(self, formId, timestamp):

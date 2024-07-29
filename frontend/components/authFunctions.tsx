@@ -17,7 +17,8 @@ function SignInGoogle() {
         <form
             action={async () => {
                 signInWithGoogleRedirect();
-                router.push("/platform/form");
+          
+                router.push("/platform/homepage");
             }}
         >
             <Button type="submit" variant="outline" className="w-full">
