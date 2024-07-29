@@ -22,7 +22,6 @@ export default function ViewFormInsightsPage({ params }: { params: { formId: str
                 const data = await read_form_data(params.formId);
                 if (data.isAiForm) {
                     const aiData = await read_aiForm(params.formId);
-                    console.log(aiData);
                   setFormData(aiData);
                 } else {
                   setFormData(data);
@@ -38,9 +37,7 @@ export default function ViewFormInsightsPage({ params }: { params: { formId: str
         async function fetchResponseData() {
             try {
                 if (formData.isAiForm) {
-                    console.log("I am here")
                     const data = await read_aiForm_responses(params.formId);
-                    console.log(data);
                     setResponseData(data);
                 } else {
                     const data = await read_form_responses(params.formId);

@@ -15,7 +15,6 @@ export async function readUserForms(projectId: string): Promise<{ [key: string]:
         const snapshot = await get(projectRef);
         if (snapshot.exists()) {
           const formIdsObject = snapshot.val();
-          console.log(formIdsObject, "hi");
             const formData: { [key: string]: MyFormData } = {};
             for (let i = 0; i < formIdsObject.length; i++) {
                 if (formIdsObject[i] != null) {
@@ -23,12 +22,10 @@ export async function readUserForms(projectId: string): Promise<{ [key: string]:
                     const formSnapshot = await get(formRef);
 
                     if (formSnapshot.exists()) {
-                        console.log(formSnapshot.val());
                         formData[formIdsObject[i]] = formSnapshot.val();
                     }
                 }
             }
-            console.log(formData);
           return formData;
         } else {
             console.log('No forms found for this project');

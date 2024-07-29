@@ -60,7 +60,7 @@ export default function FormBuilder() {
     const formattedQuestions = questions.map((question) => ({
       text: question.question,
     }));
-    console.log(selectedProject.id);
+
     // Call the backend create_form function here to store form data in database
     const newKey = create_form(
         email,

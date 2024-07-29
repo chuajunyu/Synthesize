@@ -29,7 +29,6 @@ export default function create_aiForm(
 
       // Retrieve the current formIds if they exist
       const snapshot = await get(projectFormsRef);
-      console.log(snapshot.val());
       let formIds = [];
       if (snapshot.exists()) {
         formIds = snapshot.val();
@@ -40,7 +39,6 @@ export default function create_aiForm(
 
       // Add the new form ID
       formIds.push(key);
-      console.log(formIds);
 
       // Update the formIds in the database
       set(projectFormsRef, formIds).then(() => {

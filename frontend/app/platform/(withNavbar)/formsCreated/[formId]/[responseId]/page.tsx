@@ -26,7 +26,6 @@ export default function Page({ params }: {
         const data = await read_form_data(params.formId);
         if (data.isAiForm) {
           const aiData = await read_aiForm(params.formId);
-          console.log(aiData);
           setFormData(aiData);
         } else {
           setFormData(data);
@@ -47,7 +46,6 @@ export default function Page({ params }: {
             params.formId,
             params.responseId
           );
-          console.log(aiData);
           setAiResponseData(aiData);
         } else {
           const responseData = await readResponseData(

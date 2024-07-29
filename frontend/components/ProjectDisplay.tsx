@@ -36,7 +36,6 @@ export default function ProjectDisplay() {
     async function fetchProjects() {
       if (userEmail !== null) {
         const projects = await read_user_projects(userEmail);
-        console.log(projects);
         setProjectTitles(projects ?? []);
         setLoading(false);
       }

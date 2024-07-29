@@ -77,27 +77,22 @@ export default function ChatBot({
     };
 
     const handleSendMessage = async () => {
-      console.log("Send Message Button Clicked");
       if (input.trim() === "") {
         return;
       }
-      console.log(input);
       const newMessage: MessageProps = {
         timestamp: Date.now(),
         message: input,
         role: "user",
       };
-      console.log("Messages before appending:", messages);
       setMessages((prevMessages) => {
         const newHistory = [...prevMessages, newMessage];
-        console.log("set user message");
         return newHistory;
       });
       setInput("");
-      console.log("Messages after appending:", messages);
 
       try {
-        console.log("Attempt to fetch chatgpt response will begin now");
+        // console.log("Attempt to fetch chatgpt response will begin now");
         const response = await fetch(
           `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
           {
@@ -117,7 +112,6 @@ export default function ChatBot({
         const data = await response.json();
 
         if (response.ok) {
-          console.log("Fetched data successfully");
           const botMessage: MessageProps = {
             timestamp: Date.now(),
             message: data.response,
@@ -125,14 +119,12 @@ export default function ChatBot({
           };
           setMessages((prevMessages) => {
             const newHistory = [...prevMessages, botMessage];
-            console.log("set bot message");
             return newHistory;
           });
           if (data.response.includes("<END>")) {
             storeMessageHistory();
           }
         } else {
-          console.log("Error in fetching bot response");
           console.error("Response details:", data);
         }
       } catch (error) {
@@ -146,7 +138,7 @@ export default function ChatBot({
 
       async function getBotOpening() {
         if (count == 1 && mounted) {
-          console.log("Attempt to get chatgpt opening message will begin now");
+          // console.log("Attempt to get chatgpt opening message will begin now");
           const response = await fetch(
             `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
             {
@@ -166,16 +158,15 @@ export default function ChatBot({
           const data = await response.json();
 
           if (response.ok) {
-            console.log("Fetched data successfully");
             const botMessage: MessageProps = {
               timestamp: Date.now(),
               message: data.response,
               role: "robot",
             };
             setMessages((prevMessages) => [...prevMessages, botMessage]);
-            console.log();
           } else {
-            console.error("Error in fetching bot response", data);
+            console.error(`Error: ${response.status} ${response.statusText}`);
+            return;
           }
         }
       }
@@ -186,7 +177,7 @@ export default function ChatBot({
       return () => {
         mounted = false;
       };
-    }, [project, form, userEmail]);
+    }, [project, form]);
 
     useEffect(() => {
       if (chatEndRef.current) {
