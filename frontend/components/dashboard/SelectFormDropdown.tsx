@@ -31,9 +31,7 @@ function SelectFormDropdown ({ forms, setExternalId }: ComboboxProps) {
     const { selectedForm, setSelectedForm } = useSelectedForm();
 
     useEffect(() => {
-        console.log(forms.filter((form: Form) => form.id === id));
-        console.log(forms);
-        console.log(id);
+        forms.filter((form: Form) => form.id === id);
     }, [forms, id]);
 
     useEffect(() => {

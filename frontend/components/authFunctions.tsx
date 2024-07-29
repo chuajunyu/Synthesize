@@ -17,7 +17,7 @@ function SignInGoogle() {
         <form
             action={async () => {
                 signInWithGoogleRedirect();
-
+          
                 router.push("/platform/homepage");
             }}
         >

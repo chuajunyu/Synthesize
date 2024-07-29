@@ -23,9 +23,8 @@ export default function EmailLogIn() {
                     email,
                     password
                 );
-                console.log(message);
+                
                 if (message == "success") {
-                    console.log(message);
                     router.push("/platform/form");
                 } else {
                     setErrorCode(message);

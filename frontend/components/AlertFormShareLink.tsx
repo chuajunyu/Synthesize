@@ -25,7 +25,6 @@ export default function AlertFormShareLink({
   isManualForm,
   selectedProject
 }: AlertDialogComponentProps) {
-  console.log(selectedProject);
   const descriptionRef = useRef<HTMLDivElement>(null); // Reference to the AlertDialogDescription
   let hrefOrigin = useRef<string | undefined>();
 
@@ -46,7 +45,7 @@ export default function AlertFormShareLink({
         });
     }
   };
-  console.log(selectedProject);
+
   const link = isManualForm
     ? `${hrefOrigin.current}/platform/form/manualForm/${shareKey}`
     : `${hrefOrigin.current}/platform/chat/${selectedProject}/${shareKey}`;

@@ -19,7 +19,6 @@ export default function signInWithGoogleRedirect() {
 
                 // The signed-in user info.
                 const user = result.user;
-                console.log(user);
 
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...

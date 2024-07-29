@@ -21,6 +21,7 @@ export interface Suggestion {
 export interface Question {
     text: string;
 }
+
 export interface Form {
   title: string;
   description: string;

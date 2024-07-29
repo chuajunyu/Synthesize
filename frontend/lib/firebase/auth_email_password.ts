@@ -12,7 +12,6 @@ async function signUpWithEmailAndPassword(email: string, password: string) {
         })
         .catch((error) => {
             const errorCode = error.code;
-            console.log(errorCode);
             if (errorCode == "auth/weak-password") {
                 return "Use a stronger password!"
             }
@@ -31,7 +30,6 @@ async function logInWithEmailAndPassword(email: string, password: string) {
         })
         .catch((error) => {
             const errorCode = error.code;
-            console.log(errorCode);
             if (errorCode == "auth/invalid-credential") {
                 return "Wrong email or password. Try again.";
             }

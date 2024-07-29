@@ -6,10 +6,25 @@ import { useAuth } from "@/lib/firebase/AuthContext";
 import { readUserForms } from "@/database/read_user_forms";
 import Link from "next/link";
 import { useProject } from "@/contexts/ProjectContext";
+import read_form_data from "@/database/read_form";
 
 interface MyFormData {
   createdDate: string;
   title: string;
+  isAiForm?: boolean;
+}
+
+interface Question {
+    text: string;
+}
+
+interface Form {
+  title: string;
+  description: string;
+  questions: Question[];
+  createdDate: number;
+  creatorId: string;
+  isAiForm: boolean;
 }
 
 interface FormSummary {
@@ -39,10 +54,27 @@ export default function CreatedFormsTable() {
   useEffect(() => {
     async function fetchData() {
       if (selectedProject !== null) {
-        const data = await readUserForms(selectedProject.id);
-        console.log(data);
-        setFormData(data);
-        setLoading(false);
+        try {
+          const data = await readUserForms(selectedProject.id);
+          setFormData(data);
+          const updatedFormData = await Promise.all(
+            Object.keys(data).map(async (formId) => {
+              const formData: Form = await read_form_data(formId);
+              if (formData.isAiForm) {
+                formData[formId].append({ isAiForm: true })
+              } else {
+                formData[formId].append({ isAiForm: false });
+              }
+            })
+          );
+
+          const mergedFormData = Object.assign({}, ...updatedFormData);
+          setFormData(mergedFormData);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setLoading(false);
+        }
       }
     }
     fetchData();
@@ -55,8 +87,10 @@ export default function CreatedFormsTable() {
   }, []);
 
   const handleCopyLink = (formId: string) => {
-    const pathName = "/platform/form/manualForm";
-    const dynamicResponseLink = `${hrefOrigin.current}${pathName}/${formId}`;
+    const pathName = formData[formId].isAiForm
+      ? `platform/chat/${selectedProject.id}`
+      : "/platform/form/manualForm";
+    const dynamicResponseLink = `${hrefOrigin.current}/${pathName}/${formId}`;
     navigator.clipboard
       .writeText(dynamicResponseLink)
       .then(() => {
@@ -96,7 +130,6 @@ export default function CreatedFormsTable() {
     title: formData[key].title,
     date: new Date(formData[key].createdDate).toLocaleDateString(),
   }));
-  console.log(formattedData);
 
   return (
     <div className="flex flex-col w-full gap-4 mb-3">
