@@ -54,17 +54,27 @@ export default function CreatedFormsTable() {
   useEffect(() => {
     async function fetchData() {
       if (selectedProject !== null) {
-        const data = await readUserForms(selectedProject.id);
-        setFormData(data);
-        Object.keys(formData).map(async (formId) => {
-          const formData: Form = await read_form_data(formId);
-          if (formData.isAiForm) {
-            formData[formId].append({ isAiForm: true })
-          } else {
-            formData[formId].append({ isAiForm: false });
-          }
-        })
-        setLoading(false);
+        try {
+          const data = await readUserForms(selectedProject.id);
+          setFormData(data);
+          const updatedFormData = await Promise.all(
+            Object.keys(data).map(async (formId) => {
+              const formData: Form = await read_form_data(formId);
+              if (formData.isAiForm) {
+                formData[formId].append({ isAiForm: true })
+              } else {
+                formData[formId].append({ isAiForm: false });
+              }
+            })
+          );
+
+          const mergedFormData = Object.assign({}, ...updatedFormData);
+          setFormData(mergedFormData);
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+        } finally {
+          setLoading(false);
+        }
       }
     }
     fetchData();
