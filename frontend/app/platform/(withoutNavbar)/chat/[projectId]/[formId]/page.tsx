@@ -1,9 +1,9 @@
-"use client"
-import React, { useState, useEffect, useRef } from 'react'
-import ChatBubble from '@/components/ChatBubble';
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import ChatBubble from "@/components/ChatBubble";
 import { useAuth } from "@/lib/firebase/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import create_chat_history from '@/database/create_chat_history';
+import create_chat_history from "@/database/create_chat_history";
 
 export interface MessageProps {
   timestamp: number;
@@ -12,7 +12,7 @@ export interface MessageProps {
 }
 
 interface SendButtonProps {
-    handleSubmit: () => void
+  handleSubmit: () => void;
 }
 
 function SendButton({ handleSubmit }: SendButtonProps) {
@@ -34,111 +34,109 @@ function SendButton({ handleSubmit }: SendButtonProps) {
     </svg>
   );
 }
-                                                                                                                                                        
+
 export default function ChatBot({
   params,
 }: {
   params: { projectId: string; formId: string };
-  }) {
-    const project = params.projectId;
-    const form = params.formId;
-    const { user } = useAuth();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-    const [userEmail, setUserEmail] = useState<string | null>(null);
-    const [count, setCount] = useState(0); // New state variable
-    const [messages, setMessages] = useState<MessageProps[]>([]);
-    const [input, setInput] = useState<string>("");
-    const chatEndRef = useRef<HTMLDivElement | null>(null);
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+}) {
+  const project = params.projectId;
+  const form = params.formId;
+  const { user } = useAuth();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [input, setInput] = useState<string>("");
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-      useEffect(() => {
-        let mounted = true;
+  useEffect(() => {
+    let mounted = true;
 
-        async function authenticate() {
-          const email = user?.email ?? "";
-          if (mounted) {
-            setUserEmail(email);
-            setCount(1);
-          }
-        }
-
-        authenticate();
-
-        return () => {
-          mounted = false;
-        };
-      }, [user?.email]);
-
-    const handleInputChange = (e: string) => {
-      setInput(e);
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    async function authenticate() {
+      const email = user?.email ?? "";
+      if (mounted) {
+        setUserEmail(email);
       }
-    };
+    }
 
-    const handleSendMessage = async () => {
-      if (input.trim() === "") {
+    authenticate();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user?.email]);
+
+  const handleInputChange = (e: string) => {
+    setInput(e);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (input.trim() === "") {
+      return;
+    }
+    const newMessage: MessageProps = {
+      timestamp: Date.now(),
+      message: input,
+      role: "user",
+    };
+    setMessages((prevMessages) => {
+      const newHistory = [...prevMessages, newMessage];
+      return newHistory;
+    });
+    setInput("");
+
+    try {
+      const response = await fetch(
+        `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: userEmail,
+            form_id: form,
+            project_id: project,
+            message: input,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error(`Error: ${response.status} ${response.statusText}`);
         return;
       }
-      const newMessage: MessageProps = {
+
+      const data = await response.json();
+
+      const botMessage: MessageProps = {
         timestamp: Date.now(),
-        message: input,
-        role: "user",
+        message: data.response,
+        role: "robot",
       };
       setMessages((prevMessages) => {
-        const newHistory = [...prevMessages, newMessage];
+        const newHistory = [...prevMessages, botMessage];
         return newHistory;
       });
-      setInput("");
 
-      try {
-        // console.log("Attempt to fetch chatgpt response will begin now");
-        const response = await fetch(
-          `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              user_id: userEmail,
-              form_id: form,
-              project_id: project,
-              message: input,
-            }),
-          }
-        );
-
-        const data = await response.json();
-
-        if (response.ok) {
-          const botMessage: MessageProps = {
-            timestamp: Date.now(),
-            message: data.response,
-            role: "robot",
-          };
-          setMessages((prevMessages) => {
-            const newHistory = [...prevMessages, botMessage];
-            return newHistory;
-          });
-          if (data.response.includes("<END>")) {
-            storeMessageHistory();
-          }
-        } else {
-          console.error("Response details:", data);
-        }
-      } catch (error) {
-        console.log("Fetch error", error);
+      if (data.response.includes("<END>")) {
+        storeMessageHistory();
       }
-    };
-  
+    } catch (error) {
+      console.log("Fetch error", error);
+    }
+  };
 
-    useEffect(() => {
-      let mounted = true;
+  useEffect(() => {
+    let mounted = true;
 
-      async function getBotOpening() {
-        if (count == 1 && mounted) {
-          // console.log("Attempt to get chatgpt opening message will begin now");
+    async function getBotOpening() {
+      if (mounted) {
+        try {
           const response = await fetch(
             `https://synthesize-wcnj.onrender.com/chat/${project}/${form}`,
             {
@@ -155,43 +153,45 @@ export default function ChatBot({
             }
           );
 
-          const data = await response.json();
-
-          if (response.ok) {
-            const botMessage: MessageProps = {
-              timestamp: Date.now(),
-              message: data.response,
-              role: "robot",
-            };
-            setMessages((prevMessages) => [...prevMessages, botMessage]);
-          } else {
+          if (!response.ok) {
             console.error(`Error: ${response.status} ${response.statusText}`);
             return;
           }
+
+          const data = await response.json();
+
+          const botMessage: MessageProps = {
+            timestamp: Date.now(),
+            message: data.response,
+            role: "robot",
+          };
+          setMessages((prevMessages) => [...prevMessages, botMessage]);
+        } catch (error) {
+          console.log("Fetch error", error);
         }
       }
-      if (count == 1) {
-        getBotOpening();
-      }
+    }
 
-      return () => {
-        mounted = false;
-      };
-    }, [project, form]);
+    getBotOpening();
 
-    useEffect(() => {
-      if (chatEndRef.current) {
-        chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, [messages]);
-    
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === "Enter") {
-        e.preventDefault(); // Prevents newline being added in the textarea
-        handleSendMessage();
-      }
+    return () => {
+      mounted = false;
     };
-  
+  }, [project, form, user?.email]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevents newline being added in the textarea
+      handleSendMessage();
+    }
+  };
+
   const storeMessageHistory = async () => {
     create_chat_history(userEmail, form, messages);
     setTimeout(() => {
@@ -199,37 +199,37 @@ export default function ChatBot({
     }, 1000); // Delay of 1 second (1000 milliseconds)
   };
 
-    return (
-      <ProtectedRoute>
-        <div className="flex flex-col max-h-lvh h-[calc(100vh-2rem)] bg-stone-100 w-full rounded-lg">
-          <div className="flex flex-row bg-rose-100 w-full rounded-tr-lg rounded-tl-lg text-stone-500 font-semibold text-xl pl-4 py-2 mb-2">
-            Synthesize Chatbot
-          </div>
-          <div className="flex flex-grow flex-col overflow-y-auto bg-stone-100 w-full rounded-lg">
-            {messages.map((message, index) => (
-              <ChatBubble
-                key={index}
-                message={message.message}
-                role={message.role}
-                timestamp={message.timestamp}
-              />
-            ))}
-            <div ref={chatEndRef}></div>
-          </div>
-          <div className="flex flex-row items-center bg-white rounded-br-lg rounded-bl-lg">
-            <textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type a Message..."
-              className="flex-grow p-2 focus:outline-none focus:bg-white transition-colors duration-200 rounded-bl-lg resize-none"
-              rows={1}
-              style={{ overflow: "hidden" }}
-            />
-            <SendButton handleSubmit={handleSendMessage} />
-          </div>
+  return (
+    <ProtectedRoute>
+      <div className="flex flex-col max-h-lvh h-[calc(100vh-2rem)] bg-stone-100 w-full rounded-lg">
+        <div className="flex flex-row bg-rose-100 w-full rounded-tr-lg rounded-tl-lg text-stone-500 font-semibold text-xl pl-4 py-2 mb-2">
+          Synthesize Chatbot
         </div>
-      </ProtectedRoute>
-    );
-  }
+        <div className="flex flex-grow flex-col overflow-y-auto bg-stone-100 w-full rounded-lg">
+          {messages.map((message, index) => (
+            <ChatBubble
+              key={index}
+              message={message.message}
+              role={message.role}
+              timestamp={message.timestamp}
+            />
+          ))}
+          <div ref={chatEndRef}></div>
+        </div>
+        <div className="flex flex-row items-center bg-white rounded-br-lg rounded-bl-lg">
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => handleInputChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Type a Message..."
+            className="flex-grow p-2 focus:outline-none focus:bg-white transition-colors duration-200 rounded-bl-lg resize-none"
+            rows={1}
+            style={{ overflow: "hidden" }}
+          />
+          <SendButton handleSubmit={handleSendMessage} />
+        </div>
+      </div>
+    </ProtectedRoute>
+  );
+}
